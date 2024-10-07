@@ -120,9 +120,8 @@ function fetchWithBypass(request, bypassCache)
 	
 	if (bypassCache)
 	{
-		// bypass enabled: add a random search parameter to avoid getting a stale HTTP cache result
 		const url = new URL(request.url);
-		url.search += Math.floor(Math.random() * 1000000);
+		url.search += `${Date.now()}`;
 
 		return fetch(url, {
 			headers: request.headers,
