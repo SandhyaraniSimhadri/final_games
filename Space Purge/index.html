@@ -1,33 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Space Purge</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Space Purge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Simplified for better scaling on iOS -->
+    
+    <meta name="generator" content="Construct 3">
+    <meta name="author" content="Muscle-SS">
+    <meta name="description" content="game">
+    
+    <link rel="manifest" href="appmanifest.json">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
+    <link rel="icon" type="image/png" href="icons/icon-256.png">
 
-<meta name="generator" content="Construct 3">
-	<meta name="author" content="Muscle-SS">
-	<meta name="description" content="game">
-	<link rel="manifest" href="appmanifest.json">
-	<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
-	<link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
-	<link rel="icon" type="image/png" href="icons/icon-256.png">
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="fb-root"></div>
+    <div id="fb-root"></div>
 
-	<noscript>
-		<div id="notSupportedWrap">
-			<h2 id="notSupportedTitle">This content requires JavaScript</h2>
-			<p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
-		</div>
-	</noscript>
-	<script src="scripts/supportcheck.js"></script>
-	<script src="scripts/offlineclient.js" type="module"></script>
-	<script src="scripts/main.js" type="module"></script>
-	<script src="scripts/register-sw.js" type="module"></script>
+    <!-- No JavaScript Warning -->
+    <noscript>
+        <div id="notSupportedWrap">
+            <h2 id="notSupportedTitle">This content requires JavaScript</h2>
+            <p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+        </div>
+    </noscript>
+
+    <!-- Support Check Script -->
+    <script>
+        'use strict';
+        (function() {
+            var isKasperskyScriptInjected = !!document.querySelector('script[src*="kaspersky"]');
+            var tmpCanvas = document.createElement("canvas");
+            var hasWebGL = !!(tmpCanvas.getContext("webgl") || tmpCanvas.getContext("experimental-webgl"));
+            var hasWebAssembly = typeof WebAssembly !== "undefined";
+            var hasJavaScriptModules = "noModule" in HTMLScriptElement.prototype;
+            var missingFeatures = [];
+
+            if (!hasWebGL) missingFeatures.push("WebGL");
+            if (!hasWebAssembly) missingFeatures.push("WebAssembly");
+            if (!hasJavaScriptModules) missingFeatures.push("JavaScript Modules");
+
+            var ua = navigator.userAgent.toLowerCase();
+            var isIOS = /iphone|ipad|ipod/i.test(ua);
+            var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+
+            if (missingFeatures.length === 0 && !isKasperskyScriptInjected) {
+                window["C3_IsSupported"] = true;
+            } else {
+                var msgWrap = document.createElement("div");
+                msgWrap.id = "notSupportedWrap";
+                document.body.appendChild(msgWrap);
+
+                var msgTitle = document.createElement("h2");
+                msgTitle.id = "notSupportedTitle";
+
+                if (isKasperskyScriptInjected) {
+                    msgTitle.textContent = "Kaspersky Internet Security broke this export";
+                } else {
+                    msgTitle.textContent = "Software update needed";
+                }
+                msgWrap.appendChild(msgTitle);
+
+                var msgBody = document.createElement("p");
+                msgBody.className = "notSupportedMessage";
+                var msgText = "This content is not supported because your device's software is out-of-date. ";
+
+                if (isIOS) {
+                    msgText += "<br><br>Ensure your iOS version and Safari are up-to-date.";
+                    msgText += " If using an <strong>iOS simulator</strong>, use <strong>Xcode 12+</strong>. Testing on a real device is recommended.";
+                } else if (isSafari) {
+                    msgText += "<br><br><strong>Safari may have compatibility issues</strong>. Try using a different browser such as <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
+                } else if (/msie|trident/i.test(ua) || /edge\//i.test(ua)) {
+                    msgText += "<br><br>Try using <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
+                } else if (isKasperskyScriptInjected) {
+                    msgText = "It appears Kaspersky software added a script to this export, causing issues. Try disabling Kaspersky and exporting again.";
+                } else {
+                    msgText += "Try installing available software updates or testing on a different device.";
+                }
+
+                msgText += "<br><br><em>Missing features: " + missingFeatures.join(", ") + "<br>User agent: " + navigator.userAgent + "</em>";
+                msgBody.innerHTML = msgText;
+                msgWrap.appendChild(msgBody);
+            }
+        })();
+    </script>
+
+    <!-- Loading Scripts -->
+    <script src="scripts/supportcheck.js"></script>
+    <script src="scripts/offlineclient.js" type="module"></script>
+    <script src="scripts/main.js" type="module"></script>
+
+    <!-- Service Worker Temporarily Disabled for Debugging on iOS -->
+    <!-- <script src="scripts/register-sw.js" type="module"></script> -->
 </body>
 </html>
