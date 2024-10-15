@@ -1,0 +1,6 @@
+projectKey=Fishing_frenzy-12-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Fishing_frenzy-12-10-2024
+ceTaskId=7e841689-b97c-439a-b5c6-ab57c6627f27
+ceTaskUrl=http://localhost:9000/api/ce/task?id=7e841689-b97c-439a-b5c6-ab57c6627f27
