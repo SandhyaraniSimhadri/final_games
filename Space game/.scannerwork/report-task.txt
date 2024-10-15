@@ -1,0 +1,6 @@
+projectKey=Space_game-14-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Space_game-14-10-2024
+ceTaskId=64012f3c-3b9a-49b4-894f-b5fb20914bf0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=64012f3c-3b9a-49b4-894f-b5fb20914bf0
