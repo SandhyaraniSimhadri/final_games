@@ -29,70 +29,101 @@
 
     <!-- Support Check Script -->
     <script>
-        'use strict';
-        (function() {
-            var isKasperskyScriptInjected = !!document.querySelector('script[src*="kaspersky"]');
-            var tmpCanvas = document.createElement("canvas");
-            var hasWebGL = !!(tmpCanvas.getContext("webgl") || tmpCanvas.getContext("experimental-webgl"));
-            var hasWebAssembly = typeof WebAssembly !== "undefined";
-            var hasJavaScriptModules = "noModule" in HTMLScriptElement.prototype;
-            var missingFeatures = [];
+       (function() {
+    'use strict';
 
-            if (!hasWebGL) missingFeatures.push("WebGL");
-            if (!hasWebAssembly) missingFeatures.push("WebAssembly");
-            if (!hasJavaScriptModules) missingFeatures.push("JavaScript Modules");
+    let isKasperskyScriptInjected = checkKasperskyScript();
+    let missingFeatures = getMissingFeatures();
+    let ua = navigator.userAgent.toLowerCase();
+    let isIOS = /iphone|ipad|ipod/i.test(ua);
+    let isSafari = /^((?!chrome|android).)*safari/i.test(ua);
 
-            var ua = navigator.userAgent.toLowerCase();
-            var isIOS = /iphone|ipad|ipod/i.test(ua);
-            var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    if (missingFeatures.length === 0 && !isKasperskyScriptInjected) {
+        window["C3_IsSupported"] = true;
+    } else {
+        showNotSupportedMessage(isKasperskyScriptInjected, missingFeatures, ua, isIOS, isSafari);
+    }
 
-            if (missingFeatures.length === 0 && !isKasperskyScriptInjected) {
-                window["C3_IsSupported"] = true;
-            } else {
-                var msgWrap = document.createElement("div");
-                msgWrap.id = "notSupportedWrap";
-                document.body.appendChild(msgWrap);
+    function checkKasperskyScript() {
+        return !!document.querySelector('script[src*="kaspersky"]');
+    }
 
-                var msgTitle = document.createElement("h2");
-                msgTitle.id = "notSupportedTitle";
+    function getMissingFeatures() {
+        let tmpCanvas = document.createElement("canvas");
+        let missingFeatures = [];
+        if (!hasWebGL(tmpCanvas)) missingFeatures.push("WebGL");
+        if (!hasWebAssembly()) missingFeatures.push("WebAssembly");
+        if (!hasJavaScriptModules()) missingFeatures.push("JavaScript Modules");
+        return missingFeatures;
+    }
 
-                if (isKasperskyScriptInjected) {
-                    msgTitle.textContent = "Kaspersky Internet Security broke this export";
-                } else {
-                    msgTitle.textContent = "Software update needed";
-                }
-                msgWrap.appendChild(msgTitle);
+    function hasWebGL(canvas) {
+        return !!(canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
+    }
 
-                var msgBody = document.createElement("p");
-                msgBody.className = "notSupportedMessage";
-                var msgText = "This content is not supported because your device's software is out-of-date. ";
+    function hasWebAssembly() {
+        return typeof WebAssembly !== "undefined";
+    }
 
-                if (isIOS) {
-                    msgText += "<br><br>Ensure your iOS version and Safari are up-to-date.";
-                    msgText += " If using an <strong>iOS simulator</strong>, use <strong>Xcode 12+</strong>. Testing on a real device is recommended.";
-                } else if (isSafari) {
-                    msgText += "<br><br><strong>Safari may have compatibility issues</strong>. Try using a different browser such as <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
-                } else if (/msie|trident/i.test(ua) || /edge\//i.test(ua)) {
-                    msgText += "<br><br>Try using <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
-                } else if (isKasperskyScriptInjected) {
-                    msgText = "It appears Kaspersky software added a script to this export, causing issues. Try disabling Kaspersky and exporting again.";
-                } else {
-                    msgText += "Try installing available software updates or testing on a different device.";
-                }
+    function hasJavaScriptModules() {
+        return "noModule" in HTMLScriptElement.prototype;
+    }
 
-                msgText += "<br><br><em>Missing features: " + missingFeatures.join(", ") + "<br>User agent: " + navigator.userAgent + "</em>";
-                msgBody.innerHTML = msgText;
-                msgWrap.appendChild(msgBody);
-            }
-        })();
+    function showNotSupportedMessage(isKasperskyScriptInjected, missingFeatures, ua, isIOS, isSafari) {
+        let msgWrap = createMessageWrapper();
+        let msgTitle = createMessageTitle(isKasperskyScriptInjected);
+        msgWrap.appendChild(msgTitle);
+
+        let msgBody = createMessageBody(isKasperskyScriptInjected, missingFeatures, ua, isIOS, isSafari);
+        msgWrap.appendChild(msgBody);
+    }
+
+    function createMessageWrapper() {
+        let msgWrap = document.createElement("div");
+        msgWrap.id = "notSupportedWrap";
+        document.body.appendChild(msgWrap);
+        return msgWrap;
+    }
+
+    function createMessageTitle(isKasperskyScriptInjected) {
+        let msgTitle = document.createElement("h2");
+        msgTitle.id = "notSupportedTitle";
+        msgTitle.textContent = isKasperskyScriptInjected
+            ? "Kaspersky Internet Security broke this export"
+            : "Software update needed";
+        return msgTitle;
+    }
+
+    function createMessageBody(isKasperskyScriptInjected, missingFeatures, ua, isIOS, isSafari) {
+        let msgBody = document.createElement("p");
+        msgBody.className = "notSupportedMessage";
+        let msgText = isKasperskyScriptInjected
+            ? "It appears Kaspersky software added a script to this export, causing issues. Try disabling Kaspersky and exporting again."
+            : getBrowserSpecificMessage(isIOS, isSafari, ua);
+
+        msgText += "<br><br><em>Missing features: " + missingFeatures.join(", ") + "<br>User agent: " + navigator.userAgent + "</em>";
+        msgBody.innerHTML = msgText;
+        return msgBody;
+    }
+
+    function getBrowserSpecificMessage(isIOS, isSafari, ua) {
+        if (isIOS) {
+            return "This content is not supported because your device's software is out-of-date.<br><br>Ensure your iOS version and Safari are up-to-date. If using an <strong>iOS simulator</strong>, use <strong>Xcode 12+</strong>. Testing on a real device is recommended.";
+        } else if (isSafari) {
+            return "This content is not supported because your device's software is out-of-date.<br><br><strong>Safari may have compatibility issues</strong>. Try using a different browser such as <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
+        } else if (/msie|trident/i.test(ua) || /edge\//i.test(ua)) {
+            return "This content is not supported because your device's software is out-of-date.<br><br>Try using <a href='https://www.google.com/chrome'>Chrome</a> or <a href='https://www.mozilla.org/firefox'>Firefox</a>.";
+        } else {
+            return "This content is not supported because your device's software is out-of-date. Try installing available software updates or testing on a different device.";
+        }
+    }
+})();
+
     </script>
-
-    <!-- Loading Scripts -->
+    
+ 
     <script src="scripts/supportcheck.js"></script>
     <script src="scripts/offlineclient.js" type="module"></script>
     <script src="scripts/main.js" type="module"></script>
-
-    <!-- Service Worker Temporarily Disabled for Debugging on iOS -->
-    <!-- <script src="scripts/register-sw.js" type="module"></script> -->
 </body>
 </html>
