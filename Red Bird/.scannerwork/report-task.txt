@@ -1,0 +1,6 @@
+projectKey=Red_bird-15-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Red_bird-15-10-2024
+ceTaskId=bb87e8d4-84e3-4947-a7e1-04ab99b0470c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=bb87e8d4-84e3-4947-a7e1-04ab99b0470c
