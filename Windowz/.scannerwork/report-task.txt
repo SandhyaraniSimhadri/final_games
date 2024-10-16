@@ -1,0 +1,6 @@
+projectKey=windowz-15-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=windowz-15-10-2024
+ceTaskId=674cd575-b1de-41bb-9820-983c2acd3470
+ceTaskUrl=http://localhost:9000/api/ce/task?id=674cd575-b1de-41bb-9820-983c2acd3470
