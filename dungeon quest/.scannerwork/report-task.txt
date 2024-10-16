@@ -1,0 +1,6 @@
+projectKey=Dungeon-15-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Dungeon-15-10-2024
+ceTaskId=4a9b8105-43a9-49a1-8d93-8ba3feb3ad8c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=4a9b8105-43a9-49a1-8d93-8ba3feb3ad8c
