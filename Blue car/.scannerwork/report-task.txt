@@ -1,0 +1,6 @@
+projectKey=Blue_car-15-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Blue_car-15-10-2024
+ceTaskId=621fcc58-bc8c-445c-9f73-dd67e33387a2
+ceTaskUrl=http://localhost:9000/api/ce/task?id=621fcc58-bc8c-445c-9f73-dd67e33387a2
