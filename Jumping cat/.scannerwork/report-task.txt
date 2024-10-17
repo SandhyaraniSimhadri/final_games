@@ -1,0 +1,6 @@
+projectKey=Jumping_cat-16-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Jumping_cat-16-10-2024
+ceTaskId=e7d3708c-6322-445c-8783-e9c31e02e58b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=e7d3708c-6322-445c-8783-e9c31e02e58b
