@@ -1,0 +1,6 @@
+projectKey=Stick_jump-16-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Stick_jump-16-10-2024
+ceTaskId=ef9209d1-d01c-40ae-91eb-4ff58234dc1b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ef9209d1-d01c-40ae-91eb-4ff58234dc1b
