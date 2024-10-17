@@ -1,0 +1,6 @@
+projectKey=Hot_shoot-16-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Hot_shoot-16-10-2024
+ceTaskId=2e5dc418-75b5-4edb-987f-d83005b34aef
+ceTaskUrl=http://localhost:9000/api/ce/task?id=2e5dc418-75b5-4edb-987f-d83005b34aef
