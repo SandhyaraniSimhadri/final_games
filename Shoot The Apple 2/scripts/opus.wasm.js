@@ -386,10 +386,21 @@ if (ENVIRONMENT_IS_NODE) {
 } else {
     throw new Error ("Unknown runtime environment. Where are we?")
 }
+function globalEval(fnName) {
+    // Define a whitelist of allowed functions for execution
+    const allowedFunctions = {
+        mySafeFunction: () => console.log('Safe function executed!'),
+        anotherSafeFunction: () => console.log('Another safe function executed!'),
+    };
 
-function globalEval(x) {
-    eval(x);
+    // Check if the provided function name exists in the allowedFunctions list
+    if (allowedFunctions.hasOwnProperty(fnName)) {
+        allowedFunctions[fnName]();  // Execute the safe function
+    } else {
+        console.error('Invalid or unsafe function call: ' + fnName);
+    }
 }
+
 
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
@@ -592,15 +603,21 @@ function assert(condition, text) {
 }
 
 function getCFunc(ident) {
+    // Look for the function in the Module object with a prepended underscore
     let func = Module["_" + ident];
+    
+    // If the function is not found in the Module object
     if (!func) {
-        try {
-            func = eval("_" + ident)
-        } catch (e) {}
+        // Dynamically search for the function in the global scope
+        func = window["_" + ident];  // This is safer than eval()
     }
+    
+    // Assert that the function exists
     assert(func, "Cannot call unknown function " + ident + " (perhaps LLVM optimizations or closure removed it?)");
-    return func
+    
+    return func;
 }
+
 let cwrap, ccall;
 ((function() {
     let JSfuncs = {
@@ -685,9 +702,7 @@ function handleReturnValue(returnType, ret) {
     return ret;
 }
 
-
-
-let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([^()]*)\)\s*{([^]*?)}(?:\s*return\s*(.*?)\s*;)?$/;
+let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([a-zA-Z0-9$_,\s]*)\)\s*{([\s\S]*?)}?$/;
 
     function parseJSFunc(jsfunc) {
         let parsed = jsfunc.toString().match(sourceRegex).slice(1);
@@ -709,51 +724,61 @@ let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([^()]*)\)\s*{([^]*?
             }
         }
     }
-    cwrap = function cwrap(ident, returnType, argTypes) {
-        argTypes = argTypes || [];
-        let cfunc = getCFunc(ident);
-        let numericArgs = argTypes.every((function(type) {
-            return type === "number"
-        }));
-        let numericRet = returnType !== "string";
-        if (numericRet && numericArgs) {
-            return cfunc
+     cwrap = function cwrap(ident, returnType, argTypes) {
+    argTypes = argTypes || [];
+
+    // Get the C function based on the identifier
+    let cfunc = getCFunc(ident);
+    let numericArgs = argTypes.every(type => type === "number");
+    let numericRet = returnType !== "string";
+
+    // If all arguments are numeric and return type is not a string, return the C function directly
+    if (numericRet && numericArgs) {
+        return cfunc;
+    }
+
+    // Define a wrapper function that will handle argument conversion and calling the C function
+    return function(...args) {
+        if (args.length !== argTypes.length) {
+            throw new Error("Incorrect number of arguments");
         }
-        let argNames = argTypes.map((function(x, i) {
-            return "$" + i
-        }));
-        let funcstr = "(function(" + argNames.join(",") + ") {";
-        let nargs = argTypes.length;
-        if (!numericArgs) {
-            ensureJSsource();
-            funcstr += "var stack = " + JSsource["stackSave"].body + ";";
-            for (let i = 0; i < nargs; i++) {
-                let arg = argNames[i],
-                    type = argTypes[i];
-                if (type === "number") continue;
-                let convertCode = JSsource[type + "ToC"];
-                funcstr += "var " + convertCode.arguments + " = " + arg + ";";
-                funcstr += convertCode.body + ";";
-                funcstr += arg + "=(" + convertCode.returnValue + ");"
+
+        let convertedArgs = [];
+
+        // Convert each argument based on its expected type
+        for (let i = 0; i < argTypes.length; i++) {
+            let arg = args[i];
+            let expectedType = argTypes[i];
+
+            if (expectedType === "number") {
+                if (typeof arg !== "number") {
+                    throw new Error(`Argument ${i} is expected to be a number`);
+                }
+                convertedArgs.push(arg);  // No conversion needed for numbers
+            } else if (expectedType === "string") {
+                ensureJSsource();
+                let convertCode = JSsource["stringToC"];
+                let converted = convertCode(arg);  // Convert string to C-compatible format
+                convertedArgs.push(converted);
+            } else {
+                throw new Error(`Unsupported argument type: ${expectedType}`);
             }
         }
-        let cfuncname = parseJSFunc((function() {
-            return cfunc
-        })).returnValue;
-        funcstr += "var ret = " + cfuncname + "(" + argNames.join(",") + ");";
+
+        // Call the C function with the converted arguments
+        let ret = cfunc(...convertedArgs);
+
+        // If the return type is a string, convert it back to JavaScript string
         if (!numericRet) {
-            let strgfy = parseJSFunc((function() {
-                return Pointer_stringify
-            })).returnValue;
-            funcstr += "ret = " + strgfy + "(ret);"
-        }
-        if (!numericArgs) {
             ensureJSsource();
-            funcstr += JSsource["stackRestore"].body.replace("()", "(stack)") + ";"
+            ret = Pointer_stringify(ret);
         }
-        funcstr += "return ret})";
-        return eval(funcstr)
-    }
+
+        return ret;
+    };
+}
+
+    
 }))();
 Module["ccall"] = ccall;
 Module["cwrap"] = cwrap;
@@ -1661,8 +1686,24 @@ function integrateWasmJS(Module) {
     function doJustAsm(global, env, providedBuffer) {
         if (typeof Module["asm"] !== "function" || Module["asm"] === methodHandler) {
             if (!Module["asmPreload"]) {
-                eval(Module["read"](asmjsCodeFile))
-            } else {
+                // Fetch the asm.js or WebAssembly code from the specified file
+                fetch(asmjsCodeFile)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.arrayBuffer(); // Get the raw bytes
+                    })
+                    .then(bytes => WebAssembly.instantiate(bytes, { env: Module['env'] }))
+                    .then(result => {
+                        Module['asm'] = result.instance.exports; // Export the instance
+                        console.log('ASM.js code loaded and executed successfully.');
+                    })
+                    .catch(error => {
+                        console.error('Error loading WebAssembly:', error);
+                    });
+            }
+            else {
                 Module["asm"] = Module["asmPreload"]
             }
         }
