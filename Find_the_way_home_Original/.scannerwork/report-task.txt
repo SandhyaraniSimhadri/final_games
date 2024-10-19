@@ -1,0 +1,6 @@
+projectKey=Find_the_way-16-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Find_the_way-16-10-2024
+ceTaskId=4feb8a0c-669b-460b-865f-03fd41992ee0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=4feb8a0c-669b-460b-865f-03fd41992ee0

@@ -1,0 +1,6 @@
+projectKey=Bunny_adv-19-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Bunny_adv-19-10-2024
+ceTaskId=9713be2c-fd81-4e0a-88b8-6549d1910368
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9713be2c-fd81-4e0a-88b8-6549d1910368
