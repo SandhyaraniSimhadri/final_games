@@ -1,6 +1,6 @@
-projectKey=Shoot_The_Apple-01-10-2024
+projectKey=Shoot-apple17-10-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Shoot_The_Apple-01-10-2024
-ceTaskId=f991c452-2db2-4a69-8fc5-4991068289fe
-ceTaskUrl=http://localhost:9000/api/ce/task?id=f991c452-2db2-4a69-8fc5-4991068289fe
+dashboardUrl=http://localhost:9000/dashboard?id=Shoot-apple17-10-2024
+ceTaskId=6f8963d6-8cd1-4beb-b7f7-fd43a4d4450e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=6f8963d6-8cd1-4beb-b7f7-fd43a4d4450e
