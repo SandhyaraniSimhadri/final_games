@@ -1,0 +1,6 @@
+projectKey=Going_nuts_-21-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Going_nuts_-21-10-2024
+ceTaskId=2bd7ba32-9049-4430-bec4-7de0f0a2ffd3
+ceTaskUrl=http://localhost:9000/api/ce/task?id=2bd7ba32-9049-4430-bec4-7de0f0a2ffd3
