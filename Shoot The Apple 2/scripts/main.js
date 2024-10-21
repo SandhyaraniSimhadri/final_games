@@ -971,11 +971,11 @@
         async _Init() {
             let isPersistent = false;
             try {
-                // Check if navigator.storage and navigator.storage.persisted are supported
-                if (navigator.storage && typeof navigator.storage.persisted === "function") {
+                // Check if navigator.storage and navigator.storage.persisted exist
+                if (typeof navigator !== "undefined" && navigator.storage && typeof navigator.storage.persisted === "function") {
                     isPersistent = await navigator.storage.persisted();
                 } else {
-                    console.warn("[Construct] Persistent storage not supported on this browser.");
+                    console.warn("[Construct] Persistent storage not supported in this environment.");
                 }
             } catch (err) {
                 isPersistent = false;
@@ -987,12 +987,12 @@
 
         async _OnRequestPersistent() {
             try {
-                // Check if navigator.storage and navigator.storage.persist are supported
-                if (navigator.storage && typeof navigator.storage.persist === "function") {
+                // Check if navigator.storage and navigator.storage.persist exist
+                if (typeof navigator !== "undefined" && navigator.storage && typeof navigator.storage.persist === "function") {
                     const isPersistent = await navigator.storage.persist();
                     return { "isOk": true, "isPersistent": isPersistent };
                 } else {
-                    console.warn("[Construct] Persistent storage not supported on this browser.");
+                    console.warn("[Construct] Persistent storage not supported in this environment.");
                     return { "isOk": false, "isPersistent": false };
                 }
             } catch (err) {
