@@ -1,0 +1,6 @@
+projectKey=Infinite_jump-21-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Infinite_jump-21-10-2024
+ceTaskId=7a2f17aa-c604-40a0-8fbd-0cb6315a62df
+ceTaskUrl=http://localhost:9000/api/ce/task?id=7a2f17aa-c604-40a0-8fbd-0cb6315a62df
