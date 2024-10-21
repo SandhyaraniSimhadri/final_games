@@ -1,0 +1,6 @@
+projectKey=Burger_time-21-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Burger_time-21-10-2024
+ceTaskId=7854a437-0de0-4a6b-9747-7b87abd76700
+ceTaskUrl=http://localhost:9000/api/ce/task?id=7854a437-0de0-4a6b-9747-7b87abd76700
