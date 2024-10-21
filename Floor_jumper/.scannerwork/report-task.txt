@@ -1,0 +1,6 @@
+projectKey=Floor_jumper-21-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Floor_jumper-21-10-2024
+ceTaskId=9243907b-3492-4c18-b304-471cfdadae1f
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9243907b-3492-4c18-b304-471cfdadae1f
