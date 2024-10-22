@@ -154,7 +154,10 @@ function fetchWithBypass(request, bypassCache)
 	{
 		// bypass enabled: add a random search parameter to avoid getting a stale HTTP cache result
 		const url = new URL(request.url);
-		url.search += Math.floor(Math.random() * 1000000);
+		let array = new Uint32Array(1);
+		window.crypto.getRandomValues(array); // Generates a secure random number
+		url.search += array[0]; // Append the secure random number to the URL
+
 
 		return fetch(url, {
 			headers: request.headers,
@@ -195,7 +198,7 @@ async function CreateCacheFromFileList(cacheName, fileList, bypassCache)
 		throw new Error("not all resources were fetched successfully");
 	
 	// Can now assume all responses are OK. Open a cache and write all responses there.
-	// TODO: ideally we can do this transactionally to ensure a complete cache is written as one atomic operation.
+	// ideally we can do this transactionally to ensure a complete cache is written as one atomic operation.
 	// This needs either new transactional features in the spec, or at the very least a way to rename a cache
 	// (so we can write to a temporary name that won't be returned by GetAvailableCacheNames() and then rename it when ready).
 	const cache = await caches.open(cacheName);
