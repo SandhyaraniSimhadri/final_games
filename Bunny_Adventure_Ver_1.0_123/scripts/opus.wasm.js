@@ -1898,9 +1898,10 @@ var stackRestore = Module["stackRestore"] = (function() {
 var ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-var stackAlloc = Module["stackAlloc"] = (function() {
-    return Module["asm"]["stackAlloc"].apply(null, arguments)
+const stackAlloc = Module["stackAlloc"] = (() => {
+    return Module["asm"]["stackAlloc"].apply(null, arguments);
 });
+
 Runtime.stackAlloc = Module["stackAlloc"];
 Runtime.stackSave = Module["stackSave"];
 Runtime.stackRestore = Module["stackRestore"];
