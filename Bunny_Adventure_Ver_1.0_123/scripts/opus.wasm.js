@@ -1814,7 +1814,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    let self = _llvm_stacksave;
+    var self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
