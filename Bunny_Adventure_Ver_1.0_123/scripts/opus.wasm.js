@@ -1769,63 +1769,63 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
+let _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
+let _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-var getTempRet0 = Module["getTempRet0"] = (function() {
+let getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-var _free = Module["_free"] = (function() {
+let _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-var runPostSets = Module["runPostSets"] = (function() {
+let runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-var setTempRet0 = Module["setTempRet0"] = (function() {
+let setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-var establishStackSpace = Module["establishStackSpace"] = (function() {
+let establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-var _memmove = Module["_memmove"] = (function() {
+let _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
+let _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-var stackSave = Module["stackSave"] = (function() {
+let stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-var _memset = Module["_memset"] = (function() {
+let _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+let _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-var _memcpy = Module["_memcpy"] = (function() {
+let _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
+let _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-var setThrew = Module["setThrew"] = (function() {
+let setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-var stackRestore = Module["stackRestore"] = (function() {
+let stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-var ___errno_location = Module["___errno_location"] = (function() {
+let ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-var stackAlloc = Module["stackAlloc"] = (function() {
+let stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
@@ -1842,11 +1842,11 @@ if (memoryInitializer) {
         memoryInitializer = Module["memoryInitializerPrefixURL"] + memoryInitializer
     }
     if (ENVIRONMENT_IS_NODE || ENVIRONMENT_IS_SHELL) {
-        var data = Module["readBinary"](memoryInitializer);
+        let data = Module["readBinary"](memoryInitializer);
         HEAPU8.set(data, Runtime.GLOBAL_BASE)
     } else {
         addRunDependency("memory initializer");
-        var applyMemoryInitializer = (function(data) {
+        let applyMemoryInitializer = (function(data) {
             if (data.byteLength) data = new Uint8Array(data);
             HEAPU8.set(data, Runtime.GLOBAL_BASE);
             if (Module["memoryInitializerRequest"]) delete Module["memoryInitializerRequest"].response;
@@ -1860,7 +1860,7 @@ if (memoryInitializer) {
         }
         if (Module["memoryInitializerRequest"]) {
             function useRequest() {
-                var request = Module["memoryInitializerRequest"];
+                let request = Module["memoryInitializerRequest"];
                 if (request.status !== 200 && request.status !== 0) {
                     console.warn("a problem seems to have happened with Module.memoryInitializerRequest, status: " + request.status + ", retrying " + memoryInitializer);
                     doBrowserLoad();
@@ -1886,9 +1886,9 @@ function ExitStatus(status) {
 }
 ExitStatus.prototype = new Error;
 ExitStatus.prototype.constructor = ExitStatus;
-var initialStackTop;
-var preloadStartTime = null;
-var calledMain = false;
+let initialStackTop;
+let preloadStartTime = null;
+let calledMain = false;
 dependenciesFulfilled = function runCaller() {
     if (!Module["calledRun"]) run();
     if (!Module["calledRun"]) dependenciesFulfilled = runCaller
@@ -1896,23 +1896,23 @@ dependenciesFulfilled = function runCaller() {
 Module["callMain"] = Module.callMain = function callMain(args) {
     args = args || [];
     ensureInitRuntime();
-    var argc = args.length + 1;
+    let argc = args.length + 1;
 
     function pad() {
-        for (var i = 0; i < 4 - 1; i++) {
+        for (let i = 0; i < 4 - 1; i++) {
             argv.push(0)
         }
     }
-    var argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
+    let argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
     pad();
-    for (var i = 0; i < argc - 1; i = i + 1) {
+    for (let i = 0; i < argc - 1; i = i + 1) {
         argv.push(allocate(intArrayFromString(args[i]), "i8", ALLOC_NORMAL));
         pad()
     }
     argv.push(0);
     argv = allocate(argv, "i32", ALLOC_NORMAL);
     try {
-        var ret = Module["_main"](argc, argv, 0);
+        let ret = Module["_main"](argc, argv, 0);
         exit(ret, true)
     } catch (e) {
         if (e instanceof ExitStatus) {
@@ -1921,7 +1921,7 @@ Module["callMain"] = Module.callMain = function callMain(args) {
             Module["noExitRuntime"] = true;
             return
         } else {
-            var toLog = e;
+            let toLog = e;
             if (e && typeof e === "object" && e.stack) {
                 toLog = [e, e.stack]
             }
@@ -1984,7 +1984,7 @@ function exit(status, implicit) {
     Module["quit"](status, new ExitStatus(status))
 }
 Module["exit"] = Module.exit = exit;
-var abortDecorators = [];
+let abortDecorators = [];
 
 function abort(what) {
     if (Module["onAbort"]) {
@@ -1999,8 +1999,8 @@ function abort(what) {
     }
     ABORT = true;
     EXITSTATUS = 1;
-    var extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
-    var output = "abort(" + what + ") at " + stackTrace() + extra;
+    let extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
+    let output = "abort(" + what + ") at " + stackTrace() + extra;
     if (abortDecorators) {
         abortDecorators.forEach((function(decorator) {
             output = decorator(output, what)
@@ -2015,7 +2015,7 @@ if (Module["preInit"]) {
         Module["preInit"].pop()()
     }
 }
-var shouldRunNow = true;
+let shouldRunNow = true;
 if (Module["noInitialRun"]) {
     shouldRunNow = false
 }
