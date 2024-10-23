@@ -219,7 +219,7 @@
                     ParseDiscard(data, position, size);
                     break;
                 case 134:       // CodecID
-                    TestOpus(data, position, size);
+                    TestOpus(data, position);
                     break;
                 case 161:       // Block
                 case 163:       // SimpleBlock
@@ -413,8 +413,8 @@ if (!Module["quit"]) {
         throw toThrow
     })
 }
-Module.print = Module["print"];
-Module.printErr = Module["printErr"];
+Module.print = Module["print"] || console.log;
+Module.printErr = Module["printErr"] || console.log;
 Module["preRun"] = [];
 Module["postRun"] = [];
 for (var key in moduleOverrides) {
