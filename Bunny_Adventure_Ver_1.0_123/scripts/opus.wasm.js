@@ -139,13 +139,11 @@
     }
 
     function ParseBlock(data, position, size) {
-        let firstByte, tagLength, mask, trackEntry, timeCode, flags, lacing;
+        let firstByte, tagLength, mask, flags, lacing;
         firstByte = data.getUint8(position);
         tagLength = VINT_SIZES[firstByte];
         mask = VINT_MASKS[tagLength];
-        trackEntry = ReadVInt(data, position, tagLength, mask);
         position += tagLength;
-        timeCode = data.getInt16(position);
         position += 2;
         flags = data.getUint8(position);
         position += 1;
@@ -187,7 +185,7 @@
 
     function ParseMaster(data, position, length) {
         let firstByte, tagLength, id, sizeLength, mask, size;
-        var end = position + length;
+        let end = position + length;
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
@@ -230,18 +228,18 @@
         }
     }
 }))();
-var Module;
+let Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
-var moduleOverrides = {};
-for (var key in Module) {
+let moduleOverrides = {};
+for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
         moduleOverrides[key] = Module[key]
     }
 }
-var ENVIRONMENT_IS_WEB = false;
-var ENVIRONMENT_IS_WORKER = false;
-var ENVIRONMENT_IS_NODE = false;
-var ENVIRONMENT_IS_SHELL = false;
+let ENVIRONMENT_IS_WEB = false;
+let ENVIRONMENT_IS_WORKER = false;
+let ENVIRONMENT_IS_NODE = false;
+let ENVIRONMENT_IS_SHELL = false;
 if (Module["ENVIRONMENT"]) {
     if (Module["ENVIRONMENT"] === "WEB") {
         ENVIRONMENT_IS_WEB = true
@@ -263,17 +261,18 @@ if (Module["ENVIRONMENT"]) {
 if (ENVIRONMENT_IS_NODE) {
     if (!Module["print"]) Module["print"] = console.log;
     if (!Module["printErr"]) Module["printErr"] = console.warn;
-    var nodeFS;
-    var nodePath;
+    let nodeFS;
+    let nodePath;
+    let ret;
     Module["read"] = function shell_read(filename, binary) {
         if (!nodeFS) nodeFS = require("fs");
         if (!nodePath) nodePath = require("path");
         filename = nodePath["normalize"](filename);
-        var ret = nodeFS["readFileSync"](filename);
+        ret = nodeFS["readFileSync"](filename);
         return binary ? ret : ret.toString()
     };
     Module["readBinary"] = function readBinary(filename) {
-        var ret = Module["read"](filename, true);
+        ret = Module["read"](filename, true);
         if (!ret.buffer) {
             ret = new Uint8Array(ret)
         }
