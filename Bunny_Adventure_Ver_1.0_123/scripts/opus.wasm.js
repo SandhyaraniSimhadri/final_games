@@ -228,7 +228,7 @@
     }
 }))();
 // Using an object to hold functions
-let ModuleFunctions = {
+var ModuleFunctions = {
     _malloc: function() {
         return Module["asm"]["_malloc"].apply(null, arguments);
     },
