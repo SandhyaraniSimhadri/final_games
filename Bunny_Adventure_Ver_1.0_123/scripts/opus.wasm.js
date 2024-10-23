@@ -1697,15 +1697,15 @@ STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-var STATIC_BUMP = 28816;
+const STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-var tempDoublePtr = STATICTOP;
+let tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    var self = _llvm_stacksave;
-    var ret = self.LLVM_SAVEDSTACKS[p];
+    let self = _llvm_stacksave;
+    let ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1725,7 +1725,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    var self = _llvm_stacksave;
+    let self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1769,9 +1769,9 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
+let _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
 var _destroy_decoder = Module["_destroy_decoder"] = (function() {
