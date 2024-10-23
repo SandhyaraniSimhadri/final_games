@@ -893,31 +893,30 @@ function getMemory(size) {
 Module["getMemory"] = getMemory;
 
 function Pointer_stringify(ptr, length) {
-    if (length === 0 || !ptr) return "";
-    let hasUtf = 0;
-    let t;
-    let i = 0;
-    while (1) {
-        t = HEAPU8[ptr + i >> 0];
+    if (length === 0 || !ptr) return ""; // Early return for edge cases
+
+    let i = 0, hasUtf = 0, t;
+    
+    // Determine string length if not provided
+    if (!length) {
+        while (HEAPU8[ptr + i]) i++;
+        length = i;
+    }
+
+    // Check if the string contains UTF-8 characters
+    for (i = 0; i < length; i++) {
+        t = HEAPU8[ptr + i];
         hasUtf |= t;
-        if (t == 0 && !length) break;
-        i++;
-        if (length && i == length) break
+        if (!t) break;
     }
-    if (!length) length = i;
-    let ret = "";
+
+    // Fast path for ASCII strings
     if (hasUtf < 128) {
-        let MAX_CHUNK = 1024;
-        let curr;
-        while (length > 0) {
-            curr = String.fromCharCode.apply(String, HEAPU8.subarray(ptr, ptr + Math.min(length, MAX_CHUNK)));
-            ret = ret ? ret + curr : curr;
-            ptr += MAX_CHUNK;
-            length -= MAX_CHUNK
-        }
-        return ret
+        return readAsciiString(ptr, length);
     }
-    return Module["UTF8ToString"](ptr)
+
+    // Handle UTF-8 strings
+    return Module["UTF8ToString"](ptr);
 }
 Module["Pointer_stringify"] = Pointer_stringify;
 
@@ -1274,15 +1273,7 @@ function intArrayFromString(stringy, dontAddNull, length) {
 Module["intArrayFromString"] = intArrayFromString;
 
 function intArrayToString(array) {
-    let ret = [];
-    for (let i = 0; i < array.length; i++) {
-        let chr = array[i];
-        if (chr > 255) {
-            chr &= 255
-        }
-        ret.push(String.fromCharCode(chr))
-    }
-    return ret.join("")
+    return Array.from(array, chr => String.fromCharCode(chr > 255 ? chr & 255 : chr)).join("");
 }
 Module["intArrayToString"] = intArrayToString;
 
@@ -1467,13 +1458,6 @@ function integrateWasmJS(Module) {
         updateGlobalBuffer(newBuffer);
         updateGlobalBufferViews()
     }
-    let WasmTypes = {
-        none: 0,
-        i32: 1,
-        i64: 2,
-        f32: 3,
-        f64: 4
-    };
 
     function fixImports(imports) {
         if (!0) return imports;
