@@ -1741,23 +1741,25 @@ function integrateWasmJS(Module) {
         }
         let exports;
         let methods = method.split(",");
-        for (let i = 0; i < methods.length; i++) {
-            let curr = methods[i];
+        for (let curr of methods) {
             finalMethod = curr;
+            
             if (curr === "native-wasm") {
-                if (exports = doNativeWasm(global, env, providedBuffer)) break
+                exports = doNativeWasm(global, env, providedBuffer);
             } else if (curr === "asmjs") {
-                if (exports = doJustAsm(global, env, providedBuffer)) break
+                exports = doJustAsm(global, env, providedBuffer);
             } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
-                if (exports) {
-                    break; // Use the extracted value in the condition
-                }
+                exports = doWasmPolyfill(global, env, providedBuffer, curr);
+            } else {
+                abort("bad method: " + curr);
             }
-            else {
-                abort("bad method: " + curr)
+        
+            if (exports) {
+                break;
             }
         }
+        
+        
         if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         return exports
     });
