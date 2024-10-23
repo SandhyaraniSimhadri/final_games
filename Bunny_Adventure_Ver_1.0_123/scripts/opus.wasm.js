@@ -151,7 +151,7 @@
         position += 1;
         size -= tagLength + 3;
         lacing = flags & 6;
-        if (lacing) throw "Lacing not supported";
+        if (lacing)   throw new Error("Lacing not supported");
         ParseFrame(new Uint8Array(data.buffer, position, size))
     }
 
@@ -191,13 +191,13 @@
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
-            if (tagLength > 4 || tagLength == 0) throw "Invalid tag length " + tagLength;
+            if (tagLength > 4 || tagLength == 0)   throw new Error("Invalid tag length " + tagLength);
             id = ReadVInt(data, position, tagLength, 255);
             position += tagLength;
             firstByte = data.getUint8(position);
             sizeLength = VINT_SIZES[firstByte];
             mask = VINT_MASKS[sizeLength];
-            if (sizeLength == 0) throw "Invalid size length";
+            if (sizeLength == 0)   throw new Error( "Invalid size length");
             size = ReadVInt(data, position, sizeLength, mask);
             position += sizeLength;
             switch (id) {
@@ -296,7 +296,7 @@ if (ENVIRONMENT_IS_NODE) {
     }
     process["on"]("uncaughtException", (function(ex) {
         if (!(ex instanceof ExitStatus)) {
-            throw ex
+            throw new Error( ex)
         }
     }));
     Module["inspect"] = (function() {
@@ -309,7 +309,7 @@ if (ENVIRONMENT_IS_NODE) {
         Module["read"] = read
     } else {
         Module["read"] = function shell_read() {
-            throw "no read() available"
+            throw new Error("no read() available")
         }
     }
     Module["readBinary"] = function readBinary(f) {
@@ -385,7 +385,7 @@ if (ENVIRONMENT_IS_NODE) {
         })
     }
 } else {
-    throw "Unknown runtime environment. Where are we?"
+    throw new Error("Unknown runtime environment. Where are we?")
 }
 
 function globalEval(x) {
@@ -410,7 +410,7 @@ if (!Module["thisProgram"]) {
 }
 if (!Module["quit"]) {
     Module["quit"] = (function(status, toThrow) {
-        throw toThrow
+        throw new Error( toThrow)
     })
 }
 Module.print = Module["print"] || console.log;
@@ -501,7 +501,7 @@ var Runtime = {
                 return 2 * (1 + i)
             }
         }
-        throw "Finished up all reserved function pointers. Use a higher value for RESERVED_FUNCTION_POINTERS."
+        throw new Error("Finished up all reserved function pointers. Use a higher value for RESERVED_FUNCTION_POINTERS.")
     }),
     removeFunction: (function(index) {
         Runtime.functionPointers[(index - 2) / 2] = null
@@ -538,7 +538,7 @@ var Runtime = {
         return sigCache[func]
     }),
     getCompilerSetting: (function(name) {
-        throw "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work"
+        throw new Error( "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work")
     }),
     stackAlloc: (function(size) {
         var ret = STACKTOP;
@@ -1166,7 +1166,7 @@ function getTotalMemory() {
 }
 HEAP32[0] = 1668509029;
 HEAP16[1] = 25459;
-if (HEAPU8[2] !== 115 || HEAPU8[3] !== 99) throw "Runtime error: expected the system to be little-endian!";
+if (HEAPU8[2] !== 115 || HEAPU8[3] !== 99)   throw new Error( "Runtime error: expected the system to be little-endian!");
 Module["HEAP"] = HEAP;
 Module["buffer"] = buffer;
 Module["HEAP8"] = HEAP8;
@@ -1496,7 +1496,7 @@ function integrateWasmJS(Module) {
             } else if (Module["readBinary"]) {
                 binary = Module["readBinary"](wasmBinaryFile)
             } else {
-                throw "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)"
+                throw new Error( "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)")
             }
             return binary
         } catch (err) {
@@ -1633,7 +1633,7 @@ function integrateWasmJS(Module) {
             wasmJS["HEAPU8"].set(code, temp);
             wasmJS["_load_binary2wasm"](temp, code.length)
         } else {
-            throw "what? " + method
+            throw new Error( "what? " + method)
         }
         wasmJS["_free"](temp);
         wasmJS["_instantiate"](temp);
@@ -1721,7 +1721,7 @@ function integrateWasmJS(Module) {
                 abort("bad method: " + curr)
             }
         }
-        if (!exports) throw "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods";
+        if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         return exports
     });
     let methodHandler = Module["asm"]
@@ -1890,7 +1890,7 @@ if (memoryInitializer) {
 
         function doBrowserLoad() {
             Module["readAsync"](memoryInitializer, applyMemoryInitializer, (function() {
-                throw "could not load memory initializer " + memoryInitializer
+                throw new Error( "could not load memory initializer " + memoryInitializer)
             }))
         }
         if (Module["memoryInitializerRequest"]) {
@@ -2041,7 +2041,7 @@ function abort(what) {
             output = decorator(output, what)
         }))
     }
-    throw output
+    throw new Error(output)
 }
 Module["abort"] = Module.abort = abort;
 if (Module["preInit"]) {
