@@ -658,7 +658,7 @@ var cwrap, ccall;
         }
         return ret
     };
-    var sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
+    let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([a-zA-Z0-9$_,\s]*)\)\s*{([\s\S]*?)}?$/;
 
     function parseJSFunc(jsfunc) {
         var parsed = jsfunc.toString().match(sourceRegex).slice(1);
@@ -1135,7 +1135,13 @@ function abortOnCannotGrowMemory() {
 }
 
 function enlargeMemory() {
-    abortOnCannotGrowMemory()
+    let memoryGrowthSuccess = tryToGrowMemory();  // This is a placeholder for your actual logic
+
+    if (!memoryGrowthSuccess) {
+        return abortOnCannotGrowMemory();  // Return false if it fails
+    }
+    
+    return true;  
 }
 let TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
 let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
@@ -1519,8 +1525,24 @@ function integrateWasmJS(Module) {
     function doJustAsm(global, env, providedBuffer) {
         if (typeof Module["asm"] !== "function" || Module["asm"] === methodHandler) {
             if (!Module["asmPreload"]) {
-                eval(Module["read"](asmjsCodeFile))
-            } else {
+                // Fetch the asm.js or WebAssembly code from the specified file
+                fetch(asmjsCodeFile)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.arrayBuffer(); // Get the raw bytes
+                    })
+                    .then(bytes => WebAssembly.instantiate(bytes, { env: Module['env'] }))
+                    .then(result => {
+                        Module['asm'] = result.instance.exports; // Export the instance
+                        console.log('ASM.js code loaded and executed successfully.');
+                    })
+                    .catch(error => {
+                        console.error('Error loading WebAssembly:', error);
+                    });
+            }
+            else {
                 Module["asm"] = Module["asmPreload"]
             }
         }
