@@ -607,31 +607,31 @@ var cwrap, ccall;
             Runtime.stackRestore()
         }),
         "arrayToC": (function(arr) {
-            var ret = Runtime.stackAlloc(arr.length);
+            let ret = Runtime.stackAlloc(arr.length);
             writeArrayToMemory(arr, ret);
             return ret
         }),
         "stringToC": (function(str) {
-            var ret = 0;
+            let ret = 0;
             if (str !== null && str !== undefined && str !== 0) {
-                var len = (str.length << 2) + 1;
+                let len = (str.length << 2) + 1;
                 ret = Runtime.stackAlloc(len);
                 stringToUTF8(str, ret, len)
             }
             return ret
         })
     };
-    var toC = {
+    let toC = {
         "string": JSfuncs["stringToC"],
         "array": JSfuncs["arrayToC"]
     };
     ccall = function ccallFunc(ident, returnType, argTypes, args, opts) {
-        var func = getCFunc(ident);
-        var cArgs = [];
-        var stack = 0;
+        let func = getCFunc(ident);
+        let cArgs = [];
+        let stack = 0;
         if (args) {
-            for (var i = 0; i < args.length; i++) {
-                var converter = toC[argTypes[i]];
+            for (let i = 0; i < args.length; i++) {
+                let converter = toC[argTypes[i]];
                 if (converter) {
                     if (stack === 0) stack = Runtime.stackSave();
                     cArgs[i] = converter(args[i])
@@ -640,7 +640,7 @@ var cwrap, ccall;
                 }
             }
         }
-        var ret = func.apply(null, cArgs);
+        let ret = func.apply(null, cArgs);
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
             if (opts && opts.async) {
@@ -653,22 +653,22 @@ var cwrap, ccall;
         }
         return ret
     };
-    var sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
+    let sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
 
     function parseJSFunc(jsfunc) {
-        var parsed = jsfunc.toString().match(sourceRegex).slice(1);
+        let parsed = jsfunc.toString().match(sourceRegex).slice(1);
         return {
             arguments: parsed[0],
             body: parsed[1],
             returnValue: parsed[2]
         }
     }
-    var JSsource = null;
+    let JSsource = null;
 
     function ensureJSsource() {
         if (!JSsource) {
             JSsource = {};
-            for (var fun in JSfuncs) {
+            for (let fun in JSfuncs) {
                 if (JSfuncs.hasOwnProperty(fun)) {
                     JSsource[fun] = parseJSFunc(JSfuncs[fun])
                 }
@@ -677,38 +677,38 @@ var cwrap, ccall;
     }
     cwrap = function cwrap(ident, returnType, argTypes) {
         argTypes = argTypes || [];
-        var cfunc = getCFunc(ident);
-        var numericArgs = argTypes.every((function(type) {
+        let cfunc = getCFunc(ident);
+        let numericArgs = argTypes.every((function(type) {
             return type === "number"
         }));
-        var numericRet = returnType !== "string";
+        let numericRet = returnType !== "string";
         if (numericRet && numericArgs) {
             return cfunc
         }
-        var argNames = argTypes.map((function(x, i) {
+        let argNames = argTypes.map((function(x, i) {
             return "$" + i
         }));
-        var funcstr = "(function(" + argNames.join(",") + ") {";
-        var nargs = argTypes.length;
+        let funcstr = "(function(" + argNames.join(",") + ") {";
+        let nargs = argTypes.length;
         if (!numericArgs) {
             ensureJSsource();
-            funcstr += "var stack = " + JSsource["stackSave"].body + ";";
-            for (var i = 0; i < nargs; i++) {
-                var arg = argNames[i],
+            funcstr += "let stack = " + JSsource["stackSave"].body + ";";
+            for (let i = 0; i < nargs; i++) {
+                let arg = argNames[i],
                     type = argTypes[i];
                 if (type === "number") continue;
-                var convertCode = JSsource[type + "ToC"];
-                funcstr += "var " + convertCode.arguments + " = " + arg + ";";
+                let convertCode = JSsource[type + "ToC"];
+                funcstr += "let " + convertCode.arguments + " = " + arg + ";";
                 funcstr += convertCode.body + ";";
                 funcstr += arg + "=(" + convertCode.returnValue + ");"
             }
         }
-        var cfuncname = parseJSFunc((function() {
+        let cfuncname = parseJSFunc((function() {
             return cfunc
         })).returnValue;
-        funcstr += "var ret = " + cfuncname + "(" + argNames.join(",") + ");";
+        funcstr += "let ret = " + cfuncname + "(" + argNames.join(",") + ");";
         if (!numericRet) {
-            var strgfy = parseJSFunc((function() {
+            let strgfy = parseJSFunc((function() {
                 return Pointer_stringify
             })).returnValue;
             funcstr += "ret = " + strgfy + "(ret);"
@@ -779,11 +779,11 @@ function getValue(ptr, type, noSafe) {
     return null
 }
 Module["getValue"] = getValue;
-var ALLOC_NORMAL = 0;
-var ALLOC_STACK = 1;
-var ALLOC_STATIC = 2;
-var ALLOC_DYNAMIC = 3;
-var ALLOC_NONE = 4;
+let ALLOC_NORMAL = 0;
+let ALLOC_STACK = 1;
+let ALLOC_STATIC = 2;
+let ALLOC_DYNAMIC = 3;
+let ALLOC_NONE = 4;
 Module["ALLOC_NORMAL"] = ALLOC_NORMAL;
 Module["ALLOC_STACK"] = ALLOC_STACK;
 Module["ALLOC_STATIC"] = ALLOC_STATIC;
@@ -791,7 +791,7 @@ Module["ALLOC_DYNAMIC"] = ALLOC_DYNAMIC;
 Module["ALLOC_NONE"] = ALLOC_NONE;
 
 function allocate(slab, types, allocator, ptr) {
-    var zeroinit, size;
+    let zeroinit, size;
     if (typeof slab === "number") {
         zeroinit = true;
         size = slab
@@ -799,15 +799,15 @@ function allocate(slab, types, allocator, ptr) {
         zeroinit = false;
         size = slab.length
     }
-    var singleType = typeof types === "string" ? types : null;
-    var ret;
+    let singleType = typeof types === "string" ? types : null;
+    let ret;
     if (allocator == ALLOC_NONE) {
         ret = ptr
     } else {
         ret = [typeof _malloc === "function" ? _malloc : Runtime.staticAlloc, Runtime.stackAlloc, Runtime.staticAlloc, Runtime.dynamicAlloc][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length))
     }
     if (zeroinit) {
-        var ptr = ret,
+        let ptr = ret,
             stop;
         assert((ret & 3) == 0);
         stop = ret + (size & ~3);
@@ -828,10 +828,10 @@ function allocate(slab, types, allocator, ptr) {
         }
         return ret
     }
-    var i = 0,
+    let i = 0,
         type, typeSize, previousType;
     while (i < size) {
-        var curr = slab[i];
+        let curr = slab[i];
         if (typeof curr === "function") {
             curr = Runtime.getFunctionIndex(curr)
         }
@@ -861,9 +861,9 @@ Module["getMemory"] = getMemory;
 
 function Pointer_stringify(ptr, length) {
     if (length === 0 || !ptr) return "";
-    var hasUtf = 0;
-    var t;
-    var i = 0;
+    let hasUtf = 0;
+    let t;
+    let i = 0;
     while (1) {
         t = HEAPU8[ptr + i >> 0];
         hasUtf |= t;
@@ -872,10 +872,10 @@ function Pointer_stringify(ptr, length) {
         if (length && i == length) break
     }
     if (!length) length = i;
-    var ret = "";
+    let ret = "";
     if (hasUtf < 128) {
-        var MAX_CHUNK = 1024;
-        var curr;
+        let MAX_CHUNK = 1024;
+        let curr;
         while (length > 0) {
             curr = String.fromCharCode.apply(String, HEAPU8.subarray(ptr, ptr + Math.min(length, MAX_CHUNK)));
             ret = ret ? ret + curr : curr;
@@ -889,9 +889,9 @@ function Pointer_stringify(ptr, length) {
 Module["Pointer_stringify"] = Pointer_stringify;
 
 function AsciiToString(ptr) {
-    var str = "";
+    let str = "";
     while (1) {
-        var ch = HEAP8[ptr++ >> 0];
+        let ch = HEAP8[ptr++ >> 0];
         if (!ch) return str;
         str += String.fromCharCode(ch)
     }
@@ -902,16 +902,16 @@ function stringToAscii(str, outPtr) {
     return writeAsciiToMemory(str, outPtr, false)
 }
 Module["stringToAscii"] = stringToAscii;
-var UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
+let UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
 
 function UTF8ArrayToString(u8Array, idx) {
-    var endPtr = idx;
+    let endPtr = idx;
     while (u8Array[endPtr]) ++endPtr;
     if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
         return UTF8Decoder.decode(u8Array.subarray(idx, endPtr))
     } else {
-        var u0, u1, u2, u3, u4, u5;
-        var str = "";
+        let u0, u1, u2, u3, u4, u5;
+        let str = "";
         while (1) {
             u0 = u8Array[idx++];
             if (!u0) return str;
@@ -944,7 +944,7 @@ function UTF8ArrayToString(u8Array, idx) {
             if (u0 < 65536) {
                 str += String.fromCharCode(u0)
             } else {
-                var ch = u0 - 65536;
+                let ch = u0 - 65536;
                 str += String.fromCharCode(55296 | ch >> 10, 56320 | ch & 1023)
             }
         }
@@ -959,10 +959,10 @@ Module["UTF8ToString"] = UTF8ToString;
 
 function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
     if (!(maxBytesToWrite > 0)) return 0;
-    var startIdx = outIdx;
-    var endIdx = outIdx + maxBytesToWrite - 1;
-    for (var i = 0; i < str.length; ++i) {
-        var u = str.charCodeAt(i);
+    let startIdx = outIdx;
+    let endIdx = outIdx + maxBytesToWrite - 1;
+    for (let i = 0; i < str.length; ++i) {
+        let u = str.charCodeAt(i);
         if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
         if (u <= 127) {
             if (outIdx >= endIdx) break;
@@ -1010,9 +1010,9 @@ function stringToUTF8(str, outPtr, maxBytesToWrite) {
 Module["stringToUTF8"] = stringToUTF8;
 
 function lengthBytesUTF8(str) {
-    var len = 0;
-    for (var i = 0; i < str.length; ++i) {
-        var u = str.charCodeAt(i);
+    let len = 0;
+    for (let i = 0; i < str.length; ++i) {
+        let u = str.charCodeAt(i);
         if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
         if (u <= 127) {
             ++len
@@ -1031,18 +1031,18 @@ function lengthBytesUTF8(str) {
     return len
 }
 Module["lengthBytesUTF8"] = lengthBytesUTF8;
-var UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
+let UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
 
 function demangle(func) {
-    var __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
+    let __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
     if (__cxa_demangle_func) {
         try {
-            var s = func.substr(1);
-            var len = lengthBytesUTF8(s) + 1;
-            var buf = _malloc(len);
+            let s = func.substr(1);
+            let len = lengthBytesUTF8(s) + 1;
+            let buf = _malloc(len);
             stringToUTF8(s, buf, len);
-            var status = _malloc(4);
-            var ret = __cxa_demangle_func(buf, 0, 0, status);
+            let status = _malloc(4);
+            let ret = __cxa_demangle_func(buf, 0, 0, status);
             if (getValue(status, "i32") === 0 && ret) {
                 return Pointer_stringify(ret)
             }
@@ -1058,15 +1058,15 @@ function demangle(func) {
 }
 
 function demangleAll(text) {
-    var regex = /__Z[\w\d_]+/g;
+    let regex = /__Z[\w\d_]+/g;
     return text.replace(regex, (function(x) {
-        var y = demangle(x);
+        let y = demangle(x);
         return x === y ? x : x + " [" + y + "]"
     }))
 }
 
 function jsStackTrace() {
-    var err = new Error;
+    let err = new Error;
     if (!err.stack) {
         try {
             throw new Error(0)
@@ -1081,13 +1081,13 @@ function jsStackTrace() {
 }
 
 function stackTrace() {
-    var js = jsStackTrace();
+    let js = jsStackTrace();
     if (Module["extraStackTrace"]) js += "\n" + Module["extraStackTrace"]();
     return demangleAll(js)
 }
 Module["stackTrace"] = stackTrace;
-var WASM_PAGE_SIZE = 65536;
-var ASMJS_PAGE_SIZE = 16777216;
+let WASM_PAGE_SIZE = 65536;
+let ASMJS_PAGE_SIZE = 16777216;
 
 function alignUp(x, multiple) {
     if (x % multiple > 0) {
@@ -1095,7 +1095,7 @@ function alignUp(x, multiple) {
     }
     return x
 }
-var HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
+let HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
 
 function updateGlobalBuffer(buf) {
     Module["buffer"] = buffer = buf
@@ -1111,9 +1111,9 @@ function updateGlobalBufferViews() {
     Module["HEAPF32"] = HEAPF32 = new Float32Array(buffer);
     Module["HEAPF64"] = HEAPF64 = new Float64Array(buffer)
 }
-var STATIC_BASE, STATICTOP, staticSealed;
-var STACK_BASE, STACKTOP, STACK_MAX;
-var DYNAMIC_BASE, DYNAMICTOP_PTR;
+let STATIC_BASE, STATICTOP, staticSealed;
+let STACK_BASE, STACKTOP, STACK_MAX;
+let DYNAMIC_BASE, DYNAMICTOP_PTR;
 STATIC_BASE = STATICTOP = STACK_BASE = STACKTOP = STACK_MAX = DYNAMIC_BASE = DYNAMICTOP_PTR = 0;
 staticSealed = false;
 
@@ -1124,8 +1124,8 @@ function abortOnCannotGrowMemory() {
 function enlargeMemory() {
     abortOnCannotGrowMemory()
 }
-var TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
-var TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
+let TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
+let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
 if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr("TOTAL_MEMORY should be larger than TOTAL_STACK, was " + TOTAL_MEMORY + "! (TOTAL_STACK=" + TOTAL_STACK + ")");
 if (Module["buffer"]) {
     buffer = Module["buffer"]
@@ -1161,12 +1161,12 @@ Module["HEAPF64"] = HEAPF64;
 
 function callRuntimeCallbacks(callbacks) {
     while (callbacks.length > 0) {
-        var callback = callbacks.shift();
+        let callback = callbacks.shift();
         if (typeof callback == "function") {
             callback();
             continue
         }
-        var func = callback.func;
+        let func = callback.func;
         if (typeof func === "number") {
             if (callback.arg === undefined) {
                 Module["dynCall_v"](func)
@@ -1178,13 +1178,13 @@ function callRuntimeCallbacks(callbacks) {
         }
     }
 }
-var __ATPRERUN__ = [];
-var __ATINIT__ = [];
-var __ATMAIN__ = [];
-var __ATEXIT__ = [];
-var __ATPOSTRUN__ = [];
-var runtimeInitialized = false;
-var runtimeExited = false;
+let __ATPRERUN__ = [];
+let __ATINIT__ = [];
+let __ATMAIN__ = [];
+let __ATEXIT__ = [];
+let __ATPOSTRUN__ = [];
+let runtimeInitialized = false;
+let runtimeExited = false;
 
 function preRun() {
     if (Module["preRun"]) {
@@ -1247,18 +1247,18 @@ function addOnPostRun(cb) {
 Module["addOnPostRun"] = addOnPostRun;
 
 function intArrayFromString(stringy, dontAddNull, length) {
-    var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
-    var u8array = new Array(len);
-    var numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
+    let len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
+    let u8array = new Array(len);
+    let numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
     if (dontAddNull) u8array.length = numBytesWritten;
     return u8array
 }
 Module["intArrayFromString"] = intArrayFromString;
 
 function intArrayToString(array) {
-    var ret = [];
-    for (var i = 0; i < array.length; i++) {
-        var chr = array[i];
+    let ret = [];
+    for (let i = 0; i < array.length; i++) {
+        let chr = array[i];
         if (chr > 255) {
             chr &= 255
         }
@@ -1270,7 +1270,7 @@ Module["intArrayToString"] = intArrayToString;
 
 function writeStringToMemory(string, buffer, dontAddNull) {
     Runtime.warnOnce("writeStringToMemory is deprecated and should not be called! Use stringToUTF8() instead!");
-    var lastChar, end;
+    let lastChar, end;
     if (dontAddNull) {
         end = buffer + lengthBytesUTF8(string);
         lastChar = HEAP8[end]
@@ -1286,22 +1286,22 @@ function writeArrayToMemory(array, buffer) {
 Module["writeArrayToMemory"] = writeArrayToMemory;
 
 function writeAsciiToMemory(str, buffer, dontAddNull) {
-    for (var i = 0; i < str.length; ++i) {
+    for (let i = 0; i < str.length; ++i) {
         HEAP8[buffer++ >> 0] = str.charCodeAt(i)
     }
     if (!dontAddNull) HEAP8[buffer >> 0] = 0
 }
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 if (!Math["imul"] || Math["imul"](4294967295, 5) !== -5) Math["imul"] = function imul(a, b) {
-    var ah = a >>> 16;
-    var al = a & 65535;
-    var bh = b >>> 16;
-    var bl = b & 65535;
+    let ah = a >>> 16;
+    let al = a & 65535;
+    let bh = b >>> 16;
+    let bl = b & 65535;
     return al * bl + (ah * bl + al * bh << 16) | 0
 };
 Math.imul = Math["imul"];
 if (!Math["fround"]) {
-    var froundBuffer = new Float32Array(1);
+    let froundBuffer = new Float32Array(1);
     Math["fround"] = (function(x) {
         froundBuffer[0] = x;
         return froundBuffer[0]
@@ -1310,7 +1310,7 @@ if (!Math["fround"]) {
 Math.fround = Math["fround"];
 if (!Math["clz32"]) Math["clz32"] = (function(x) {
     x = x >>> 0;
-    for (var i = 0; i < 32; i++) {
+    for (let i = 0; i < 32; i++) {
         if (x & 1 << 31 - i) return i
     }
     return 32
@@ -1320,29 +1320,29 @@ if (!Math["trunc"]) Math["trunc"] = (function(x) {
     return x < 0 ? Math.ceil(x) : Math.floor(x)
 });
 Math.trunc = Math["trunc"];
-var Math_abs = Math.abs;
-var Math_cos = Math.cos;
-var Math_sin = Math.sin;
-var Math_tan = Math.tan;
-var Math_acos = Math.acos;
-var Math_asin = Math.asin;
-var Math_atan = Math.atan;
-var Math_atan2 = Math.atan2;
-var Math_exp = Math.exp;
-var Math_log = Math.log;
-var Math_sqrt = Math.sqrt;
-var Math_ceil = Math.ceil;
-var Math_floor = Math.floor;
-var Math_pow = Math.pow;
-var Math_imul = Math.imul;
-var Math_fround = Math.fround;
-var Math_round = Math.round;
-var Math_min = Math.min;
-var Math_clz32 = Math.clz32;
-var Math_trunc = Math.trunc;
-var runDependencies = 0;
-var runDependencyWatcher = null;
-var dependenciesFulfilled = null;
+let Math_abs = Math.abs;
+let Math_cos = Math.cos;
+let Math_sin = Math.sin;
+let Math_tan = Math.tan;
+let Math_acos = Math.acos;
+let Math_asin = Math.asin;
+let Math_atan = Math.atan;
+let Math_atan2 = Math.atan2;
+let Math_exp = Math.exp;
+let Math_log = Math.log;
+let Math_sqrt = Math.sqrt;
+let Math_ceil = Math.ceil;
+let Math_floor = Math.floor;
+let Math_pow = Math.pow;
+let Math_imul = Math.imul;
+let Math_fround = Math.fround;
+let Math_round = Math.round;
+let Math_min = Math.min;
+let Math_clz32 = Math.clz32;
+let Math_trunc = Math.trunc;
+let runDependencies = 0;
+let runDependencyWatcher = null;
+let dependenciesFulfilled = null;
 
 function addRunDependency(id) {
     runDependencies++;
@@ -1363,7 +1363,7 @@ function removeRunDependency(id) {
             runDependencyWatcher = null
         }
         if (dependenciesFulfilled) {
-            var callback = dependenciesFulfilled;
+            let callback = dependenciesFulfilled;
             dependenciesFulfilled = null;
             callback()
         }
@@ -1372,21 +1372,21 @@ function removeRunDependency(id) {
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
-var memoryInitializer = null;
+let memoryInitializer = null;
 
 function integrateWasmJS(Module) {
-    var method = Module["wasmJSMethod"] || "native-wasm";
+    let method = Module["wasmJSMethod"] || "native-wasm";
     Module["wasmJSMethod"] = method;
-    var wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
-	var wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
-    var asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
+    let wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
+	let wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
+    let asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
     if (typeof Module["locateFile"] === "function") {
         wasmTextFile = Module["locateFile"](wasmTextFile);
         wasmBinaryFile = Module["locateFile"](wasmBinaryFile);
         asmjsCodeFile = Module["locateFile"](asmjsCodeFile)
     }
-    var wasmPageSize = 64 * 1024;
-    var asm2wasmImports = {
+    let wasmPageSize = 64 * 1024;
+    let asm2wasmImports = {
         "f64-rem": (function(x, y) {
             return x % y
         }),
@@ -1409,20 +1409,20 @@ function integrateWasmJS(Module) {
             debugger
         })
     };
-    var info = {
+    let info = {
         "global": null,
         "env": null,
         "asm2wasm": asm2wasmImports,
         "parent": Module
     };
-    var exports = null;
+    let exports = null;
 
     function lookupImport(mod, base) {
-        var lookup = info;
+        let lookup = info;
         if (mod.indexOf(".") < 0) {
             lookup = (lookup || {})[mod]
         } else {
-            var parts = mod.split(".");
+            let parts = mod.split(".");
             lookup = (lookup || {})[parts[0]];
             lookup = (lookup || {})[parts[1]]
         }
@@ -1436,12 +1436,12 @@ function integrateWasmJS(Module) {
     }
 
     function mergeMemory(newBuffer) {
-        var oldBuffer = Module["buffer"];
+        let oldBuffer = Module["buffer"];
         if (newBuffer.byteLength < oldBuffer.byteLength) {
             Module["printErr"]("the new buffer in mergeMemory is smaller than the previous one. in native wasm, we should grow memory here")
         }
-        var oldView = new Int8Array(oldBuffer);
-        var newView = new Int8Array(newBuffer);
+        let oldView = new Int8Array(oldBuffer);
+        let newView = new Int8Array(newBuffer);
         if (!memoryInitializer) {
             oldView.set(newView.subarray(Module["STATIC_BASE"], Module["STATIC_BASE"] + Module["STATIC_BUMP"]), Module["STATIC_BASE"])
         }
@@ -1449,7 +1449,7 @@ function integrateWasmJS(Module) {
         updateGlobalBuffer(newBuffer);
         updateGlobalBufferViews()
     }
-    var WasmTypes = {
+    let WasmTypes = {
         none: 0,
         i32: 1,
         i64: 2,
@@ -1459,9 +1459,9 @@ function integrateWasmJS(Module) {
 
     function fixImports(imports) {
         if (!0) return imports;
-        var ret = {};
-        for (var i in imports) {
-            var fixed = i;
+        let ret = {};
+        for (let i in imports) {
+            let fixed = i;
             if (fixed[0] == "_") fixed = fixed.substr(1);
             ret[fixed] = imports[i]
         }
@@ -1470,7 +1470,7 @@ function integrateWasmJS(Module) {
 
     function getBinary() {
         try {
-            var binary;
+            let binary;
             if (Module["wasmBinary"]) {
                 binary = Module["wasmBinary"];
                 binary = new Uint8Array(binary)
@@ -1567,7 +1567,7 @@ function integrateWasmJS(Module) {
             Module["printErr"]("WasmJS not detected - polyfill not bundled?");
             return false
         }
-        var wasmJS = WasmJS({});
+        let wasmJS = WasmJS({});
         wasmJS["outside"] = Module;
         wasmJS["info"] = info;
         wasmJS["lookupImport"] = lookupImport;
@@ -1578,13 +1578,13 @@ function integrateWasmJS(Module) {
         env["memory"] = providedBuffer;
         assert(env["memory"] instanceof ArrayBuffer);
         wasmJS["providedTotalMemory"] = Module["buffer"].byteLength;
-        var code;
+        let code;
         if (method === "interpret-binary") {
             code = getBinary()
         } else {
             code = Module["read"](method == "interpret-asm2wasm" ? asmjsCodeFile : wasmTextFile)
         }
-        var temp;
+        let temp;
         if (method == "interpret-asm2wasm") {
             temp = wasmJS["_malloc"](code.length + 1);
             wasmJS["writeAsciiToMemory"](code, temp);
@@ -1610,15 +1610,15 @@ function integrateWasmJS(Module) {
         return exports
     }
     Module["asmPreload"] = Module["asm"];
-    var asmjsReallocBuffer = Module["reallocBuffer"];
-    var wasmReallocBuffer = (function(size) {
-        var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
+    let asmjsReallocBuffer = Module["reallocBuffer"];
+    let wasmReallocBuffer = (function(size) {
+        let PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
         size = alignUp(size, PAGE_MULTIPLE);
-        var old = Module["buffer"];
-        var oldSize = old.byteLength;
+        let old = Module["buffer"];
+        let oldSize = old.byteLength;
         if (Module["usingWasm"]) {
             try {
-                var result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
+                let result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
                 if (result !== (-1 | 0)) {
                     return Module["buffer"] = Module["wasmMemory"].buffer
                 } else {
@@ -1639,14 +1639,14 @@ function integrateWasmJS(Module) {
             return wasmReallocBuffer(size)
         }
     });
-    var finalMethod = "";
+    let finalMethod = "";
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
         if (!env["table"]) {
-            var TABLE_SIZE = Module["wasmTableSize"];
+            let TABLE_SIZE = Module["wasmTableSize"];
             if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
                 if (MAX_TABLE_SIZE !== undefined) {
                     env["table"] = new WebAssembly.Table({
@@ -1671,10 +1671,10 @@ function integrateWasmJS(Module) {
         if (!env["tableBase"]) {
             env["tableBase"] = 0
         }
-        var exports;
-        var methods = method.split(",");
-        for (var i = 0; i < methods.length; i++) {
-            var curr = methods[i];
+        let exports;
+        let methods = method.split(",");
+        for (let i = 0; i < methods.length; i++) {
+            let curr = methods[i];
             finalMethod = curr;
             if (curr === "native-wasm") {
                 if (exports = doNativeWasm(global, env, providedBuffer)) break
@@ -1689,23 +1689,23 @@ function integrateWasmJS(Module) {
         if (!exports) throw "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods";
         return exports
     });
-    var methodHandler = Module["asm"]
+    let methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
-var ASM_CONSTS = [];
+let ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-var STATIC_BUMP = 28816;
+let STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-var tempDoublePtr = STATICTOP;
+let tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    var self = _llvm_stacksave;
-    var ret = self.LLVM_SAVEDSTACKS[p];
+    let self = _llvm_stacksave;
+    let ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1725,7 +1725,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    var self = _llvm_stacksave;
+    let self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1769,63 +1769,63 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
+let _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
+let _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-var getTempRet0 = Module["getTempRet0"] = (function() {
+let getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-var _free = Module["_free"] = (function() {
+let _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-var runPostSets = Module["runPostSets"] = (function() {
+let runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-var setTempRet0 = Module["setTempRet0"] = (function() {
+let setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-var establishStackSpace = Module["establishStackSpace"] = (function() {
+let establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-var _memmove = Module["_memmove"] = (function() {
+let _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
+let _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-var stackSave = Module["stackSave"] = (function() {
+let stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-var _memset = Module["_memset"] = (function() {
+let _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+let _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-var _memcpy = Module["_memcpy"] = (function() {
+let _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
+let _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-var setThrew = Module["setThrew"] = (function() {
+let setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-var stackRestore = Module["stackRestore"] = (function() {
+let stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-var ___errno_location = Module["___errno_location"] = (function() {
+let ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-var stackAlloc = Module["stackAlloc"] = (function() {
+let stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
@@ -1842,11 +1842,11 @@ if (memoryInitializer) {
         memoryInitializer = Module["memoryInitializerPrefixURL"] + memoryInitializer
     }
     if (ENVIRONMENT_IS_NODE || ENVIRONMENT_IS_SHELL) {
-        var data = Module["readBinary"](memoryInitializer);
+        let data = Module["readBinary"](memoryInitializer);
         HEAPU8.set(data, Runtime.GLOBAL_BASE)
     } else {
         addRunDependency("memory initializer");
-        var applyMemoryInitializer = (function(data) {
+        let applyMemoryInitializer = (function(data) {
             if (data.byteLength) data = new Uint8Array(data);
             HEAPU8.set(data, Runtime.GLOBAL_BASE);
             if (Module["memoryInitializerRequest"]) delete Module["memoryInitializerRequest"].response;
@@ -1860,7 +1860,7 @@ if (memoryInitializer) {
         }
         if (Module["memoryInitializerRequest"]) {
             function useRequest() {
-                var request = Module["memoryInitializerRequest"];
+                let request = Module["memoryInitializerRequest"];
                 if (request.status !== 200 && request.status !== 0) {
                     console.warn("a problem seems to have happened with Module.memoryInitializerRequest, status: " + request.status + ", retrying " + memoryInitializer);
                     doBrowserLoad();
@@ -1886,9 +1886,9 @@ function ExitStatus(status) {
 }
 ExitStatus.prototype = new Error;
 ExitStatus.prototype.constructor = ExitStatus;
-var initialStackTop;
-var preloadStartTime = null;
-var calledMain = false;
+let initialStackTop;
+let preloadStartTime = null;
+let calledMain = false;
 dependenciesFulfilled = function runCaller() {
     if (!Module["calledRun"]) run();
     if (!Module["calledRun"]) dependenciesFulfilled = runCaller
@@ -1896,23 +1896,23 @@ dependenciesFulfilled = function runCaller() {
 Module["callMain"] = Module.callMain = function callMain(args) {
     args = args || [];
     ensureInitRuntime();
-    var argc = args.length + 1;
+    let argc = args.length + 1;
 
     function pad() {
-        for (var i = 0; i < 4 - 1; i++) {
+        for (let i = 0; i < 4 - 1; i++) {
             argv.push(0)
         }
     }
-    var argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
+    let argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
     pad();
-    for (var i = 0; i < argc - 1; i = i + 1) {
+    for (let i = 0; i < argc - 1; i = i + 1) {
         argv.push(allocate(intArrayFromString(args[i]), "i8", ALLOC_NORMAL));
         pad()
     }
     argv.push(0);
     argv = allocate(argv, "i32", ALLOC_NORMAL);
     try {
-        var ret = Module["_main"](argc, argv, 0);
+        let ret = Module["_main"](argc, argv, 0);
         exit(ret, true)
     } catch (e) {
         if (e instanceof ExitStatus) {
@@ -1921,7 +1921,7 @@ Module["callMain"] = Module.callMain = function callMain(args) {
             Module["noExitRuntime"] = true;
             return
         } else {
-            var toLog = e;
+            let toLog = e;
             if (e && typeof e === "object" && e.stack) {
                 toLog = [e, e.stack]
             }
@@ -1984,7 +1984,7 @@ function exit(status, implicit) {
     Module["quit"](status, new ExitStatus(status))
 }
 Module["exit"] = Module.exit = exit;
-var abortDecorators = [];
+let abortDecorators = [];
 
 function abort(what) {
     if (Module["onAbort"]) {
@@ -1999,8 +1999,8 @@ function abort(what) {
     }
     ABORT = true;
     EXITSTATUS = 1;
-    var extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
-    var output = "abort(" + what + ") at " + stackTrace() + extra;
+    let extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
+    let output = "abort(" + what + ") at " + stackTrace() + extra;
     if (abortDecorators) {
         abortDecorators.forEach((function(decorator) {
             output = decorator(output, what)
@@ -2015,7 +2015,7 @@ if (Module["preInit"]) {
         Module["preInit"].pop()()
     }
 }
-var shouldRunNow = true;
+let shouldRunNow = true;
 if (Module["noInitialRun"]) {
     shouldRunNow = false
 }
