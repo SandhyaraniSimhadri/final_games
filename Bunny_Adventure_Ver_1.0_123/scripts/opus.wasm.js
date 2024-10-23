@@ -1746,8 +1746,12 @@ function integrateWasmJS(Module) {
             } else if (curr === "asmjs") {
                 if (exports = doJustAsm(global, env, providedBuffer)) break
             } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                if (exports = doWasmPolyfill(global, env, providedBuffer, curr)) break
-            } else {
+                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
+                if (exports) {
+                    break; // Use the extracted value in the condition
+                }
+            }
+            else {
                 abort("bad method: " + curr)
             }
         }
