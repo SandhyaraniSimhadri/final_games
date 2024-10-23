@@ -826,64 +826,23 @@ Module["ALLOC_DYNAMIC"] = ALLOC_DYNAMIC;
 Module["ALLOC_NONE"] = ALLOC_NONE;
 
 function allocate(slab, types, allocator, ptr) {
-    let zeroinit, size;
-    if (typeof slab === "number") {
-        zeroinit = true;
-        size = slab
-    } else {
-        zeroinit = false;
-        size = slab.length
+    const size = getSize(slab);
+    const singleType = typeof types === "string" ? types : null;
+    const ret = allocateMemory(size, singleType, allocator, ptr);
+
+    if (isZeroInit(slab)) {
+        zeroInitMemory(ret, size);
+        return ret;
     }
-    let singleType = typeof types === "string" ? types : null;
-    let ret;
-    if (allocator == ALLOC_NONE) {
-        ret = ptr
-    } else {
-        ret = [typeof _malloc === "function" ? _malloc : Runtime.staticAlloc, Runtime.stackAlloc, Runtime.staticAlloc, Runtime.dynamicAlloc][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length))
-    }
-    if (zeroinit) {
-        let ptr = ret,
-            stop;
-        assert((ret & 3) == 0);
-        stop = ret + (size & ~3);
-        for (; ptr < stop; ptr += 4) {
-            HEAP32[ptr >> 2] = 0
-        }
-        stop = ret + size;
-        while (ptr < stop) {
-            HEAP8[ptr++ >> 0] = 0
-        }
-        return ret
-    }
+
     if (singleType === "i8") {
-        if (slab.subarray || slab.slice) {
-            HEAPU8.set(slab, ret)
-        } else {
-            HEAPU8.set(new Uint8Array(slab), ret)
-        }
-        return ret
+        copySlabToMemory(slab, ret);
+        return ret;
     }
-    let i = 0,
-        type, typeSize, previousType;
-    while (i < size) {
-        let curr = slab[i];
-        if (typeof curr === "function") {
-            curr = Runtime.getFunctionIndex(curr)
-        }
-        type = singleType || types[i];
-        if (type === 0) {
-            i++;
-            continue
-        }
-        if (type == "i64") type = "i32";
-        setValue(ret + i, curr, type);
-        if (previousType !== type) {
-            typeSize = Runtime.getNativeTypeSize(type);
-            previousType = type
-        }
-        i += typeSize
-    }
-    return ret
+
+    writeSlabToMemory(slab, types, singleType, ret, size);
+
+    return ret;
 }
 Module["allocate"] = allocate;
 
@@ -939,49 +898,66 @@ Module["stringToAscii"] = stringToAscii;
 let UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
 
 function UTF8ArrayToString(u8Array, idx) {
+    let endPtr = findStringEnd(u8Array, idx);
+    
+    if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
+        return UTF8Decoder.decode(u8Array.subarray(idx, endPtr));
+    } else {
+        return decodeUTF8(u8Array, idx, endPtr);
+    }
+}
+
+function findStringEnd(u8Array, idx) {
     let endPtr = idx;
     while (u8Array[endPtr]) ++endPtr;
-    if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
-        return UTF8Decoder.decode(u8Array.subarray(idx, endPtr))
+    return endPtr;
+}
+
+function decodeUTF8(u8Array, idx, endPtr) {
+    let str = "";
+    while (idx < endPtr) {
+        let u0 = u8Array[idx++];
+        if (!u0) return str;
+        str += decodeCodePoint(u8Array, u0, idx);
+    }
+    return str;
+}
+
+function decodeCodePoint(u8Array, u0, idx) {
+    if (!(u0 & 128)) return String.fromCharCode(u0);
+    
+    let u1 = u8Array[idx++] & 63;
+    if ((u0 & 224) === 192) {
+        return String.fromCharCode((u0 & 31) << 6 | u1);
+    }
+    
+    let u2 = u8Array[idx++] & 63;
+    if ((u0 & 240) === 224) {
+        u0 = (u0 & 15) << 12 | u1 << 6 | u2;
     } else {
-        let u0, u1, u2, u3, u4, u5;
-        let str = "";
-        while (1) {
-            u0 = u8Array[idx++];
-            if (!u0) return str;
-            if (!(u0 & 128)) {
-                str += String.fromCharCode(u0);
-                continue
-            }
-            u1 = u8Array[idx++] & 63;
-            if ((u0 & 224) == 192) {
-                str += String.fromCharCode((u0 & 31) << 6 | u1);
-                continue
-            }
-            u2 = u8Array[idx++] & 63;
-            if ((u0 & 240) == 224) {
-                u0 = (u0 & 15) << 12 | u1 << 6 | u2
+        let u3 = u8Array[idx++] & 63;
+        if ((u0 & 248) === 240) {
+            u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | u3;
+        } else {
+            let u4 = u8Array[idx++] & 63;
+            if ((u0 & 252) === 248) {
+                u0 = (u0 & 3) << 24 | u1 << 18 | u2 << 12 | u3 << 6 | u4;
             } else {
-                u3 = u8Array[idx++] & 63;
-                if ((u0 & 248) == 240) {
-                    u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | u3
-                } else {
-                    u4 = u8Array[idx++] & 63;
-                    if ((u0 & 252) == 248) {
-                        u0 = (u0 & 3) << 24 | u1 << 18 | u2 << 12 | u3 << 6 | u4
-                    } else {
-                        u5 = u8Array[idx++] & 63;
-                        u0 = (u0 & 1) << 30 | u1 << 24 | u2 << 18 | u3 << 12 | u4 << 6 | u5
-                    }
-                }
-            }
-            if (u0 < 65536) {
-                str += String.fromCharCode(u0)
-            } else {
-                let ch = u0 - 65536;
-                str += String.fromCharCode(55296 | ch >> 10, 56320 | ch & 1023)
+                let u5 = u8Array[idx++] & 63;
+                u0 = (u0 & 1) << 30 | u1 << 24 | u2 << 18 | u3 << 12 | u4 << 6 | u5;
             }
         }
+    }
+    
+    return createUTF16Pair(u0);
+}
+
+function createUTF16Pair(u0) {
+    if (u0 < 65536) {
+        return String.fromCharCode(u0);
+    } else {
+        let ch = u0 - 65536;
+        return String.fromCharCode(55296 | (ch >> 10), 56320 | (ch & 1023));
     }
 }
 Module["UTF8ArrayToString"] = UTF8ArrayToString;
@@ -1438,21 +1414,26 @@ function integrateWasmJS(Module) {
 
     function lookupImport(mod, base) {
         let lookup = info;
+    
         if (mod.indexOf(".") < 0) {
-            lookup = (lookup || {})[mod]
+            lookup = lookup?.[mod]; // Use optional chaining here
         } else {
             let parts = mod.split(".");
-            lookup = (lookup || {})[parts[0]];
-            lookup = (lookup || {})[parts[1]]
+            lookup = lookup?.[parts[0]]; // Use optional chaining here
+            lookup = lookup?.[parts[1]]; // Use optional chaining here
         }
+    
         if (base) {
-            lookup = (lookup || {})[base]
+            lookup = lookup?.[base]; // Use optional chaining here
         }
+    
         if (lookup === undefined) {
-            abort("bad lookupImport to (" + mod + ")." + base)
+            abort("bad lookupImport to (" + mod + ")." + base);
         }
-        return lookup
+    
+        return lookup;
     }
+    
 
     function mergeMemory(newBuffer) {
         let oldBuffer = Module["buffer"];
