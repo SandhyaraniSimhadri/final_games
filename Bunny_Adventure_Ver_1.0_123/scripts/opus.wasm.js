@@ -1712,64 +1712,56 @@ function integrateWasmJS(Module) {
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
-    
-        setupTable(env);
-        setupMemoryBase(env);
-    
-        let exports;
-        const methods = method.split(",");
-    
-        for (const curr of methods) {
-            exports = selectMethod(curr, global, env, providedBuffer);
-            if (exports) break; // Stop the loop if exports is truthy
-        }
-    
-        if (!exports) {
-            throw new Error("No Binaryen method succeeded. Consider enabling more options: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
-        }
-    
-        return exports;
-    });
-    
-    function setupTable(env) {
         if (!env["table"]) {
-            let TABLE_SIZE = Module["wasmTableSize"] || 1024;
+            let TABLE_SIZE = Module["wasmTableSize"];
+            if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
             let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
-    
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
-                env["table"] = new WebAssembly.Table({
-                    initial: TABLE_SIZE,
-                    maximum: MAX_TABLE_SIZE,
-                    element: "anyfunc"
-                });
+                if (MAX_TABLE_SIZE !== undefined) {
+                    env["table"] = new WebAssembly.Table({
+                        "initial": TABLE_SIZE,
+                        "maximum": MAX_TABLE_SIZE,
+                        "element": "anyfunc"
+                    })
+                } else {
+                    env["table"] = new WebAssembly.Table({
+                        "initial": TABLE_SIZE,
+                        element: "anyfunc"
+                    })
+                }
             } else {
-                env["table"] = new Array(TABLE_SIZE);
+                env["table"] = new Array(TABLE_SIZE)
             }
-            
-            Module["wasmTable"] = env["table"];
+            Module["wasmTable"] = env["table"]
         }
-    }
-    
-    function setupMemoryBase(env) {
-        env["memoryBase"] = env["memoryBase"] || Module["STATIC_BASE"];
-        env["tableBase"] = env["tableBase"] || 0;
-    }
-    
-    function selectMethod(method, global, env, providedBuffer) {
-        switch (method) {
-            case "native-wasm":
-                return doNativeWasm(global, env, providedBuffer);
-            case "asmjs":
-                return doJustAsm(global, env, providedBuffer);
-            case "interpret-asm2wasm":
-            case "interpret-s-expr":
-            case "interpret-binary":
-                return doWasmPolyfill(global, env, providedBuffer, method);
-            default:
-                abort(`bad method: ${method}`);
+        if (!env["memoryBase"]) {
+            env["memoryBase"] = Module["STATIC_BASE"]
         }
-    }
-    
+        if (!env["tableBase"]) {
+            env["tableBase"] = 0
+        }
+        let exports;
+        let methods = method.split(",");
+        for (let i = 0; i < methods.length; i++) {
+            let curr = methods[i];
+            finalMethod = curr;
+            if (curr === "native-wasm") {
+                if (exports = doNativeWasm(global, env, providedBuffer)) break
+            } else if (curr === "asmjs") {
+                if (exports = doJustAsm(global, env, providedBuffer)) break
+            } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
+                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
+                if (exports) {
+                    break; // Use the extracted value in the condition
+                }
+            }
+            else {
+                abort("bad method: " + curr)
+            }
+        }
+        if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
+        return exports
+    });
     let methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
