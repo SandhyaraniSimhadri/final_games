@@ -826,65 +826,81 @@ Module["ALLOC_DYNAMIC"] = ALLOC_DYNAMIC;
 Module["ALLOC_NONE"] = ALLOC_NONE;
 
 function allocate(slab, types, allocator, ptr) {
-    let zeroinit, size;
-    if (typeof slab === "number") {
-        zeroinit = true;
-        size = slab
-    } else {
-        zeroinit = false;
-        size = slab.length
-    }
-    let singleType = typeof types === "string" ? types : null;
-    let ret;
-    if (allocator == ALLOC_NONE) {
-        ret = ptr
-    } else {
-        ret = [typeof _malloc === "function" ? _malloc : Runtime.staticAlloc, Runtime.stackAlloc, Runtime.staticAlloc, Runtime.dynamicAlloc][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length))
-    }
+    const { zeroinit, size } = determineSlabProperties(slab);
+    const singleType = typeof types === "string" ? types : null;
+    const ret = allocateMemory(allocator, ptr, size, singleType);
+
     if (zeroinit) {
-        let ptr = ret,
-            stop;
-        assert((ret & 3) == 0);
-        stop = ret + (size & ~3);
-        for (; ptr < stop; ptr += 4) {
-            HEAP32[ptr >> 2] = 0
-        }
-        stop = ret + size;
-        while (ptr < stop) {
-            HEAP8[ptr++ >> 0] = 0
-        }
-        return ret
+        initializeMemory(ret, size);
+        return ret;
     }
+
+    return copySlabData(slab, ret, size, singleType);
+}
+
+function determineSlabProperties(slab) {
+    if (typeof slab === "number") {
+        return { zeroinit: true, size: slab };
+    }
+    return { zeroinit: false, size: slab.length };
+}
+
+function allocateMemory(allocator, ptr, size, singleType) {
+    if (allocator == ALLOC_NONE) {
+        return ptr;
+    }
+    return [
+        typeof _malloc === "function" ? _malloc : Runtime.staticAlloc,
+        Runtime.stackAlloc,
+        Runtime.staticAlloc,
+        Runtime.dynamicAlloc
+    ][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length));
+}
+
+function initializeMemory(ret, size) {
+    assert((ret & 3) === 0);
+    const stop = ret + (size & ~3);
+    for (let ptr = ret; ptr < stop; ptr += 4) {
+        HEAP32[ptr >> 2] = 0;
+    }
+    for (let ptr = stop; ptr < ret + size; ptr++) {
+        HEAP8[ptr >> 0] = 0;
+    }
+}
+
+function copySlabData(slab, ret, size, singleType) {
     if (singleType === "i8") {
         if (slab.subarray || slab.slice) {
-            HEAPU8.set(slab, ret)
+            HEAPU8.set(slab, ret);
         } else {
-            HEAPU8.set(new Uint8Array(slab), ret)
+            HEAPU8.set(new Uint8Array(slab), ret);
         }
-        return ret
+        return ret;
     }
-    let i = 0,
-        type, typeSize, previousType;
+
+    let i = 0, previousType;
     while (i < size) {
         let curr = slab[i];
         if (typeof curr === "function") {
-            curr = Runtime.getFunctionIndex(curr)
+            curr = Runtime.getFunctionIndex(curr);
         }
-        type = singleType || types[i];
+        const type = singleType || types[i];
+
         if (type === 0) {
             i++;
-            continue
+            continue;
         }
-        if (type == "i64") type = "i32";
-        setValue(ret + i, curr, type);
-        if (previousType !== type) {
-            typeSize = Runtime.getNativeTypeSize(type);
-            previousType = type
-        }
-        i += typeSize
+
+        const finalType = type === "i64" ? "i32" : type;
+        setValue(ret + i, curr, finalType);
+        const typeSize = (previousType !== finalType) ? Runtime.getNativeTypeSize(finalType) : 0;
+        previousType = finalType;
+        i += typeSize;
     }
-    return ret
+
+    return ret;
 }
+
 Module["allocate"] = allocate;
 
 function getMemory(size) {
