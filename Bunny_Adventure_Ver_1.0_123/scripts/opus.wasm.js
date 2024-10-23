@@ -1864,14 +1864,11 @@ var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
-let _memcpy = Module["_memcpy"] = (function() {
+var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
 
 
-const stackAlloc = Module["stackAlloc"] = (() => {
-    return Module["asm"]["stackAlloc"].apply(null, arguments);
-});
 
 Runtime.stackAlloc = Module["stackAlloc"];
 Runtime.stackSave = Module["stackSave"];
