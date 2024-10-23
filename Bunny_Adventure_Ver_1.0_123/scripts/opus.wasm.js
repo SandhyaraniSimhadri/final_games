@@ -1113,7 +1113,7 @@ function updateGlobalBufferViews() {
 }
 let STATIC_BASE, STATICTOP, staticSealed;
 let STACK_BASE, STACKTOP, STACK_MAX;
-var DYNAMIC_BASE, DYNAMICTOP_PTR;
+let DYNAMIC_BASE, DYNAMICTOP_PTR;
 STATIC_BASE = STATICTOP = STACK_BASE = STACKTOP = STACK_MAX = DYNAMIC_BASE = DYNAMICTOP_PTR = 0;
 staticSealed = false;
 
@@ -1124,8 +1124,8 @@ function abortOnCannotGrowMemory() {
 function enlargeMemory() {
     abortOnCannotGrowMemory()
 }
-var TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
-var TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
+let TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
+let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
 if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr("TOTAL_MEMORY should be larger than TOTAL_STACK, was " + TOTAL_MEMORY + "! (TOTAL_STACK=" + TOTAL_STACK + ")");
 if (Module["buffer"]) {
     buffer = Module["buffer"]
@@ -1161,12 +1161,12 @@ Module["HEAPF64"] = HEAPF64;
 
 function callRuntimeCallbacks(callbacks) {
     while (callbacks.length > 0) {
-        var callback = callbacks.shift();
+        let callback = callbacks.shift();
         if (typeof callback == "function") {
             callback();
             continue
         }
-        var func = callback.func;
+        let func = callback.func;
         if (typeof func === "number") {
             if (callback.arg === undefined) {
                 Module["dynCall_v"](func)
@@ -1178,13 +1178,13 @@ function callRuntimeCallbacks(callbacks) {
         }
     }
 }
-var __ATPRERUN__ = [];
-var __ATINIT__ = [];
-var __ATMAIN__ = [];
-var __ATEXIT__ = [];
-var __ATPOSTRUN__ = [];
-var runtimeInitialized = false;
-var runtimeExited = false;
+let __ATPRERUN__ = [];
+let __ATINIT__ = [];
+let __ATMAIN__ = [];
+let __ATEXIT__ = [];
+let __ATPOSTRUN__ = [];
+let runtimeInitialized = false;
+let runtimeExited = false;
 
 function preRun() {
     if (Module["preRun"]) {
@@ -1247,18 +1247,18 @@ function addOnPostRun(cb) {
 Module["addOnPostRun"] = addOnPostRun;
 
 function intArrayFromString(stringy, dontAddNull, length) {
-    var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
-    var u8array = new Array(len);
-    var numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
+    let len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
+    let u8array = new Array(len);
+    let numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
     if (dontAddNull) u8array.length = numBytesWritten;
     return u8array
 }
 Module["intArrayFromString"] = intArrayFromString;
 
 function intArrayToString(array) {
-    var ret = [];
-    for (var i = 0; i < array.length; i++) {
-        var chr = array[i];
+    let ret = [];
+    for (let i = 0; i < array.length; i++) {
+        let chr = array[i];
         if (chr > 255) {
             chr &= 255
         }
@@ -1270,7 +1270,7 @@ Module["intArrayToString"] = intArrayToString;
 
 function writeStringToMemory(string, buffer, dontAddNull) {
     Runtime.warnOnce("writeStringToMemory is deprecated and should not be called! Use stringToUTF8() instead!");
-    var lastChar, end;
+    let lastChar, end;
     if (dontAddNull) {
         end = buffer + lengthBytesUTF8(string);
         lastChar = HEAP8[end]
@@ -1286,22 +1286,22 @@ function writeArrayToMemory(array, buffer) {
 Module["writeArrayToMemory"] = writeArrayToMemory;
 
 function writeAsciiToMemory(str, buffer, dontAddNull) {
-    for (var i = 0; i < str.length; ++i) {
+    for (let i = 0; i < str.length; ++i) {
         HEAP8[buffer++ >> 0] = str.charCodeAt(i)
     }
     if (!dontAddNull) HEAP8[buffer >> 0] = 0
 }
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 if (!Math["imul"] || Math["imul"](4294967295, 5) !== -5) Math["imul"] = function imul(a, b) {
-    var ah = a >>> 16;
-    var al = a & 65535;
-    var bh = b >>> 16;
-    var bl = b & 65535;
+    let ah = a >>> 16;
+    let al = a & 65535;
+    let bh = b >>> 16;
+    let bl = b & 65535;
     return al * bl + (ah * bl + al * bh << 16) | 0
 };
 Math.imul = Math["imul"];
 if (!Math["fround"]) {
-    var froundBuffer = new Float32Array(1);
+    let froundBuffer = new Float32Array(1);
     Math["fround"] = (function(x) {
         froundBuffer[0] = x;
         return froundBuffer[0]
@@ -1310,7 +1310,7 @@ if (!Math["fround"]) {
 Math.fround = Math["fround"];
 if (!Math["clz32"]) Math["clz32"] = (function(x) {
     x = x >>> 0;
-    for (var i = 0; i < 32; i++) {
+    for (let i = 0; i < 32; i++) {
         if (x & 1 << 31 - i) return i
     }
     return 32
@@ -1320,8 +1320,8 @@ if (!Math["trunc"]) Math["trunc"] = (function(x) {
     return x < 0 ? Math.ceil(x) : Math.floor(x)
 });
 Math.trunc = Math["trunc"];
-var Math_abs = Math.abs;
-var Math_cos = Math.cos;
+let Math_abs = Math.abs;
+let Math_cos = Math.cos;
 var Math_sin = Math.sin;
 var Math_tan = Math.tan;
 var Math_acos = Math.acos;
