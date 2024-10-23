@@ -1322,27 +1322,27 @@ if (!Math["trunc"]) Math["trunc"] = (function(x) {
 Math.trunc = Math["trunc"];
 let Math_abs = Math.abs;
 let Math_cos = Math.cos;
-var Math_sin = Math.sin;
-var Math_tan = Math.tan;
-var Math_acos = Math.acos;
-var Math_asin = Math.asin;
-var Math_atan = Math.atan;
-var Math_atan2 = Math.atan2;
-var Math_exp = Math.exp;
-var Math_log = Math.log;
-var Math_sqrt = Math.sqrt;
-var Math_ceil = Math.ceil;
-var Math_floor = Math.floor;
-var Math_pow = Math.pow;
-var Math_imul = Math.imul;
-var Math_fround = Math.fround;
-var Math_round = Math.round;
-var Math_min = Math.min;
-var Math_clz32 = Math.clz32;
-var Math_trunc = Math.trunc;
-var runDependencies = 0;
-var runDependencyWatcher = null;
-var dependenciesFulfilled = null;
+let Math_sin = Math.sin;
+let Math_tan = Math.tan;
+let Math_acos = Math.acos;
+let Math_asin = Math.asin;
+let Math_atan = Math.atan;
+let Math_atan2 = Math.atan2;
+let Math_exp = Math.exp;
+let Math_log = Math.log;
+let Math_sqrt = Math.sqrt;
+let Math_ceil = Math.ceil;
+let Math_floor = Math.floor;
+let Math_pow = Math.pow;
+let Math_imul = Math.imul;
+let Math_fround = Math.fround;
+let Math_round = Math.round;
+let Math_min = Math.min;
+let Math_clz32 = Math.clz32;
+let Math_trunc = Math.trunc;
+let runDependencies = 0;
+let runDependencyWatcher = null;
+let dependenciesFulfilled = null;
 
 function addRunDependency(id) {
     runDependencies++;
@@ -1363,7 +1363,7 @@ function removeRunDependency(id) {
             runDependencyWatcher = null
         }
         if (dependenciesFulfilled) {
-            var callback = dependenciesFulfilled;
+            let callback = dependenciesFulfilled;
             dependenciesFulfilled = null;
             callback()
         }
@@ -1372,21 +1372,21 @@ function removeRunDependency(id) {
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
-var memoryInitializer = null;
+let memoryInitializer = null;
 
 function integrateWasmJS(Module) {
-    var method = Module["wasmJSMethod"] || "native-wasm";
+    let method = Module["wasmJSMethod"] || "native-wasm";
     Module["wasmJSMethod"] = method;
-    var wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
-	var wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
-    var asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
+    let wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
+	let wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
+    let asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
     if (typeof Module["locateFile"] === "function") {
         wasmTextFile = Module["locateFile"](wasmTextFile);
         wasmBinaryFile = Module["locateFile"](wasmBinaryFile);
         asmjsCodeFile = Module["locateFile"](asmjsCodeFile)
     }
-    var wasmPageSize = 64 * 1024;
-    var asm2wasmImports = {
+    let wasmPageSize = 64 * 1024;
+    let asm2wasmImports = {
         "f64-rem": (function(x, y) {
             return x % y
         }),
@@ -1409,20 +1409,20 @@ function integrateWasmJS(Module) {
             debugger
         })
     };
-    var info = {
+    let info = {
         "global": null,
         "env": null,
         "asm2wasm": asm2wasmImports,
         "parent": Module
     };
-    var exports = null;
+    let exports = null;
 
     function lookupImport(mod, base) {
-        var lookup = info;
+        let lookup = info;
         if (mod.indexOf(".") < 0) {
             lookup = (lookup || {})[mod]
         } else {
-            var parts = mod.split(".");
+            let parts = mod.split(".");
             lookup = (lookup || {})[parts[0]];
             lookup = (lookup || {})[parts[1]]
         }
@@ -1436,12 +1436,12 @@ function integrateWasmJS(Module) {
     }
 
     function mergeMemory(newBuffer) {
-        var oldBuffer = Module["buffer"];
+        let oldBuffer = Module["buffer"];
         if (newBuffer.byteLength < oldBuffer.byteLength) {
             Module["printErr"]("the new buffer in mergeMemory is smaller than the previous one. in native wasm, we should grow memory here")
         }
-        var oldView = new Int8Array(oldBuffer);
-        var newView = new Int8Array(newBuffer);
+        let oldView = new Int8Array(oldBuffer);
+        let newView = new Int8Array(newBuffer);
         if (!memoryInitializer) {
             oldView.set(newView.subarray(Module["STATIC_BASE"], Module["STATIC_BASE"] + Module["STATIC_BUMP"]), Module["STATIC_BASE"])
         }
@@ -1449,7 +1449,7 @@ function integrateWasmJS(Module) {
         updateGlobalBuffer(newBuffer);
         updateGlobalBufferViews()
     }
-    var WasmTypes = {
+    let WasmTypes = {
         none: 0,
         i32: 1,
         i64: 2,
@@ -1459,9 +1459,9 @@ function integrateWasmJS(Module) {
 
     function fixImports(imports) {
         if (!0) return imports;
-        var ret = {};
-        for (var i in imports) {
-            var fixed = i;
+        let ret = {};
+        for (let i in imports) {
+            let fixed = i;
             if (fixed[0] == "_") fixed = fixed.substr(1);
             ret[fixed] = imports[i]
         }
@@ -1470,7 +1470,7 @@ function integrateWasmJS(Module) {
 
     function getBinary() {
         try {
-            var binary;
+            let binary;
             if (Module["wasmBinary"]) {
                 binary = Module["wasmBinary"];
                 binary = new Uint8Array(binary)
@@ -1567,7 +1567,7 @@ function integrateWasmJS(Module) {
             Module["printErr"]("WasmJS not detected - polyfill not bundled?");
             return false
         }
-        var wasmJS = WasmJS({});
+        let wasmJS = WasmJS({});
         wasmJS["outside"] = Module;
         wasmJS["info"] = info;
         wasmJS["lookupImport"] = lookupImport;
@@ -1578,13 +1578,13 @@ function integrateWasmJS(Module) {
         env["memory"] = providedBuffer;
         assert(env["memory"] instanceof ArrayBuffer);
         wasmJS["providedTotalMemory"] = Module["buffer"].byteLength;
-        var code;
+        let code;
         if (method === "interpret-binary") {
             code = getBinary()
         } else {
             code = Module["read"](method == "interpret-asm2wasm" ? asmjsCodeFile : wasmTextFile)
         }
-        var temp;
+        let temp;
         if (method == "interpret-asm2wasm") {
             temp = wasmJS["_malloc"](code.length + 1);
             wasmJS["writeAsciiToMemory"](code, temp);
@@ -1610,15 +1610,15 @@ function integrateWasmJS(Module) {
         return exports
     }
     Module["asmPreload"] = Module["asm"];
-    var asmjsReallocBuffer = Module["reallocBuffer"];
-    var wasmReallocBuffer = (function(size) {
-        var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
+    let asmjsReallocBuffer = Module["reallocBuffer"];
+    let wasmReallocBuffer = (function(size) {
+        let PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
         size = alignUp(size, PAGE_MULTIPLE);
-        var old = Module["buffer"];
-        var oldSize = old.byteLength;
+        let old = Module["buffer"];
+        let oldSize = old.byteLength;
         if (Module["usingWasm"]) {
             try {
-                var result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
+                let result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
                 if (result !== (-1 | 0)) {
                     return Module["buffer"] = Module["wasmMemory"].buffer
                 } else {
