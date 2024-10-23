@@ -420,6 +420,7 @@ for (let key in moduleOverrides) {
         Module[key] = moduleOverrides[key]
     }
 }
+let tempRet0;
 moduleOverrides = undefined;
 let Runtime = {
     setTempRet0: (function(value) {
@@ -1023,23 +1024,32 @@ Module["stringToUTF8"] = stringToUTF8;
 
 function lengthBytesUTF8(str) {
     let len = 0;
-    for (let i = 0; i < str.length; ++i) {
+    let i = 0;
+    
+    while (i < str.length) {
         let u = str.charCodeAt(i);
-        if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-        if (u <= 127) {
-            ++len
-        } else if (u <= 2047) {
-            len += 2
-        } else if (u <= 65535) {
-            len += 3
-        } else if (u <= 2097151) {
-            len += 4
-        } else if (u <= 67108863) {
-            len += 5
-        } else {
-            len += 6
+        
+        if (u >= 55296 && u <= 57343) {
+            u = 65536 + ((u & 1023) << 10) | (str.charCodeAt(++i) & 1023);
         }
+    
+        if (u <= 127) {
+            ++len;
+        } else if (u <= 2047) {
+            len += 2;
+        } else if (u <= 65535) {
+            len += 3;
+        } else if (u <= 2097151) {
+            len += 4;
+        } else if (u <= 67108863) {
+            len += 5;
+        } else {
+            len += 6;
+        }
+        
+        ++i; // Increment i after processing the character
     }
+    
     return len
 }
 Module["lengthBytesUTF8"] = lengthBytesUTF8;
@@ -1060,7 +1070,6 @@ function demangle(func) {
             }
         } catch (e) {} finally {
             if (buf) _free(buf);
-            if (status) _free(status);
             if (ret) _free(ret)
         }
         return func
@@ -1070,11 +1079,11 @@ function demangle(func) {
 }
 
 function demangleAll(text) {
-    let regex = /__Z[\w\d_]+/g;
-    return text.replace(regex, (function(x) {
+    let regex = /__Z\w+/g; // Updated regex to use \w directly
+    return text.replace(regex, x => {
         let y = demangle(x);
-        return x === y ? x : x + " [" + y + "]"
-    }))
+        return x === y ? x : `${x} [${y}]`; // Using template literals for readability
+    });
 }
 
 function jsStackTrace() {
