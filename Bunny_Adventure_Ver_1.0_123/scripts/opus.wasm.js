@@ -236,10 +236,10 @@ for (var key in Module) {
         moduleOverrides[key] = Module[key]
     }
 }
-var ENVIRONMENT_IS_WEB = false;
-var ENVIRONMENT_IS_WORKER = false;
-var ENVIRONMENT_IS_NODE = false;
-var ENVIRONMENT_IS_SHELL = false;
+let ENVIRONMENT_IS_WEB = false;
+let ENVIRONMENT_IS_WORKER = false;
+let ENVIRONMENT_IS_NODE = false;
+let ENVIRONMENT_IS_SHELL = false;
 if (Module["ENVIRONMENT"]) {
     if (Module["ENVIRONMENT"] === "WEB") {
         ENVIRONMENT_IS_WEB = true
@@ -261,17 +261,17 @@ if (Module["ENVIRONMENT"]) {
 if (ENVIRONMENT_IS_NODE) {
     if (!Module["print"]) Module["print"] = console.log;
     if (!Module["printErr"]) Module["printErr"] = console.warn;
-    var nodeFS;
-    var nodePath;
+    let nodeFS;
+    let nodePath;
     Module["read"] = function shell_read(filename, binary) {
         if (!nodeFS) nodeFS = require("fs");
         if (!nodePath) nodePath = require("path");
         filename = nodePath["normalize"](filename);
-        var ret = nodeFS["readFileSync"](filename);
+        let ret = nodeFS["readFileSync"](filename);
         return binary ? ret : ret.toString()
     };
     Module["readBinary"] = function readBinary(filename) {
-        var ret = Module["read"](filename, true);
+        let ret = Module["read"](filename, true);
         if (!ret.buffer) {
             ret = new Uint8Array(ret)
         }
@@ -314,7 +314,7 @@ if (ENVIRONMENT_IS_NODE) {
         if (typeof readbuffer === "function") {
             return new Uint8Array(readbuffer(f))
         }
-        var data = read(f, "binary");
+        let data = read(f, "binary");
         assert(typeof data === "object");
         return data
     };
@@ -330,14 +330,14 @@ if (ENVIRONMENT_IS_NODE) {
     }
 } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
     Module["read"] = function shell_read(url) {
-        var xhr = new XMLHttpRequest;
+        let xhr = new XMLHttpRequest;
         xhr.open("GET", url, false);
         xhr.send(null);
         return xhr.responseText
     };
     if (ENVIRONMENT_IS_WORKER) {
         Module["readBinary"] = function readBinary(url) {
-            var xhr = new XMLHttpRequest;
+            let xhr = new XMLHttpRequest;
             xhr.open("GET", url, false);
             xhr.responseType = "arraybuffer";
             xhr.send(null);
@@ -345,7 +345,7 @@ if (ENVIRONMENT_IS_NODE) {
         }
     }
     Module["readAsync"] = function readAsync(url, onload, onerror) {
-        var xhr = new XMLHttpRequest;
+        let xhr = new XMLHttpRequest;
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
         xhr.onload = function xhr_onload() {
@@ -369,7 +369,7 @@ if (ENVIRONMENT_IS_NODE) {
             console.warn(x)
         }
     } else {
-        var TRY_USE_DUMP = false;
+        let TRY_USE_DUMP = false;
         if (!Module["print"]) Module["print"] = TRY_USE_DUMP && typeof dump !== "undefined" ? (function(x) {
             dump(x)
         }) : (function(x) {})
@@ -415,13 +415,13 @@ Module.print = Module["print"] || console.log;
 Module.printErr = Module["printErr"] || console.log;
 Module["preRun"] = [];
 Module["postRun"] = [];
-for (var key in moduleOverrides) {
+for (let key in moduleOverrides) {
     if (moduleOverrides.hasOwnProperty(key)) {
         Module[key] = moduleOverrides[key]
     }
 }
 moduleOverrides = undefined;
-var Runtime = {
+let Runtime = {
     setTempRet0: (function(value) {
         tempRet0 = value;
         return value
@@ -455,7 +455,7 @@ var Runtime = {
                     if (type[type.length - 1] === "*") {
                         return Runtime.QUANTUM_SIZE
                     } else if (type[0] === "i") {
-                        var bits = parseInt(type.substr(1));
+                        let bits = parseInt(type.substr(1));
                         assert(bits % 8 === 0);
                         return bits / 8
                     } else {
