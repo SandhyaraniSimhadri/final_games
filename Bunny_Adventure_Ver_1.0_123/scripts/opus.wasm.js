@@ -1,15 +1,15 @@
 ((function() {
     "use strict";
-    let VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    let VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
-    let OPUS_SIG = [65, 95, 79, 80, 85, 83];
+    var VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    var VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
+    var OPUS_SIG = [65, 95, 79, 80, 85, 83];
     
-    let _decoder = null;
-    let _audioBuffer = null;
-    let _inputPointer = null;
-    let _outputBuffer = null;
-    let _outputPointer = null;
-    let _outputOffset = 0;
+    var _decoder = null;
+    var _audioBuffer = null;
+    var _inputPointer = null;
+    var _outputBuffer = null;
+    var _outputPointer = null;
+    var _outputOffset = 0;
     
     // Ready promise resolves when onRuntimeInitialized called
     let readyPromiseResolve = null;
@@ -21,8 +21,8 @@
     };
 
     function ReadVInt(data, position, length, initialMask) {
-        let value = data.getUint8(position) & initialMask;
-        for (let i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
+        var value = data.getUint8(position) & initialMask;
+        for (var i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
         return value
     }
 
@@ -44,9 +44,9 @@
 
     function ReadInt24(data, position)
     {
-        let first = data.getInt8(position);
-        let sign = first >> 7;
-        let value = first & 0b1111111;
+        var first = data.getInt8(position);
+        var sign = first >> 7;
+        var value = first & 0b1111111;
 
         value = (value << 8) | data.getUint8(position);
         value = (value << 8) | data.getUint8(position);
@@ -59,14 +59,14 @@
     }
 
     function CreateDecoder(duration) {
-        let frequency = 48e3;
-        let channels = 1;
-        let bufferSize = 2048;
+        var frequency = 48e3;
+        var channels = 1;
+        var bufferSize = 2048;
         // the true size should be "duration - codecDelay"
         // but we also write the "discardpadding" at the end 
         // of the buffer before discarding it, so we need 1 opus frame of
         // extra space. max size of a frame is 120ms
-        let length = CalculateAudioBufferSize(frequency, channels, duration + 120);
+        var length = CalculateAudioBufferSize(frequency, channels, duration + 120);
         _audioBuffer = new Float32Array(length);
         if (!_outputBuffer) {
             _outputPointer = Module._malloc(bufferSize << 2);
@@ -107,10 +107,10 @@
 
     function WriteOutput (ret) {
         if (ret + _outputOffset > 0) {
-            let tempBuffer;
-            let writePosition = _outputOffset;
+            var tempBuffer;
+            var writePosition = _outputOffset;
             if (_outputOffset < 0) {
-                let trim = -_outputOffset;
+                var trim = -_outputOffset;
                 tempBuffer = new Float32Array(Module.HEAPU8.buffer, _outputPointer + trim * 4, ret - trim);
                 writePosition = 0;
             }
@@ -128,9 +128,9 @@
     }
 
     function ParseFrame(data) {
-        let length = data.length;
+        var length = data.length;
         Module.HEAPU8.set(data, _inputPointer);
-        let ret = Module._decode_frame(_decoder, _inputPointer, length, _outputPointer, 4096);
+        var ret = Module._decode_frame(_decoder, _inputPointer, length, _outputPointer, 4096);
         if (ret > 0) {
             WriteOutput(ret);
         } else {
@@ -139,7 +139,7 @@
     }
 
     function ParseBlock(data, position, size) {
-        let firstByte, tagLength, mask, trackEntry, timeCode, flags, lacing;
+        var firstByte, tagLength, mask, trackEntry, timeCode, flags, lacing;
         firstByte = data.getUint8(position);
         tagLength = VINT_SIZES[firstByte];
         mask = VINT_MASKS[tagLength];
@@ -156,7 +156,7 @@
     }
 
     function ParseDuration(data, position, size) {
-        let duration;
+        var duration;
         if (size == 4) duration = data.getFloat32(position);
         else if (size == 8) duration = data.getFloat64(position);
         else throw new Error("Invalid size");
@@ -167,27 +167,27 @@
         // NOTE discard in an integer
         // postive values are trailing, negative are leading
         // value is in nanoseconds
-        let discardDuration = ParseIntTag(data, position, size);
+        var discardDuration = ParseIntTag(data, position, size);
         if (discardDuration < 0)
             throw new Error("Cannot discard leading block data");
-        let discardFrames = Math.floor(discardDuration * 0.000048);
+        var discardFrames = Math.floor(discardDuration * 0.000048);
         _outputOffset -= discardFrames;
     }
 
     function ParseDelay(data, position, size) {
-        let discardDuration = ReadVInt(data, position, size, 0xFF);
+        var discardDuration = ReadVInt(data, position, size, 0xFF);
         _outputOffset = -Math.floor(discardDuration * 0.000048)
     }
 
     function TestOpus(data, position) {
-        for (let i = 0, l = 6; i < l; i++) {
+        for (var i = 0, l = 6; i < l; i++) {
             if (data.getUint8(position + i) != OPUS_SIG[i]) throw new Error("Contains non opus data")
         }
     }
 
     function ParseMaster(data, position, length) {
-        let firstByte, tagLength, id, sizeLength, mask, size;
-        let end = position + length;
+        var firstByte, tagLength, id, sizeLength, mask, size;
+        var end = position + length;
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
@@ -230,18 +230,18 @@
         }
     }
 }))();
-let Module;
+var Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
-let moduleOverrides = {};
-for (let key in Module) {
+var moduleOverrides = {};
+for (var key in Module) {
     if (Module.hasOwnProperty(key)) {
         moduleOverrides[key] = Module[key]
     }
 }
-let ENVIRONMENT_IS_WEB = false;
-let ENVIRONMENT_IS_WORKER = false;
-let ENVIRONMENT_IS_NODE = false;
-let ENVIRONMENT_IS_SHELL = false;
+var ENVIRONMENT_IS_WEB = false;
+var ENVIRONMENT_IS_WORKER = false;
+var ENVIRONMENT_IS_NODE = false;
+var ENVIRONMENT_IS_SHELL = false;
 if (Module["ENVIRONMENT"]) {
     if (Module["ENVIRONMENT"] === "WEB") {
         ENVIRONMENT_IS_WEB = true
@@ -263,17 +263,17 @@ if (Module["ENVIRONMENT"]) {
 if (ENVIRONMENT_IS_NODE) {
     if (!Module["print"]) Module["print"] = console.log;
     if (!Module["printErr"]) Module["printErr"] = console.warn;
-    let nodeFS;
-    let nodePath;
+    var nodeFS;
+    var nodePath;
     Module["read"] = function shell_read(filename, binary) {
         if (!nodeFS) nodeFS = require("fs");
         if (!nodePath) nodePath = require("path");
         filename = nodePath["normalize"](filename);
-        let ret = nodeFS["readFileSync"](filename);
+        var ret = nodeFS["readFileSync"](filename);
         return binary ? ret : ret.toString()
     };
     Module["readBinary"] = function readBinary(filename) {
-        let ret = Module["read"](filename, true);
+        var ret = Module["read"](filename, true);
         if (!ret.buffer) {
             ret = new Uint8Array(ret)
         }
@@ -316,7 +316,7 @@ if (ENVIRONMENT_IS_NODE) {
         if (typeof readbuffer === "function") {
             return new Uint8Array(readbuffer(f))
         }
-        let data = read(f, "binary");
+        var data = read(f, "binary");
         assert(typeof data === "object");
         return data
     };
@@ -332,14 +332,14 @@ if (ENVIRONMENT_IS_NODE) {
     }
 } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
     Module["read"] = function shell_read(url) {
-        let xhr = new XMLHttpRequest;
+        var xhr = new XMLHttpRequest;
         xhr.open("GET", url, false);
         xhr.send(null);
         return xhr.responseText
     };
     if (ENVIRONMENT_IS_WORKER) {
         Module["readBinary"] = function readBinary(url) {
-            let xhr = new XMLHttpRequest;
+            var xhr = new XMLHttpRequest;
             xhr.open("GET", url, false);
             xhr.responseType = "arraybuffer";
             xhr.send(null);
@@ -347,7 +347,7 @@ if (ENVIRONMENT_IS_NODE) {
         }
     }
     Module["readAsync"] = function readAsync(url, onload, onerror) {
-        let xhr = new XMLHttpRequest;
+        var xhr = new XMLHttpRequest;
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
         xhr.onload = function xhr_onload() {
@@ -371,7 +371,7 @@ if (ENVIRONMENT_IS_NODE) {
             console.warn(x)
         }
     } else {
-        let TRY_USE_DUMP = false;
+        var TRY_USE_DUMP = false;
         if (!Module["print"]) Module["print"] = TRY_USE_DUMP && typeof dump !== "undefined" ? (function(x) {
             dump(x)
         }) : (function(x) {})
@@ -417,13 +417,13 @@ Module.print = Module["print"];
 Module.printErr = Module["printErr"];
 Module["preRun"] = [];
 Module["postRun"] = [];
-for (let key in moduleOverrides) {
+for (var key in moduleOverrides) {
     if (moduleOverrides.hasOwnProperty(key)) {
         Module[key] = moduleOverrides[key]
     }
 }
 moduleOverrides = undefined;
-let Runtime = {
+var Runtime = {
     setTempRet0: (function(value) {
         tempRet0 = value;
         return value
@@ -457,7 +457,7 @@ let Runtime = {
                     if (type[type.length - 1] === "*") {
                         return Runtime.QUANTUM_SIZE
                     } else if (type[0] === "i") {
-                        let bits = parseInt(type.substr(1));
+                        var bits = parseInt(type.substr(1));
                         assert(bits % 8 === 0);
                         return bits / 8
                     } else {
@@ -495,7 +495,7 @@ let Runtime = {
     }),
     functionPointers: [],
     addFunction: (function(func) {
-        for (let i = 0; i < Runtime.functionPointers.length; i++) {
+        for (var i = 0; i < Runtime.functionPointers.length; i++) {
             if (!Runtime.functionPointers[i]) {
                 Runtime.functionPointers[i] = func;
                 return 2 * (1 + i)
@@ -519,7 +519,7 @@ let Runtime = {
         if (!Runtime.funcWrappers[sig]) {
             Runtime.funcWrappers[sig] = {}
         }
-        let sigCache = Runtime.funcWrappers[sig];
+        var sigCache = Runtime.funcWrappers[sig];
         if (!sigCache[func]) {
             if (sig.length === 1) {
                 sigCache[func] = function dynCall_wrapper() {
@@ -541,23 +541,23 @@ let Runtime = {
         throw "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work"
     }),
     stackAlloc: (function(size) {
-        let ret = STACKTOP;
+        var ret = STACKTOP;
         STACKTOP = STACKTOP + size | 0;
         STACKTOP = STACKTOP + 15 & -16;
         return ret
     }),
     staticAlloc: (function(size) {
-        let ret = STATICTOP;
+        var ret = STATICTOP;
         STATICTOP = STATICTOP + size | 0;
         STATICTOP = STATICTOP + 15 & -16;
         return ret
     }),
     dynamicAlloc: (function(size) {
-        let ret = HEAP32[DYNAMICTOP_PTR >> 2];
-        let end = (ret + size + 15 | 0) & -16;
+        var ret = HEAP32[DYNAMICTOP_PTR >> 2];
+        var end = (ret + size + 15 | 0) & -16;
         HEAP32[DYNAMICTOP_PTR >> 2] = end;
         if (end >= TOTAL_MEMORY) {
-            let success = enlargeMemory();
+            var success = enlargeMemory();
             if (!success) {
                 HEAP32[DYNAMICTOP_PTR >> 2] = ret;
                 return 0
@@ -566,11 +566,11 @@ let Runtime = {
         return ret
     }),
     alignMemory: (function(size, quantum) {
-        let ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
+        var ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
         return ret
     }),
     makeBigInt: (function(low, high, unsigned) {
-        let ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
+        var ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
         return ret
     }),
     GLOBAL_BASE: 1024,
@@ -578,8 +578,8 @@ let Runtime = {
     __dummy__: 0
 };
 Module["Runtime"] = Runtime;
-let ABORT = 0;
-let EXITSTATUS = 0;
+var ABORT = 0;
+var EXITSTATUS = 0;
 
 function assert(condition, text) {
     if (!condition) {
@@ -588,7 +588,7 @@ function assert(condition, text) {
 }
 
 function getCFunc(ident) {
-    let func = Module["_" + ident];
+    var func = Module["_" + ident];
     if (!func) {
         try {
             func = eval("_" + ident)
@@ -597,9 +597,9 @@ function getCFunc(ident) {
     assert(func, "Cannot call unknown function " + ident + " (perhaps LLVM optimizations or closure removed it?)");
     return func
 }
-let cwrap, ccall;
+var cwrap, ccall;
 ((function() {
-    let JSfuncs = {
+    var JSfuncs = {
         "stackSave": (function() {
             Runtime.stackSave()
         }),
@@ -607,31 +607,31 @@ let cwrap, ccall;
             Runtime.stackRestore()
         }),
         "arrayToC": (function(arr) {
-            let ret = Runtime.stackAlloc(arr.length);
+            var ret = Runtime.stackAlloc(arr.length);
             writeArrayToMemory(arr, ret);
             return ret
         }),
         "stringToC": (function(str) {
-            let ret = 0;
+            var ret = 0;
             if (str !== null && str !== undefined && str !== 0) {
-                let len = (str.length << 2) + 1;
+                var len = (str.length << 2) + 1;
                 ret = Runtime.stackAlloc(len);
                 stringToUTF8(str, ret, len)
             }
             return ret
         })
     };
-    let toC = {
+    var toC = {
         "string": JSfuncs["stringToC"],
         "array": JSfuncs["arrayToC"]
     };
     ccall = function ccallFunc(ident, returnType, argTypes, args, opts) {
-        let func = getCFunc(ident);
-        let cArgs = [];
-        let stack = 0;
+        var func = getCFunc(ident);
+        var cArgs = [];
+        var stack = 0;
         if (args) {
-            for (let i = 0; i < args.length; i++) {
-                let converter = toC[argTypes[i]];
+            for (var i = 0; i < args.length; i++) {
+                var converter = toC[argTypes[i]];
                 if (converter) {
                     if (stack === 0) stack = Runtime.stackSave();
                     cArgs[i] = converter(args[i])
@@ -640,7 +640,7 @@ let cwrap, ccall;
                 }
             }
         }
-        let ret = func.apply(null, cArgs);
+        var ret = func.apply(null, cArgs);
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
             if (opts && opts.async) {
@@ -653,22 +653,22 @@ let cwrap, ccall;
         }
         return ret
     };
-    let sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
+    var sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
 
     function parseJSFunc(jsfunc) {
-        let parsed = jsfunc.toString().match(sourceRegex).slice(1);
+        var parsed = jsfunc.toString().match(sourceRegex).slice(1);
         return {
             arguments: parsed[0],
             body: parsed[1],
             returnValue: parsed[2]
         }
     }
-    let JSsource = null;
+    var JSsource = null;
 
     function ensureJSsource() {
         if (!JSsource) {
             JSsource = {};
-            for (let fun in JSfuncs) {
+            for (var fun in JSfuncs) {
                 if (JSfuncs.hasOwnProperty(fun)) {
                     JSsource[fun] = parseJSFunc(JSfuncs[fun])
                 }
@@ -677,38 +677,38 @@ let cwrap, ccall;
     }
     cwrap = function cwrap(ident, returnType, argTypes) {
         argTypes = argTypes || [];
-        let cfunc = getCFunc(ident);
-        let numericArgs = argTypes.every((function(type) {
+        var cfunc = getCFunc(ident);
+        var numericArgs = argTypes.every((function(type) {
             return type === "number"
         }));
-        let numericRet = returnType !== "string";
+        var numericRet = returnType !== "string";
         if (numericRet && numericArgs) {
             return cfunc
         }
-        let argNames = argTypes.map((function(x, i) {
+        var argNames = argTypes.map((function(x, i) {
             return "$" + i
         }));
-        let funcstr = "(function(" + argNames.join(",") + ") {";
-        let nargs = argTypes.length;
+        var funcstr = "(function(" + argNames.join(",") + ") {";
+        var nargs = argTypes.length;
         if (!numericArgs) {
             ensureJSsource();
-            funcstr += "let stack = " + JSsource["stackSave"].body + ";";
-            for (let i = 0; i < nargs; i++) {
-                let arg = argNames[i],
+            funcstr += "var stack = " + JSsource["stackSave"].body + ";";
+            for (var i = 0; i < nargs; i++) {
+                var arg = argNames[i],
                     type = argTypes[i];
                 if (type === "number") continue;
-                let convertCode = JSsource[type + "ToC"];
-                funcstr += "let " + convertCode.arguments + " = " + arg + ";";
+                var convertCode = JSsource[type + "ToC"];
+                funcstr += "var " + convertCode.arguments + " = " + arg + ";";
                 funcstr += convertCode.body + ";";
                 funcstr += arg + "=(" + convertCode.returnValue + ");"
             }
         }
-        let cfuncname = parseJSFunc((function() {
+        var cfuncname = parseJSFunc((function() {
             return cfunc
         })).returnValue;
-        funcstr += "let ret = " + cfuncname + "(" + argNames.join(",") + ");";
+        funcstr += "var ret = " + cfuncname + "(" + argNames.join(",") + ");";
         if (!numericRet) {
-            let strgfy = parseJSFunc((function() {
+            var strgfy = parseJSFunc((function() {
                 return Pointer_stringify
             })).returnValue;
             funcstr += "ret = " + strgfy + "(ret);"
@@ -779,11 +779,11 @@ function getValue(ptr, type, noSafe) {
     return null
 }
 Module["getValue"] = getValue;
-let ALLOC_NORMAL = 0;
-let ALLOC_STACK = 1;
-let ALLOC_STATIC = 2;
-let ALLOC_DYNAMIC = 3;
-let ALLOC_NONE = 4;
+var ALLOC_NORMAL = 0;
+var ALLOC_STACK = 1;
+var ALLOC_STATIC = 2;
+var ALLOC_DYNAMIC = 3;
+var ALLOC_NONE = 4;
 Module["ALLOC_NORMAL"] = ALLOC_NORMAL;
 Module["ALLOC_STACK"] = ALLOC_STACK;
 Module["ALLOC_STATIC"] = ALLOC_STATIC;
@@ -791,7 +791,7 @@ Module["ALLOC_DYNAMIC"] = ALLOC_DYNAMIC;
 Module["ALLOC_NONE"] = ALLOC_NONE;
 
 function allocate(slab, types, allocator, ptr) {
-    let zeroinit, size;
+    var zeroinit, size;
     if (typeof slab === "number") {
         zeroinit = true;
         size = slab
@@ -799,7 +799,7 @@ function allocate(slab, types, allocator, ptr) {
         zeroinit = false;
         size = slab.length
     }
-    let singleType = typeof types === "string" ? types : null;
+    var singleType = typeof types === "string" ? types : null;
     var ret;
     if (allocator == ALLOC_NONE) {
         ret = ptr
