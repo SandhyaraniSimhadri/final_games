@@ -642,10 +642,11 @@ let cwrap, ccall;
                 }
             }
         }
-        let ret = func.apply(null, cArgs);
+    let ret = func(...cArgs);
+
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
-            if (opts && opts.async) {
+           if (opts?.async){
                 EmterpreterAsync.asyncFinalizers.push((function() {
                     Runtime.stackRestore(stack)
                 }));
@@ -750,9 +751,31 @@ function setValue(ptr, value, type, noSafe) {
         case "i32":
             HEAP32[ptr >> 2] = value;
             break;
-        case "i64":
-            tempI64 = [value >>> 0, (tempDouble = value, +Math_abs(tempDouble) >= 1 ? tempDouble > 0 ? (Math_min(+Math_floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0 : ~~+Math_ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0 : 0)], HEAP32[ptr >> 2] = tempI64[0], HEAP32[ptr + 4 >> 2] = tempI64[1];
-            break;
+      case "i64":{
+    let tempDouble = value;
+    let tempI64;
+
+    if (Math.abs(tempDouble) >= 1) {
+        if (tempDouble > 0) {
+            tempI64 = [
+                value >>> 0,
+                (Math.min(Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
+            ];
+        } else {
+            tempI64 = [
+                value >>> 0,
+                (Math.ceil((tempDouble - (~~tempDouble >>> 0)) / 4294967296) | 0) >>> 0
+            ];
+        }
+    } else {
+        tempI64 = [value >>> 0, 0];
+    }
+
+    // Assign values to HEAP32
+    HEAP32[ptr >> 2] = tempI64[0];
+    HEAP32[(ptr + 4) >> 2] = tempI64[1];
+    break;
+}
         case "float":
             HEAPF32[ptr >> 2] = value;
             break;
@@ -968,7 +991,7 @@ function UTF8ToString(ptr) {
 Module["UTF8ToString"] = UTF8ToString;
 
 function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
-    if (!(maxBytesToWrite > 0)) return 0;
+if (maxBytesToWrite <= 0) return 0;
     let startIdx = outIdx;
     let endIdx = outIdx + maxBytesToWrite - 1;
     for (let i = 0; i < str.length; ++i) {
