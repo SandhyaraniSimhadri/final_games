@@ -227,8 +227,8 @@
         }
     }
 }))();
-var Module;
-if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
+const Module = (typeof Module !== "undefined" ? Module : {});
+
 let moduleOverrides = {};
 for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
