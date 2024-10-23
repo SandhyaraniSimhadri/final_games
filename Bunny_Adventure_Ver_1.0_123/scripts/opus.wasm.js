@@ -185,7 +185,7 @@
 
     function ParseMaster(data, position, length) {
         let firstByte, tagLength, id, sizeLength, mask, size;
-        let end = position + length;
+        var end = position + length;
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
@@ -1758,7 +1758,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    let self = _llvm_stacksave;
+    var self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1804,61 +1804,61 @@ Module.asmLibraryArg = {
 };
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-let _malloc = Module["_malloc"] = (function() {
+var _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-let _destroy_decoder = Module["_destroy_decoder"] = (function() {
+var _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-let getTempRet0 = Module["getTempRet0"] = (function() {
+var getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-let _free = Module["_free"] = (function() {
+var _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-let runPostSets = Module["runPostSets"] = (function() {
+var runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-let setTempRet0 = Module["setTempRet0"] = (function() {
+var setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-let establishStackSpace = Module["establishStackSpace"] = (function() {
+var establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-let _memmove = Module["_memmove"] = (function() {
+var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-let _decode_frame = Module["_decode_frame"] = (function() {
+var _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-let stackSave = Module["stackSave"] = (function() {
+var stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-let _memset = Module["_memset"] = (function() {
+var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-let _sbrk = Module["_sbrk"] = (function() {
+var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-let _memcpy = Module["_memcpy"] = (function() {
+var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-let _create_decoder = Module["_create_decoder"] = (function() {
+var _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-let setThrew = Module["setThrew"] = (function() {
+var setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-let stackRestore = Module["stackRestore"] = (function() {
+var stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-let ___errno_location = Module["___errno_location"] = (function() {
+var ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-let stackAlloc = Module["stackAlloc"] = (function() {
+var stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
