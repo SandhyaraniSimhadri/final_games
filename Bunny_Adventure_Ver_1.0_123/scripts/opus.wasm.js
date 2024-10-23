@@ -263,17 +263,17 @@ if (Module["ENVIRONMENT"]) {
 if (ENVIRONMENT_IS_NODE) {
     if (!Module["print"]) Module["print"] = console.log;
     if (!Module["printErr"]) Module["printErr"] = console.warn;
-    let nodeFS;
-    let nodePath;
+    var nodeFS;
+    var nodePath;
     Module["read"] = function shell_read(filename, binary) {
         if (!nodeFS) nodeFS = require("fs");
         if (!nodePath) nodePath = require("path");
         filename = nodePath["normalize"](filename);
-        let ret = nodeFS["readFileSync"](filename);
+        var ret = nodeFS["readFileSync"](filename);
         return binary ? ret : ret.toString()
     };
     Module["readBinary"] = function readBinary(filename) {
-        let ret = Module["read"](filename, true);
+        var ret = Module["read"](filename, true);
         if (!ret.buffer) {
             ret = new Uint8Array(ret)
         }
@@ -316,7 +316,7 @@ if (ENVIRONMENT_IS_NODE) {
         if (typeof readbuffer === "function") {
             return new Uint8Array(readbuffer(f))
         }
-        let data = read(f, "binary");
+        var data = read(f, "binary");
         assert(typeof data === "object");
         return data
     };
@@ -332,14 +332,14 @@ if (ENVIRONMENT_IS_NODE) {
     }
 } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
     Module["read"] = function shell_read(url) {
-        let xhr = new XMLHttpRequest;
+        var xhr = new XMLHttpRequest;
         xhr.open("GET", url, false);
         xhr.send(null);
         return xhr.responseText
     };
     if (ENVIRONMENT_IS_WORKER) {
         Module["readBinary"] = function readBinary(url) {
-            let xhr = new XMLHttpRequest;
+            var xhr = new XMLHttpRequest;
             xhr.open("GET", url, false);
             xhr.responseType = "arraybuffer";
             xhr.send(null);
@@ -347,7 +347,7 @@ if (ENVIRONMENT_IS_NODE) {
         }
     }
     Module["readAsync"] = function readAsync(url, onload, onerror) {
-        let xhr = new XMLHttpRequest;
+        var xhr = new XMLHttpRequest;
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
         xhr.onload = function xhr_onload() {
@@ -371,7 +371,7 @@ if (ENVIRONMENT_IS_NODE) {
             console.warn(x)
         }
     } else {
-        let TRY_USE_DUMP = false;
+        var TRY_USE_DUMP = false;
         if (!Module["print"]) Module["print"] = TRY_USE_DUMP && typeof dump !== "undefined" ? (function(x) {
             dump(x)
         }) : (function(x) {})
@@ -417,13 +417,13 @@ Module.print = Module["print"];
 Module.printErr = Module["printErr"];
 Module["preRun"] = [];
 Module["postRun"] = [];
-for (let key in moduleOverrides) {
+for (var key in moduleOverrides) {
     if (moduleOverrides.hasOwnProperty(key)) {
         Module[key] = moduleOverrides[key]
     }
 }
 moduleOverrides = undefined;
-let Runtime = {
+var Runtime = {
     setTempRet0: (function(value) {
         tempRet0 = value;
         return value
@@ -457,7 +457,7 @@ let Runtime = {
                     if (type[type.length - 1] === "*") {
                         return Runtime.QUANTUM_SIZE
                     } else if (type[0] === "i") {
-                        let bits = parseInt(type.substr(1));
+                        var bits = parseInt(type.substr(1));
                         assert(bits % 8 === 0);
                         return bits / 8
                     } else {
@@ -470,7 +470,7 @@ let Runtime = {
         return Math.max(Runtime.getNativeTypeSize(type), Runtime.QUANTUM_SIZE)
     }),
     STACK_ALIGN: 16,
-    prepletarg: (function(ptr, type) {
+    prepVararg: (function(ptr, type) {
         if (type === "double" || type === "i64") {
             if (ptr & 7) {
                 assert((ptr & 7) === 4);
@@ -481,8 +481,8 @@ let Runtime = {
         }
         return ptr
     }),
-    getAlignSize: (function(type, size, letarg) {
-        if (!letarg && (type == "i64" || type == "double")) return 8;
+    getAlignSize: (function(type, size, vararg) {
+        if (!vararg && (type == "i64" || type == "double")) return 8;
         if (!type) return Math.min(size, 8);
         return Math.min(size || (type ? Runtime.getNativeFieldSize(type) : 0), Runtime.QUANTUM_SIZE)
     }),
@@ -495,7 +495,7 @@ let Runtime = {
     }),
     functionPointers: [],
     addFunction: (function(func) {
-        for (let i = 0; i < Runtime.functionPointers.length; i++) {
+        for (var i = 0; i < Runtime.functionPointers.length; i++) {
             if (!Runtime.functionPointers[i]) {
                 Runtime.functionPointers[i] = func;
                 return 2 * (1 + i)
@@ -519,7 +519,7 @@ let Runtime = {
         if (!Runtime.funcWrappers[sig]) {
             Runtime.funcWrappers[sig] = {}
         }
-        let sigCache = Runtime.funcWrappers[sig];
+        var sigCache = Runtime.funcWrappers[sig];
         if (!sigCache[func]) {
             if (sig.length === 1) {
                 sigCache[func] = function dynCall_wrapper() {
@@ -541,23 +541,23 @@ let Runtime = {
         throw "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work"
     }),
     stackAlloc: (function(size) {
-        let ret = STACKTOP;
+        var ret = STACKTOP;
         STACKTOP = STACKTOP + size | 0;
         STACKTOP = STACKTOP + 15 & -16;
         return ret
     }),
     staticAlloc: (function(size) {
-        let ret = STATICTOP;
+        var ret = STATICTOP;
         STATICTOP = STATICTOP + size | 0;
         STATICTOP = STATICTOP + 15 & -16;
         return ret
     }),
     dynamicAlloc: (function(size) {
-        let ret = HEAP32[DYNAMICTOP_PTR >> 2];
-        let end = (ret + size + 15 | 0) & -16;
+        var ret = HEAP32[DYNAMICTOP_PTR >> 2];
+        var end = (ret + size + 15 | 0) & -16;
         HEAP32[DYNAMICTOP_PTR >> 2] = end;
         if (end >= TOTAL_MEMORY) {
-            let success = enlargeMemory();
+            var success = enlargeMemory();
             if (!success) {
                 HEAP32[DYNAMICTOP_PTR >> 2] = ret;
                 return 0
@@ -566,11 +566,11 @@ let Runtime = {
         return ret
     }),
     alignMemory: (function(size, quantum) {
-        let ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
+        var ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
         return ret
     }),
     makeBigInt: (function(low, high, unsigned) {
-        let ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
+        var ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
         return ret
     }),
     GLOBAL_BASE: 1024,
@@ -578,8 +578,8 @@ let Runtime = {
     __dummy__: 0
 };
 Module["Runtime"] = Runtime;
-let ABORT = 0;
-let EXITSTATUS = 0;
+var ABORT = 0;
+var EXITSTATUS = 0;
 
 function assert(condition, text) {
     if (!condition) {
@@ -588,7 +588,7 @@ function assert(condition, text) {
 }
 
 function getCFunc(ident) {
-    let func = Module["_" + ident];
+    var func = Module["_" + ident];
     if (!func) {
         try {
             func = eval("_" + ident)
@@ -597,9 +597,9 @@ function getCFunc(ident) {
     assert(func, "Cannot call unknown function " + ident + " (perhaps LLVM optimizations or closure removed it?)");
     return func
 }
-let cwrap, ccall;
+var cwrap, ccall;
 ((function() {
-    let JSfuncs = {
+    var JSfuncs = {
         "stackSave": (function() {
             Runtime.stackSave()
         }),
@@ -607,31 +607,31 @@ let cwrap, ccall;
             Runtime.stackRestore()
         }),
         "arrayToC": (function(arr) {
-            let ret = Runtime.stackAlloc(arr.length);
+            var ret = Runtime.stackAlloc(arr.length);
             writeArrayToMemory(arr, ret);
             return ret
         }),
         "stringToC": (function(str) {
-            let ret = 0;
+            var ret = 0;
             if (str !== null && str !== undefined && str !== 0) {
-                let len = (str.length << 2) + 1;
+                var len = (str.length << 2) + 1;
                 ret = Runtime.stackAlloc(len);
                 stringToUTF8(str, ret, len)
             }
             return ret
         })
     };
-    let toC = {
+    var toC = {
         "string": JSfuncs["stringToC"],
         "array": JSfuncs["arrayToC"]
     };
     ccall = function ccallFunc(ident, returnType, argTypes, args, opts) {
-        let func = getCFunc(ident);
-        let cArgs = [];
-        let stack = 0;
+        var func = getCFunc(ident);
+        var cArgs = [];
+        var stack = 0;
         if (args) {
-            for (let i = 0; i < args.length; i++) {
-                let converter = toC[argTypes[i]];
+            for (var i = 0; i < args.length; i++) {
+                var converter = toC[argTypes[i]];
                 if (converter) {
                     if (stack === 0) stack = Runtime.stackSave();
                     cArgs[i] = converter(args[i])
@@ -640,7 +640,7 @@ let cwrap, ccall;
                 }
             }
         }
-        let ret = func.apply(null, cArgs);
+        var ret = func.apply(null, cArgs);
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
             if (opts && opts.async) {
@@ -653,17 +653,17 @@ let cwrap, ccall;
         }
         return ret
     };
-    let sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
+    var sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
 
     function parseJSFunc(jsfunc) {
-        let parsed = jsfunc.toString().match(sourceRegex).slice(1);
+        var parsed = jsfunc.toString().match(sourceRegex).slice(1);
         return {
             arguments: parsed[0],
             body: parsed[1],
             returnValue: parsed[2]
         }
     }
-    let JSsource = null;
+    var JSsource = null;
 
     function ensureJSsource() {
         if (!JSsource) {
