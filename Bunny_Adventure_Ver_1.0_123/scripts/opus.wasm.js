@@ -1813,19 +1813,19 @@ let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (funct
 let _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-let _create_decoder = Module["_create_decoder"] = (function() {
+var _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-let setThrew = Module["setThrew"] = (function() {
+var setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-let stackRestore = Module["stackRestore"] = (function() {
+var stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-let ___errno_location = Module["___errno_location"] = (function() {
+var ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-let stackAlloc = Module["stackAlloc"] = (function() {
+var stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
@@ -1842,11 +1842,11 @@ if (memoryInitializer) {
         memoryInitializer = Module["memoryInitializerPrefixURL"] + memoryInitializer
     }
     if (ENVIRONMENT_IS_NODE || ENVIRONMENT_IS_SHELL) {
-        let data = Module["readBinary"](memoryInitializer);
+        var data = Module["readBinary"](memoryInitializer);
         HEAPU8.set(data, Runtime.GLOBAL_BASE)
     } else {
         addRunDependency("memory initializer");
-        let applyMemoryInitializer = (function(data) {
+        var applyMemoryInitializer = (function(data) {
             if (data.byteLength) data = new Uint8Array(data);
             HEAPU8.set(data, Runtime.GLOBAL_BASE);
             if (Module["memoryInitializerRequest"]) delete Module["memoryInitializerRequest"].response;
@@ -1860,7 +1860,7 @@ if (memoryInitializer) {
         }
         if (Module["memoryInitializerRequest"]) {
             function useRequest() {
-                let request = Module["memoryInitializerRequest"];
+                var request = Module["memoryInitializerRequest"];
                 if (request.status !== 200 && request.status !== 0) {
                     console.warn("a problem seems to have happened with Module.memoryInitializerRequest, status: " + request.status + ", retrying " + memoryInitializer);
                     doBrowserLoad();
@@ -1886,9 +1886,9 @@ function ExitStatus(status) {
 }
 ExitStatus.prototype = new Error;
 ExitStatus.prototype.constructor = ExitStatus;
-let initialStackTop;
-let preloadStartTime = null;
-let calledMain = false;
+var initialStackTop;
+var preloadStartTime = null;
+var calledMain = false;
 dependenciesFulfilled = function runCaller() {
     if (!Module["calledRun"]) run();
     if (!Module["calledRun"]) dependenciesFulfilled = runCaller
@@ -1896,23 +1896,23 @@ dependenciesFulfilled = function runCaller() {
 Module["callMain"] = Module.callMain = function callMain(args) {
     args = args || [];
     ensureInitRuntime();
-    let argc = args.length + 1;
+    var argc = args.length + 1;
 
     function pad() {
-        for (let i = 0; i < 4 - 1; i++) {
+        for (var i = 0; i < 4 - 1; i++) {
             argv.push(0)
         }
     }
-    let argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
+    var argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
     pad();
-    for (let i = 0; i < argc - 1; i = i + 1) {
+    for (var i = 0; i < argc - 1; i = i + 1) {
         argv.push(allocate(intArrayFromString(args[i]), "i8", ALLOC_NORMAL));
         pad()
     }
     argv.push(0);
     argv = allocate(argv, "i32", ALLOC_NORMAL);
     try {
-        let ret = Module["_main"](argc, argv, 0);
+        var ret = Module["_main"](argc, argv, 0);
         exit(ret, true)
     } catch (e) {
         if (e instanceof ExitStatus) {
@@ -1921,7 +1921,7 @@ Module["callMain"] = Module.callMain = function callMain(args) {
             Module["noExitRuntime"] = true;
             return
         } else {
-            let toLog = e;
+            var toLog = e;
             if (e && typeof e === "object" && e.stack) {
                 toLog = [e, e.stack]
             }
@@ -1984,7 +1984,7 @@ function exit(status, implicit) {
     Module["quit"](status, new ExitStatus(status))
 }
 Module["exit"] = Module.exit = exit;
-let abortDecorators = [];
+var abortDecorators = [];
 
 function abort(what) {
     if (Module["onAbort"]) {
@@ -1999,8 +1999,8 @@ function abort(what) {
     }
     ABORT = true;
     EXITSTATUS = 1;
-    let extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
-    let output = "abort(" + what + ") at " + stackTrace() + extra;
+    var extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
+    var output = "abort(" + what + ") at " + stackTrace() + extra;
     if (abortDecorators) {
         abortDecorators.forEach((function(decorator) {
             output = decorator(output, what)
@@ -2015,7 +2015,7 @@ if (Module["preInit"]) {
         Module["preInit"].pop()()
     }
 }
-let shouldRunNow = true;
+var shouldRunNow = true;
 if (Module["noInitialRun"]) {
     shouldRunNow = false
 }
