@@ -184,7 +184,7 @@
 
     function ParseMaster(data, position, length) {
         let firstByte, tagLength, id, sizeLength, mask, size;
-        var end = position + length;
+        let end = position + length;
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
@@ -229,8 +229,8 @@
 }))();
 var Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
-var moduleOverrides = {};
-for (var key in Module) {
+let moduleOverrides = {};
+for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
         moduleOverrides[key] = Module[key]
     }
