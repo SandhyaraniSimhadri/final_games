@@ -1697,15 +1697,15 @@ STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-let STATIC_BUMP = 28816;
+var STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-let tempDoublePtr = STATICTOP;
+var tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    let self = _llvm_stacksave;
-    let ret = self.LLVM_SAVEDSTACKS[p];
+    var self = _llvm_stacksave;
+    var ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1725,7 +1725,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    let self = _llvm_stacksave;
+    var self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1769,21 +1769,21 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-let _malloc = Module["_malloc"] = (function() {
+var _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-let _destroy_decoder = Module["_destroy_decoder"] = (function() {
+var _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-let getTempRet0 = Module["getTempRet0"] = (function() {
+var getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-let _free = Module["_free"] = (function() {
+var _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-let runPostSets = Module["runPostSets"] = (function() {
+var runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
 var setTempRet0 = Module["setTempRet0"] = (function() {
