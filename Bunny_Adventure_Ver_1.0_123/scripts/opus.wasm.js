@@ -484,7 +484,7 @@ let Runtime = {
         return Math.min(size || (type ? Runtime.getNativeFieldSize(type) : 0), Runtime.QUANTUM_SIZE)
     }),
     dynCall: (function(sig, ptr, args) {
-        if (args && args.length) {
+       if (args?.length) {
             return Module["dynCall_" + sig].apply(null, [ptr].concat(args))
         } else {
             return Module["dynCall_" + sig].call(null, ptr)
@@ -562,8 +562,8 @@ let Runtime = {
         }
         return ret
     }),
-    alignMemory: (function(size, quantum) {
-        let ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
+    alignMemory: (function(size, quantum=16) {
+         let ret = Math.ceil(size / quantum) * quantum;
         return ret
     }),
     makeBigInt: (function(low, high, unsigned) {
