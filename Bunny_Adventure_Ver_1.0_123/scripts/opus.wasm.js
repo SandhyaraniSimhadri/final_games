@@ -227,7 +227,7 @@
         }
     }
 }))();
-let Module;
+var Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 let moduleOverrides = {};
 for (let key in Module) {
