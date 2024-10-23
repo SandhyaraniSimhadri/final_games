@@ -493,7 +493,7 @@ let Runtime = {
     }),
     functionPointers: [],
     addFunction: (function(func) {
-        for (var i = 0; i < Runtime.functionPointers.length; i++) {
+        for (let i = 0; i < Runtime.functionPointers.length; i++) {
             if (!Runtime.functionPointers[i]) {
                 Runtime.functionPointers[i] = func;
                 return 2 * (1 + i)
@@ -517,7 +517,7 @@ let Runtime = {
         if (!Runtime.funcWrappers[sig]) {
             Runtime.funcWrappers[sig] = {}
         }
-        var sigCache = Runtime.funcWrappers[sig];
+        let sigCache = Runtime.funcWrappers[sig];
         if (!sigCache[func]) {
             if (sig.length === 1) {
                 sigCache[func] = function dynCall_wrapper() {
@@ -539,23 +539,23 @@ let Runtime = {
         throw new Error( "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work")
     }),
     stackAlloc: (function(size) {
-        var ret = STACKTOP;
+        let ret = STACKTOP;
         STACKTOP = STACKTOP + size | 0;
         STACKTOP = STACKTOP + 15 & -16;
         return ret
     }),
     staticAlloc: (function(size) {
-        var ret = STATICTOP;
+        let ret = STATICTOP;
         STATICTOP = STATICTOP + size | 0;
         STATICTOP = STATICTOP + 15 & -16;
         return ret
     }),
     dynamicAlloc: (function(size) {
-        var ret = HEAP32[DYNAMICTOP_PTR >> 2];
-        var end = (ret + size + 15 | 0) & -16;
+        let ret = HEAP32[DYNAMICTOP_PTR >> 2];
+        let end = (ret + size + 15 | 0) & -16;
         HEAP32[DYNAMICTOP_PTR >> 2] = end;
         if (end >= TOTAL_MEMORY) {
-            var success = enlargeMemory();
+            let success = enlargeMemory();
             if (!success) {
                 HEAP32[DYNAMICTOP_PTR >> 2] = ret;
                 return 0
@@ -564,11 +564,11 @@ let Runtime = {
         return ret
     }),
     alignMemory: (function(size, quantum) {
-        var ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
+        let ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
         return ret
     }),
     makeBigInt: (function(low, high, unsigned) {
-        var ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
+        let ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
         return ret
     }),
     GLOBAL_BASE: 1024,
@@ -576,8 +576,8 @@ let Runtime = {
     __dummy__: 0
 };
 Module["Runtime"] = Runtime;
-var ABORT = 0;
-var EXITSTATUS = 0;
+let ABORT = 0;
+let EXITSTATUS = 0;
 
 function assert(condition, text) {
     if (!condition) {
@@ -600,9 +600,9 @@ function getCFunc(ident) {
     
     return func;
 }
-var cwrap, ccall;
+let cwrap, ccall;
 ((function() {
-    var JSfuncs = {
+    let JSfuncs = {
         "stackSave": (function() {
             Runtime.stackSave()
         }),
@@ -610,31 +610,31 @@ var cwrap, ccall;
             Runtime.stackRestore()
         }),
         "arrayToC": (function(arr) {
-            var ret = Runtime.stackAlloc(arr.length);
+            let ret = Runtime.stackAlloc(arr.length);
             writeArrayToMemory(arr, ret);
             return ret
         }),
         "stringToC": (function(str) {
-            var ret = 0;
+            let ret = 0;
             if (str !== null && str !== undefined && str !== 0) {
-                var len = (str.length << 2) + 1;
+                let len = (str.length << 2) + 1;
                 ret = Runtime.stackAlloc(len);
                 stringToUTF8(str, ret, len)
             }
             return ret
         })
     };
-    var toC = {
+    let toC = {
         "string": JSfuncs["stringToC"],
         "array": JSfuncs["arrayToC"]
     };
     ccall = function ccallFunc(ident, returnType, argTypes, args, opts) {
-        var func = getCFunc(ident);
-        var cArgs = [];
-        var stack = 0;
+        let func = getCFunc(ident);
+        let cArgs = [];
+        let stack = 0;
         if (args) {
-            for (var i = 0; i < args.length; i++) {
-                var converter = toC[argTypes[i]];
+            for (let i = 0; i < args.length; i++) {
+                let converter = toC[argTypes[i]];
                 if (converter) {
                     if (stack === 0) stack = Runtime.stackSave();
                     cArgs[i] = converter(args[i])
@@ -643,7 +643,7 @@ var cwrap, ccall;
                 }
             }
         }
-        var ret = func.apply(null, cArgs);
+        let ret = func.apply(null, cArgs);
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
             if (opts && opts.async) {
@@ -659,14 +659,14 @@ var cwrap, ccall;
     let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([a-zA-Z0-9$_,\s]*)\)\s*{([\s\S]*?)}?$/;
 
     function parseJSFunc(jsfunc) {
-        var parsed = jsfunc.toString().match(sourceRegex).slice(1);
+        let parsed = jsfunc.toString().match(sourceRegex).slice(1);
         return {
             arguments: parsed[0],
             body: parsed[1],
             returnValue: parsed[2]
         }
     }
-    var JSsource = null;
+    let JSsource = null;
 
     function ensureJSsource() {
         if (!JSsource) {
@@ -1725,20 +1725,20 @@ function integrateWasmJS(Module) {
     let methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
-var ASM_CONSTS = [];
+let ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-var STATIC_BUMP = 28816;
+let STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-var tempDoublePtr = STATICTOP;
+let tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    var self = _llvm_stacksave;
-    var ret = self.LLVM_SAVEDSTACKS[p];
+    let self = _llvm_stacksave;
+    let ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1758,7 +1758,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    var self = _llvm_stacksave;
+    let self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1804,61 +1804,61 @@ Module.asmLibraryArg = {
 };
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
+let _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
+let _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-var getTempRet0 = Module["getTempRet0"] = (function() {
+let getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-var _free = Module["_free"] = (function() {
+let _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-var runPostSets = Module["runPostSets"] = (function() {
+let runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-var setTempRet0 = Module["setTempRet0"] = (function() {
+let setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-var establishStackSpace = Module["establishStackSpace"] = (function() {
+let establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-var _memmove = Module["_memmove"] = (function() {
+let _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
+let _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-var stackSave = Module["stackSave"] = (function() {
+let stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-var _memset = Module["_memset"] = (function() {
+let _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+let _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-var _memcpy = Module["_memcpy"] = (function() {
+let _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
+let _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-var setThrew = Module["setThrew"] = (function() {
+let setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-var stackRestore = Module["stackRestore"] = (function() {
+let stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-var ___errno_location = Module["___errno_location"] = (function() {
+let ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-var stackAlloc = Module["stackAlloc"] = (function() {
+let stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
