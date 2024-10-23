@@ -1786,34 +1786,34 @@ let _free = Module["_free"] = (function() {
 let runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-let setTempRet0 = Module["setTempRet0"] = (function() {
+var setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-let establishStackSpace = Module["establishStackSpace"] = (function() {
+var establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-let _memmove = Module["_memmove"] = (function() {
+var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-let _decode_frame = Module["_decode_frame"] = (function() {
+var _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-let stackSave = Module["stackSave"] = (function() {
+var stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-let _memset = Module["_memset"] = (function() {
+var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-let _sbrk = Module["_sbrk"] = (function() {
+var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-let _memcpy = Module["_memcpy"] = (function() {
+var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-let _create_decoder = Module["_create_decoder"] = (function() {
+var _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
 var setThrew = Module["setThrew"] = (function() {
