@@ -991,49 +991,28 @@ function UTF8ToString(ptr) {
 Module["UTF8ToString"] = UTF8ToString;
 
 function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
-if (maxBytesToWrite <= 0) return 0;
+    if (maxBytesToWrite <= 0) return 0;
+
     let startIdx = outIdx;
-    let endIdx = outIdx + maxBytesToWrite - 1;
-    for (let i = 0; i < str.length; ++i) {
+    let i=0;
+    while (i < str.length) {
         let u = str.charCodeAt(i);
-        if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-        if (u <= 127) {
-            if (outIdx >= endIdx) break;
-            outU8Array[outIdx++] = u
-        } else if (u <= 2047) {
-            if (outIdx + 1 >= endIdx) break;
-            outU8Array[outIdx++] = 192 | u >> 6;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 65535) {
-            if (outIdx + 2 >= endIdx) break;
-            outU8Array[outIdx++] = 224 | u >> 12;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 2097151) {
-            if (outIdx + 3 >= endIdx) break;
-            outU8Array[outIdx++] = 240 | u >> 18;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 67108863) {
-            if (outIdx + 4 >= endIdx) break;
-            outU8Array[outIdx++] = 248 | u >> 24;
-            outU8Array[outIdx++] = 128 | u >> 18 & 63;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
+
+        // Handle surrogate pairs (Unicode code points > 0xFFFF)
+        if (isSurrogate(u)) {
+            u = handleSurrogate(str, i); // Handle surrogate
+            i += 2; // Move to the next character after the surrogate pair
         } else {
-            if (outIdx + 5 >= endIdx) break;
-            outU8Array[outIdx++] = 252 | u >> 30;
-            outU8Array[outIdx++] = 128 | u >> 24 & 63;
-            outU8Array[outIdx++] = 128 | u >> 18 & 63;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
+            i++; // Increment normally for non-surrogate characters
         }
+
+        const res = encodeUTF8(u, outU8Array, outIdx, maxBytesToWrite, endIdx);
+        if (res === -1) break; // Exit if not enough space
+        outIdx += res; // Update output index
     }
-    outU8Array[outIdx] = 0;
-    return outIdx - startIdx
+
+    outU8Array[outIdx] = 0; // Null-terminate the output array
+    return outIdx - startIdx;
 }
 Module["stringToUTF8Array"] = stringToUTF8Array;
 
@@ -1826,66 +1805,63 @@ Module.asmLibraryArg = {
 };
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-(function() {
-    const _malloc = Module["_malloc"] = (function() {
-        return Module["asm"]["_malloc"].apply(null, arguments);
-    });
-    const _destroy_decoder = Module["_destroy_decoder"] = (function() {
-        return Module["asm"]["_destroy_decoder"].apply(null, arguments);
-    });
-    const getTempRet0 = Module["getTempRet0"] = (function() {
-        return Module["asm"]["getTempRet0"].apply(null, arguments);
-    });
-    const _free = Module["_free"] = (function() {
-        return Module["asm"]["_free"].apply(null, arguments);
-    });
-    const runPostSets = Module["runPostSets"] = (function() {
-        return Module["asm"]["runPostSets"].apply(null, arguments);
-    });
-    const setTempRet0 = Module["setTempRet0"] = (function() {
-        return Module["asm"]["setTempRet0"].apply(null, arguments);
-    });
-    const establishStackSpace = Module["establishStackSpace"] = (function() {
-        return Module["asm"]["establishStackSpace"].apply(null, arguments);
-    });
-    const _memmove = Module["_memmove"] = (function() {
-        return Module["asm"]["_memmove"].apply(null, arguments);
-    });
-    const _decode_frame = Module["_decode_frame"] = (function() {
-        return Module["asm"]["_decode_frame"].apply(null, arguments);
-    });
-    const stackSave = Module["stackSave"] = (function() {
-        return Module["asm"]["stackSave"].apply(null, arguments);
-    });
-    const _memset = Module["_memset"] = (function() {
-        return Module["asm"]["_memset"].apply(null, arguments);
-    });
-    const _sbrk = Module["_sbrk"] = (function() {
-        return Module["asm"]["_sbrk"].apply(null, arguments);
-    });
-    const _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
-        return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments);
-    });
-    const _memcpy = Module["_memcpy"] = (function() {
-        return Module["asm"]["_memcpy"].apply(null, arguments);
-    });
-    const _create_decoder = Module["_create_decoder"] = (function() {
-        return Module["asm"]["_create_decoder"].apply(null, arguments);
-    });
-    const setThrew = Module["setThrew"] = (function() {
-        return Module["asm"]["setThrew"].apply(null, arguments);
-    });
-    const stackRestore = Module["stackRestore"] = (function() {
-        return Module["asm"]["stackRestore"].apply(null, arguments);
-    });
-    const ___errno_location = Module["___errno_location"] = (function() {
-        return Module["asm"]["___errno_location"].apply(null, arguments);
-    });
-    const stackAlloc = Module["stackAlloc"] = (function() {
-        return Module["asm"]["stackAlloc"].apply(null, arguments);
-    });
-})();
-
+var _malloc = Module["_malloc"] = (function() {
+    return Module["asm"]["_malloc"].apply(null, arguments)
+});
+var _destroy_decoder = Module["_destroy_decoder"] = (function() {
+    return Module["asm"]["_destroy_decoder"].apply(null, arguments)
+});
+var getTempRet0 = Module["getTempRet0"] = (function() {
+    return Module["asm"]["getTempRet0"].apply(null, arguments)
+});
+var _free = Module["_free"] = (function() {
+    return Module["asm"]["_free"].apply(null, arguments)
+});
+var runPostSets = Module["runPostSets"] = (function() {
+    return Module["asm"]["runPostSets"].apply(null, arguments)
+});
+var setTempRet0 = Module["setTempRet0"] = (function() {
+    return Module["asm"]["setTempRet0"].apply(null, arguments)
+});
+var establishStackSpace = Module["establishStackSpace"] = (function() {
+    return Module["asm"]["establishStackSpace"].apply(null, arguments)
+});
+var _memmove = Module["_memmove"] = (function() {
+    return Module["asm"]["_memmove"].apply(null, arguments)
+});
+var _decode_frame = Module["_decode_frame"] = (function() {
+    return Module["asm"]["_decode_frame"].apply(null, arguments)
+});
+var stackSave = Module["stackSave"] = (function() {
+    return Module["asm"]["stackSave"].apply(null, arguments)
+});
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
+var _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments)
+});
+var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+    return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
+});
+var _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments)
+});
+var _create_decoder = Module["_create_decoder"] = (function() {
+    return Module["asm"]["_create_decoder"].apply(null, arguments)
+});
+var setThrew = Module["setThrew"] = (function() {
+    return Module["asm"]["setThrew"].apply(null, arguments)
+});
+var stackRestore = Module["stackRestore"] = (function() {
+    return Module["asm"]["stackRestore"].apply(null, arguments)
+});
+var ___errno_location = Module["___errno_location"] = (function() {
+    return Module["asm"]["___errno_location"].apply(null, arguments)
+});
+var stackAlloc = Module["stackAlloc"] = (function() {
+    return Module["asm"]["stackAlloc"].apply(null, arguments)
+});
 Runtime.stackAlloc = Module["stackAlloc"];
 Runtime.stackSave = Module["stackSave"];
 Runtime.stackRestore = Module["stackRestore"];
