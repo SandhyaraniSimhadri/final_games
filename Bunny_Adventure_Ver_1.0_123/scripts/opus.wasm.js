@@ -1826,63 +1826,64 @@ Module.asmLibraryArg = {
 };
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
-    return Module["asm"]["_malloc"].apply(null, arguments)
+const _malloc = Module["_malloc"] = (function() {
+    return Module["asm"]["_malloc"].apply(null, arguments);
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
-    return Module["asm"]["_destroy_decoder"].apply(null, arguments)
+const _destroy_decoder = Module["_destroy_decoder"] = (function() {
+    return Module["asm"]["_destroy_decoder"].apply(null, arguments);
 });
-var getTempRet0 = Module["getTempRet0"] = (function() {
-    return Module["asm"]["getTempRet0"].apply(null, arguments)
+const getTempRet0 = Module["getTempRet0"] = (function() {
+    return Module["asm"]["getTempRet0"].apply(null, arguments);
 });
-var _free = Module["_free"] = (function() {
-    return Module["asm"]["_free"].apply(null, arguments)
+const _free = Module["_free"] = (function() {
+    return Module["asm"]["_free"].apply(null, arguments);
 });
-var runPostSets = Module["runPostSets"] = (function() {
-    return Module["asm"]["runPostSets"].apply(null, arguments)
+const runPostSets = Module["runPostSets"] = (function() {
+    return Module["asm"]["runPostSets"].apply(null, arguments);
 });
-var setTempRet0 = Module["setTempRet0"] = (function() {
-    return Module["asm"]["setTempRet0"].apply(null, arguments)
+const setTempRet0 = Module["setTempRet0"] = (function() {
+    return Module["asm"]["setTempRet0"].apply(null, arguments);
 });
-var establishStackSpace = Module["establishStackSpace"] = (function() {
-    return Module["asm"]["establishStackSpace"].apply(null, arguments)
+const establishStackSpace = Module["establishStackSpace"] = (function() {
+    return Module["asm"]["establishStackSpace"].apply(null, arguments);
 });
-var _memmove = Module["_memmove"] = (function() {
-    return Module["asm"]["_memmove"].apply(null, arguments)
+const _memmove = Module["_memmove"] = (function() {
+    return Module["asm"]["_memmove"].apply(null, arguments);
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
-    return Module["asm"]["_decode_frame"].apply(null, arguments)
+const _decode_frame = Module["_decode_frame"] = (function() {
+    return Module["asm"]["_decode_frame"].apply(null, arguments);
 });
-var stackSave = Module["stackSave"] = (function() {
-    return Module["asm"]["stackSave"].apply(null, arguments)
+const stackSave = Module["stackSave"] = (function() {
+    return Module["asm"]["stackSave"].apply(null, arguments);
 });
-var _memset = Module["_memset"] = (function() {
-    return Module["asm"]["_memset"].apply(null, arguments)
+const _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments);
 });
-var _sbrk = Module["_sbrk"] = (function() {
-    return Module["asm"]["_sbrk"].apply(null, arguments)
+const _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments);
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
-    return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
+const _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+    return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments);
 });
-var _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments)
+const _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments);
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
-    return Module["asm"]["_create_decoder"].apply(null, arguments)
+const _create_decoder = Module["_create_decoder"] = (function() {
+    return Module["asm"]["_create_decoder"].apply(null, arguments);
 });
-var setThrew = Module["setThrew"] = (function() {
-    return Module["asm"]["setThrew"].apply(null, arguments)
+const setThrew = Module["setThrew"] = (function() {
+    return Module["asm"]["setThrew"].apply(null, arguments);
 });
-var stackRestore = Module["stackRestore"] = (function() {
-    return Module["asm"]["stackRestore"].apply(null, arguments)
+const stackRestore = Module["stackRestore"] = (function() {
+    return Module["asm"]["stackRestore"].apply(null, arguments);
 });
-var ___errno_location = Module["___errno_location"] = (function() {
-    return Module["asm"]["___errno_location"].apply(null, arguments)
+const ___errno_location = Module["___errno_location"] = (function() {
+    return Module["asm"]["___errno_location"].apply(null, arguments);
 });
-var stackAlloc = Module["stackAlloc"] = (function() {
-    return Module["asm"]["stackAlloc"].apply(null, arguments)
+const stackAlloc = Module["stackAlloc"] = (function() {
+    return Module["asm"]["stackAlloc"].apply(null, arguments);
 });
+
 Runtime.stackAlloc = Module["stackAlloc"];
 Runtime.stackSave = Module["stackSave"];
 Runtime.stackRestore = Module["stackRestore"];
@@ -2026,7 +2027,10 @@ function exit(status, implicit) {
     if (implicit && Module["noExitRuntime"]) {
         return
     }
-    if (Module["noExitRuntime"]) {} else {
+    if (Module["noExitRuntime"]) {
+        return
+    }
+     else {
         ABORT = true;
         EXITSTATUS = status;
         STACKTOP = initialStackTop;
