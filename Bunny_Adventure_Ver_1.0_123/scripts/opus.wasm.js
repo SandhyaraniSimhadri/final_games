@@ -1844,60 +1844,25 @@ Module.asmLibraryArg = {
 };
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
-    return Module["asm"]["_malloc"].apply(null, arguments)
-});
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
-    return Module["asm"]["_destroy_decoder"].apply(null, arguments)
-});
-var getTempRet0 = Module["getTempRet0"] = (function() {
-    return Module["asm"]["getTempRet0"].apply(null, arguments)
-});
-var _free = Module["_free"] = (function() {
-    return Module["asm"]["_free"].apply(null, arguments)
-});
-var runPostSets = Module["runPostSets"] = (function() {
-    return Module["asm"]["runPostSets"].apply(null, arguments)
-});
-var setTempRet0 = Module["setTempRet0"] = (function() {
-    return Module["asm"]["setTempRet0"].apply(null, arguments)
-});
-var establishStackSpace = Module["establishStackSpace"] = (function() {
-    return Module["asm"]["establishStackSpace"].apply(null, arguments)
-});
-var _memmove = Module["_memmove"] = (function() {
-    return Module["asm"]["_memmove"].apply(null, arguments)
-});
-var _decode_frame = Module["_decode_frame"] = (function() {
-    return Module["asm"]["_decode_frame"].apply(null, arguments)
-});
-var stackSave = Module["stackSave"] = (function() {
-    return Module["asm"]["stackSave"].apply(null, arguments)
-});
-var _memset = Module["_memset"] = (function() {
-    return Module["asm"]["_memset"].apply(null, arguments)
-});
-var _sbrk = Module["_sbrk"] = (function() {
-    return Module["asm"]["_sbrk"].apply(null, arguments)
-});
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
-    return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
-});
-var _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments)
-});
-var _create_decoder = Module["_create_decoder"] = (function() {
-    return Module["asm"]["_create_decoder"].apply(null, arguments)
-});
-var setThrew = Module["setThrew"] = (function() {
-    return Module["asm"]["setThrew"].apply(null, arguments)
-});
-var stackRestore = Module["stackRestore"] = (function() {
-    return Module["asm"]["stackRestore"].apply(null, arguments)
-});
-var ___errno_location = Module["___errno_location"] = (function() {
-    return Module["asm"]["___errno_location"].apply(null, arguments)
-});
+const _malloc = Module["_malloc"] = (...args) => Module["asm"]["_malloc"](...args);
+const _destroy_decoder = Module["_destroy_decoder"] = (...args) => Module["asm"]["_destroy_decoder"](...args);
+const getTempRet0 = Module["getTempRet0"] = (...args) => Module["asm"]["getTempRet0"](...args);
+const _free = Module["_free"] = (...args) => Module["asm"]["_free"](...args);
+const runPostSets = Module["runPostSets"] = (...args) => Module["asm"]["runPostSets"](...args);
+const setTempRet0 = Module["setTempRet0"] = (...args) => Module["asm"]["setTempRet0"](...args);
+const establishStackSpace = Module["establishStackSpace"] = (...args) => Module["asm"]["establishStackSpace"](...args);
+const _memmove = Module["_memmove"] = (...args) => Module["asm"]["_memmove"](...args);
+const _decode_frame = Module["_decode_frame"] = (...args) => Module["asm"]["_decode_frame"](...args);
+const stackSave = Module["stackSave"] = (...args) => Module["asm"]["stackSave"](...args);
+const _memset = Module["_memset"] = (...args) => Module["asm"]["_memset"](...args);
+const _sbrk = Module["_sbrk"] = (...args) => Module["asm"]["_sbrk"](...args);
+const _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (...args) => Module["asm"]["_emscripten_get_global_libc"](...args);
+const _memcpy = Module["_memcpy"] = (...args) => Module["asm"]["_memcpy"](...args);
+const _create_decoder = Module["_create_decoder"] = (...args) => Module["asm"]["_create_decoder"](...args);
+const setThrew = Module["setThrew"] = (...args) => Module["asm"]["setThrew"](...args);
+const stackRestore = Module["stackRestore"] = (...args) => Module["asm"]["stackRestore"](...args);
+const ___errno_location = Module["___errno_location"] = (...args) => Module["asm"]["___errno_location"](...args);
+
 const stackAlloc = Module["stackAlloc"] = (() => {
     return Module["asm"]["stackAlloc"].apply(null, arguments);
 });
