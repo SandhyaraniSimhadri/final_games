@@ -1,5 +1,5 @@
 ((function() {
-    "use strict";
+
     let VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     let VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
     let OPUS_SIG = [65, 95, 79, 80, 85, 83];
@@ -227,7 +227,22 @@
         }
     }
 }))();
-const Module = (typeof Module !== "undefined" ? Module : {});
+// Using an object to hold functions
+var ModuleFunctions = {
+    _malloc: function() {
+        return Module["asm"]["_malloc"].apply(null, arguments);
+    },
+    _destroy_decoder: function() {
+        return Module["asm"]["_destroy_decoder"].apply(null, arguments);
+    },
+    getTempRet0: function() {
+        return Module["asm"]["getTempRet0"].apply(null, arguments);
+    },
+    // Add more functions...
+};
+
+// Attach ModuleFunctions to Module
+Object.assign(Module, ModuleFunctions);
 
 let moduleOverrides = {};
 for (let key in Module) {
