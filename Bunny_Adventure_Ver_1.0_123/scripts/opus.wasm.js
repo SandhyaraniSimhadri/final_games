@@ -139,10 +139,9 @@
     }
 
     function ParseBlock(data, position, size) {
-        let firstByte, tagLength, mask, flags, lacing;
+        let firstByte, tagLength, flags, lacing;
         firstByte = data.getUint8(position);
         tagLength = VINT_SIZES[firstByte];
-        mask = VINT_MASKS[tagLength];
         position += tagLength;
         position += 2;
         flags = data.getUint8(position);
