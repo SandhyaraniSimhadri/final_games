@@ -800,14 +800,14 @@ function allocate(slab, types, allocator, ptr) {
         size = slab.length
     }
     let singleType = typeof types === "string" ? types : null;
-    let ret;
+    var ret;
     if (allocator == ALLOC_NONE) {
         ret = ptr
     } else {
         ret = [typeof _malloc === "function" ? _malloc : Runtime.staticAlloc, Runtime.stackAlloc, Runtime.staticAlloc, Runtime.dynamicAlloc][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length))
     }
     if (zeroinit) {
-        let ptr = ret,
+        var ptr = ret,
             stop;
         assert((ret & 3) == 0);
         stop = ret + (size & ~3);
@@ -828,10 +828,10 @@ function allocate(slab, types, allocator, ptr) {
         }
         return ret
     }
-    let i = 0,
+    var i = 0,
         type, typeSize, previousType;
     while (i < size) {
-        let curr = slab[i];
+        var curr = slab[i];
         if (typeof curr === "function") {
             curr = Runtime.getFunctionIndex(curr)
         }
@@ -861,9 +861,9 @@ Module["getMemory"] = getMemory;
 
 function Pointer_stringify(ptr, length) {
     if (length === 0 || !ptr) return "";
-    let hasUtf = 0;
-    let t;
-    let i = 0;
+    var hasUtf = 0;
+    var t;
+    var i = 0;
     while (1) {
         t = HEAPU8[ptr + i >> 0];
         hasUtf |= t;
@@ -872,10 +872,10 @@ function Pointer_stringify(ptr, length) {
         if (length && i == length) break
     }
     if (!length) length = i;
-    let ret = "";
+    var ret = "";
     if (hasUtf < 128) {
-        let MAX_CHUNK = 1024;
-        let curr;
+        var MAX_CHUNK = 1024;
+        var curr;
         while (length > 0) {
             curr = String.fromCharCode.apply(String, HEAPU8.subarray(ptr, ptr + Math.min(length, MAX_CHUNK)));
             ret = ret ? ret + curr : curr;
@@ -889,9 +889,9 @@ function Pointer_stringify(ptr, length) {
 Module["Pointer_stringify"] = Pointer_stringify;
 
 function AsciiToString(ptr) {
-    let str = "";
+    var str = "";
     while (1) {
-        let ch = HEAP8[ptr++ >> 0];
+        var ch = HEAP8[ptr++ >> 0];
         if (!ch) return str;
         str += String.fromCharCode(ch)
     }
@@ -902,16 +902,16 @@ function stringToAscii(str, outPtr) {
     return writeAsciiToMemory(str, outPtr, false)
 }
 Module["stringToAscii"] = stringToAscii;
-let UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
+var UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
 
 function UTF8ArrayToString(u8Array, idx) {
-    let endPtr = idx;
+    var endPtr = idx;
     while (u8Array[endPtr]) ++endPtr;
     if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
         return UTF8Decoder.decode(u8Array.subarray(idx, endPtr))
     } else {
-        let u0, u1, u2, u3, u4, u5;
-        let str = "";
+        var u0, u1, u2, u3, u4, u5;
+        var str = "";
         while (1) {
             u0 = u8Array[idx++];
             if (!u0) return str;
@@ -944,7 +944,7 @@ function UTF8ArrayToString(u8Array, idx) {
             if (u0 < 65536) {
                 str += String.fromCharCode(u0)
             } else {
-                let ch = u0 - 65536;
+                var ch = u0 - 65536;
                 str += String.fromCharCode(55296 | ch >> 10, 56320 | ch & 1023)
             }
         }
@@ -959,10 +959,10 @@ Module["UTF8ToString"] = UTF8ToString;
 
 function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
     if (!(maxBytesToWrite > 0)) return 0;
-    let startIdx = outIdx;
-    let endIdx = outIdx + maxBytesToWrite - 1;
-    for (let i = 0; i < str.length; ++i) {
-        let u = str.charCodeAt(i);
+    var startIdx = outIdx;
+    var endIdx = outIdx + maxBytesToWrite - 1;
+    for (var i = 0; i < str.length; ++i) {
+        var u = str.charCodeAt(i);
         if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
         if (u <= 127) {
             if (outIdx >= endIdx) break;
@@ -1010,9 +1010,9 @@ function stringToUTF8(str, outPtr, maxBytesToWrite) {
 Module["stringToUTF8"] = stringToUTF8;
 
 function lengthBytesUTF8(str) {
-    let len = 0;
-    for (let i = 0; i < str.length; ++i) {
-        let u = str.charCodeAt(i);
+    var len = 0;
+    for (var i = 0; i < str.length; ++i) {
+        var u = str.charCodeAt(i);
         if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
         if (u <= 127) {
             ++len
@@ -1031,18 +1031,18 @@ function lengthBytesUTF8(str) {
     return len
 }
 Module["lengthBytesUTF8"] = lengthBytesUTF8;
-let UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
+var UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
 
 function demangle(func) {
-    let __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
+    var __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
     if (__cxa_demangle_func) {
         try {
-            let s = func.substr(1);
-            let len = lengthBytesUTF8(s) + 1;
-            let buf = _malloc(len);
+            var s = func.substr(1);
+            var len = lengthBytesUTF8(s) + 1;
+            var buf = _malloc(len);
             stringToUTF8(s, buf, len);
-            let status = _malloc(4);
-            let ret = __cxa_demangle_func(buf, 0, 0, status);
+            var status = _malloc(4);
+            var ret = __cxa_demangle_func(buf, 0, 0, status);
             if (getValue(status, "i32") === 0 && ret) {
                 return Pointer_stringify(ret)
             }
@@ -1058,15 +1058,15 @@ function demangle(func) {
 }
 
 function demangleAll(text) {
-    let regex = /__Z[\w\d_]+/g;
+    var regex = /__Z[\w\d_]+/g;
     return text.replace(regex, (function(x) {
-        let y = demangle(x);
+        var y = demangle(x);
         return x === y ? x : x + " [" + y + "]"
     }))
 }
 
 function jsStackTrace() {
-    let err = new Error;
+    var err = new Error;
     if (!err.stack) {
         try {
             throw new Error(0)
@@ -1081,13 +1081,13 @@ function jsStackTrace() {
 }
 
 function stackTrace() {
-    let js = jsStackTrace();
+    var js = jsStackTrace();
     if (Module["extraStackTrace"]) js += "\n" + Module["extraStackTrace"]();
     return demangleAll(js)
 }
 Module["stackTrace"] = stackTrace;
-let WASM_PAGE_SIZE = 65536;
-let ASMJS_PAGE_SIZE = 16777216;
+var WASM_PAGE_SIZE = 65536;
+var ASMJS_PAGE_SIZE = 16777216;
 
 function alignUp(x, multiple) {
     if (x % multiple > 0) {
@@ -1095,7 +1095,7 @@ function alignUp(x, multiple) {
     }
     return x
 }
-let HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
+var HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
 
 function updateGlobalBuffer(buf) {
     Module["buffer"] = buffer = buf
@@ -1111,9 +1111,9 @@ function updateGlobalBufferViews() {
     Module["HEAPF32"] = HEAPF32 = new Float32Array(buffer);
     Module["HEAPF64"] = HEAPF64 = new Float64Array(buffer)
 }
-let STATIC_BASE, STATICTOP, staticSealed;
-let STACK_BASE, STACKTOP, STACK_MAX;
-let DYNAMIC_BASE, DYNAMICTOP_PTR;
+var STATIC_BASE, STATICTOP, staticSealed;
+var STACK_BASE, STACKTOP, STACK_MAX;
+var DYNAMIC_BASE, DYNAMICTOP_PTR;
 STATIC_BASE = STATICTOP = STACK_BASE = STACKTOP = STACK_MAX = DYNAMIC_BASE = DYNAMICTOP_PTR = 0;
 staticSealed = false;
 
@@ -1124,8 +1124,8 @@ function abortOnCannotGrowMemory() {
 function enlargeMemory() {
     abortOnCannotGrowMemory()
 }
-let TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
-let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
+var TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
+var TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
 if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr("TOTAL_MEMORY should be larger than TOTAL_STACK, was " + TOTAL_MEMORY + "! (TOTAL_STACK=" + TOTAL_STACK + ")");
 if (Module["buffer"]) {
     buffer = Module["buffer"]
@@ -1161,12 +1161,12 @@ Module["HEAPF64"] = HEAPF64;
 
 function callRuntimeCallbacks(callbacks) {
     while (callbacks.length > 0) {
-        let callback = callbacks.shift();
+        var callback = callbacks.shift();
         if (typeof callback == "function") {
             callback();
             continue
         }
-        let func = callback.func;
+        var func = callback.func;
         if (typeof func === "number") {
             if (callback.arg === undefined) {
                 Module["dynCall_v"](func)
@@ -1178,13 +1178,13 @@ function callRuntimeCallbacks(callbacks) {
         }
     }
 }
-let __ATPRERUN__ = [];
-let __ATINIT__ = [];
-let __ATMAIN__ = [];
-let __ATEXIT__ = [];
-let __ATPOSTRUN__ = [];
-let runtimeInitialized = false;
-let runtimeExited = false;
+var __ATPRERUN__ = [];
+var __ATINIT__ = [];
+var __ATMAIN__ = [];
+var __ATEXIT__ = [];
+var __ATPOSTRUN__ = [];
+var runtimeInitialized = false;
+var runtimeExited = false;
 
 function preRun() {
     if (Module["preRun"]) {
@@ -1247,18 +1247,18 @@ function addOnPostRun(cb) {
 Module["addOnPostRun"] = addOnPostRun;
 
 function intArrayFromString(stringy, dontAddNull, length) {
-    let len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
-    let u8array = new Array(len);
-    let numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
+    var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
+    var u8array = new Array(len);
+    var numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
     if (dontAddNull) u8array.length = numBytesWritten;
     return u8array
 }
 Module["intArrayFromString"] = intArrayFromString;
 
 function intArrayToString(array) {
-    let ret = [];
-    for (let i = 0; i < array.length; i++) {
-        let chr = array[i];
+    var ret = [];
+    for (var i = 0; i < array.length; i++) {
+        var chr = array[i];
         if (chr > 255) {
             chr &= 255
         }
@@ -1270,7 +1270,7 @@ Module["intArrayToString"] = intArrayToString;
 
 function writeStringToMemory(string, buffer, dontAddNull) {
     Runtime.warnOnce("writeStringToMemory is deprecated and should not be called! Use stringToUTF8() instead!");
-    let lastChar, end;
+    var lastChar, end;
     if (dontAddNull) {
         end = buffer + lengthBytesUTF8(string);
         lastChar = HEAP8[end]
@@ -1286,22 +1286,22 @@ function writeArrayToMemory(array, buffer) {
 Module["writeArrayToMemory"] = writeArrayToMemory;
 
 function writeAsciiToMemory(str, buffer, dontAddNull) {
-    for (let i = 0; i < str.length; ++i) {
+    for (var i = 0; i < str.length; ++i) {
         HEAP8[buffer++ >> 0] = str.charCodeAt(i)
     }
     if (!dontAddNull) HEAP8[buffer >> 0] = 0
 }
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 if (!Math["imul"] || Math["imul"](4294967295, 5) !== -5) Math["imul"] = function imul(a, b) {
-    let ah = a >>> 16;
-    let al = a & 65535;
-    let bh = b >>> 16;
-    let bl = b & 65535;
+    var ah = a >>> 16;
+    var al = a & 65535;
+    var bh = b >>> 16;
+    var bl = b & 65535;
     return al * bl + (ah * bl + al * bh << 16) | 0
 };
 Math.imul = Math["imul"];
 if (!Math["fround"]) {
-    let froundBuffer = new Float32Array(1);
+    var froundBuffer = new Float32Array(1);
     Math["fround"] = (function(x) {
         froundBuffer[0] = x;
         return froundBuffer[0]
@@ -1310,7 +1310,7 @@ if (!Math["fround"]) {
 Math.fround = Math["fround"];
 if (!Math["clz32"]) Math["clz32"] = (function(x) {
     x = x >>> 0;
-    for (let i = 0; i < 32; i++) {
+    for (var i = 0; i < 32; i++) {
         if (x & 1 << 31 - i) return i
     }
     return 32
@@ -1320,29 +1320,29 @@ if (!Math["trunc"]) Math["trunc"] = (function(x) {
     return x < 0 ? Math.ceil(x) : Math.floor(x)
 });
 Math.trunc = Math["trunc"];
-let Math_abs = Math.abs;
-let Math_cos = Math.cos;
-let Math_sin = Math.sin;
-let Math_tan = Math.tan;
-let Math_acos = Math.acos;
-let Math_asin = Math.asin;
-let Math_atan = Math.atan;
-let Math_atan2 = Math.atan2;
-let Math_exp = Math.exp;
-let Math_log = Math.log;
-let Math_sqrt = Math.sqrt;
-let Math_ceil = Math.ceil;
-let Math_floor = Math.floor;
-let Math_pow = Math.pow;
-let Math_imul = Math.imul;
-let Math_fround = Math.fround;
-let Math_round = Math.round;
-let Math_min = Math.min;
-let Math_clz32 = Math.clz32;
-let Math_trunc = Math.trunc;
-let runDependencies = 0;
-let runDependencyWatcher = null;
-let dependenciesFulfilled = null;
+var Math_abs = Math.abs;
+var Math_cos = Math.cos;
+var Math_sin = Math.sin;
+var Math_tan = Math.tan;
+var Math_acos = Math.acos;
+var Math_asin = Math.asin;
+var Math_atan = Math.atan;
+var Math_atan2 = Math.atan2;
+var Math_exp = Math.exp;
+var Math_log = Math.log;
+var Math_sqrt = Math.sqrt;
+var Math_ceil = Math.ceil;
+var Math_floor = Math.floor;
+var Math_pow = Math.pow;
+var Math_imul = Math.imul;
+var Math_fround = Math.fround;
+var Math_round = Math.round;
+var Math_min = Math.min;
+var Math_clz32 = Math.clz32;
+var Math_trunc = Math.trunc;
+var runDependencies = 0;
+var runDependencyWatcher = null;
+var dependenciesFulfilled = null;
 
 function addRunDependency(id) {
     runDependencies++;
@@ -1363,7 +1363,7 @@ function removeRunDependency(id) {
             runDependencyWatcher = null
         }
         if (dependenciesFulfilled) {
-            let callback = dependenciesFulfilled;
+            var callback = dependenciesFulfilled;
             dependenciesFulfilled = null;
             callback()
         }
@@ -1372,21 +1372,21 @@ function removeRunDependency(id) {
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
-let memoryInitializer = null;
+var memoryInitializer = null;
 
 function integrateWasmJS(Module) {
-    let method = Module["wasmJSMethod"] || "native-wasm";
+    var method = Module["wasmJSMethod"] || "native-wasm";
     Module["wasmJSMethod"] = method;
-    let wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
-	let wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
-    let asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
+    var wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
+	var wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
+    var asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
     if (typeof Module["locateFile"] === "function") {
         wasmTextFile = Module["locateFile"](wasmTextFile);
         wasmBinaryFile = Module["locateFile"](wasmBinaryFile);
         asmjsCodeFile = Module["locateFile"](asmjsCodeFile)
     }
-    let wasmPageSize = 64 * 1024;
-    let asm2wasmImports = {
+    var wasmPageSize = 64 * 1024;
+    var asm2wasmImports = {
         "f64-rem": (function(x, y) {
             return x % y
         }),
@@ -1409,20 +1409,20 @@ function integrateWasmJS(Module) {
             debugger
         })
     };
-    let info = {
+    var info = {
         "global": null,
         "env": null,
         "asm2wasm": asm2wasmImports,
         "parent": Module
     };
-    let exports = null;
+    var exports = null;
 
     function lookupImport(mod, base) {
-        let lookup = info;
+        var lookup = info;
         if (mod.indexOf(".") < 0) {
             lookup = (lookup || {})[mod]
         } else {
-            let parts = mod.split(".");
+            var parts = mod.split(".");
             lookup = (lookup || {})[parts[0]];
             lookup = (lookup || {})[parts[1]]
         }
@@ -1436,7 +1436,7 @@ function integrateWasmJS(Module) {
     }
 
     function mergeMemory(newBuffer) {
-        let oldBuffer = Module["buffer"];
+        var oldBuffer = Module["buffer"];
         if (newBuffer.byteLength < oldBuffer.byteLength) {
             Module["printErr"]("the new buffer in mergeMemory is smaller than the previous one. in native wasm, we should grow memory here")
         }
