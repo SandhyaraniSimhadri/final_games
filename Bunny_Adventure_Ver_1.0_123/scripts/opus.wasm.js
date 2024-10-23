@@ -1440,8 +1440,8 @@ function integrateWasmJS(Module) {
         if (newBuffer.byteLength < oldBuffer.byteLength) {
             Module["printErr"]("the new buffer in mergeMemory is smaller than the previous one. in native wasm, we should grow memory here")
         }
-        let oldView = new Int8Array(oldBuffer);
-        let newView = new Int8Array(newBuffer);
+        var oldView = new Int8Array(oldBuffer);
+        var newView = new Int8Array(newBuffer);
         if (!memoryInitializer) {
             oldView.set(newView.subarray(Module["STATIC_BASE"], Module["STATIC_BASE"] + Module["STATIC_BUMP"]), Module["STATIC_BASE"])
         }
@@ -1449,7 +1449,7 @@ function integrateWasmJS(Module) {
         updateGlobalBuffer(newBuffer);
         updateGlobalBufferViews()
     }
-    let WasmTypes = {
+    var WasmTypes = {
         none: 0,
         i32: 1,
         i64: 2,
@@ -1459,9 +1459,9 @@ function integrateWasmJS(Module) {
 
     function fixImports(imports) {
         if (!0) return imports;
-        let ret = {};
-        for (let i in imports) {
-            let fixed = i;
+        var ret = {};
+        for (var i in imports) {
+            var fixed = i;
             if (fixed[0] == "_") fixed = fixed.substr(1);
             ret[fixed] = imports[i]
         }
@@ -1470,7 +1470,7 @@ function integrateWasmJS(Module) {
 
     function getBinary() {
         try {
-            let binary;
+            var binary;
             if (Module["wasmBinary"]) {
                 binary = Module["wasmBinary"];
                 binary = new Uint8Array(binary)
@@ -1567,7 +1567,7 @@ function integrateWasmJS(Module) {
             Module["printErr"]("WasmJS not detected - polyfill not bundled?");
             return false
         }
-        let wasmJS = WasmJS({});
+        var wasmJS = WasmJS({});
         wasmJS["outside"] = Module;
         wasmJS["info"] = info;
         wasmJS["lookupImport"] = lookupImport;
@@ -1578,13 +1578,13 @@ function integrateWasmJS(Module) {
         env["memory"] = providedBuffer;
         assert(env["memory"] instanceof ArrayBuffer);
         wasmJS["providedTotalMemory"] = Module["buffer"].byteLength;
-        let code;
+        var code;
         if (method === "interpret-binary") {
             code = getBinary()
         } else {
             code = Module["read"](method == "interpret-asm2wasm" ? asmjsCodeFile : wasmTextFile)
         }
-        let temp;
+        var temp;
         if (method == "interpret-asm2wasm") {
             temp = wasmJS["_malloc"](code.length + 1);
             wasmJS["writeAsciiToMemory"](code, temp);
@@ -1610,15 +1610,15 @@ function integrateWasmJS(Module) {
         return exports
     }
     Module["asmPreload"] = Module["asm"];
-    let asmjsReallocBuffer = Module["reallocBuffer"];
-    let wasmReallocBuffer = (function(size) {
-        let PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
+    var asmjsReallocBuffer = Module["reallocBuffer"];
+    var wasmReallocBuffer = (function(size) {
+        var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
         size = alignUp(size, PAGE_MULTIPLE);
-        let old = Module["buffer"];
-        let oldSize = old.byteLength;
+        var old = Module["buffer"];
+        var oldSize = old.byteLength;
         if (Module["usingWasm"]) {
             try {
-                let result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
+                var result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
                 if (result !== (-1 | 0)) {
                     return Module["buffer"] = Module["wasmMemory"].buffer
                 } else {
@@ -1639,14 +1639,14 @@ function integrateWasmJS(Module) {
             return wasmReallocBuffer(size)
         }
     });
-    let finalMethod = "";
+    var finalMethod = "";
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
         if (!env["table"]) {
-            let TABLE_SIZE = Module["wasmTableSize"];
+            var TABLE_SIZE = Module["wasmTableSize"];
             if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
                 if (MAX_TABLE_SIZE !== undefined) {
                     env["table"] = new WebAssembly.Table({
@@ -1671,10 +1671,10 @@ function integrateWasmJS(Module) {
         if (!env["tableBase"]) {
             env["tableBase"] = 0
         }
-        let exports;
-        let methods = method.split(",");
-        for (let i = 0; i < methods.length; i++) {
-            let curr = methods[i];
+        var exports;
+        var methods = method.split(",");
+        for (var i = 0; i < methods.length; i++) {
+            var curr = methods[i];
             finalMethod = curr;
             if (curr === "native-wasm") {
                 if (exports = doNativeWasm(global, env, providedBuffer)) break
@@ -1689,23 +1689,23 @@ function integrateWasmJS(Module) {
         if (!exports) throw "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods";
         return exports
     });
-    let methodHandler = Module["asm"]
+    var methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
-let ASM_CONSTS = [];
+var ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-let STATIC_BUMP = 28816;
+var STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-let tempDoublePtr = STATICTOP;
+var tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    let self = _llvm_stacksave;
-    let ret = self.LLVM_SAVEDSTACKS[p];
+    var self = _llvm_stacksave;
+    var ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1725,7 +1725,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    let self = _llvm_stacksave;
+    var self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1769,63 +1769,63 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-let _malloc = Module["_malloc"] = (function() {
+var _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-let _destroy_decoder = Module["_destroy_decoder"] = (function() {
+var _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-let getTempRet0 = Module["getTempRet0"] = (function() {
+var getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-let _free = Module["_free"] = (function() {
+var _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-let runPostSets = Module["runPostSets"] = (function() {
+var runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-let setTempRet0 = Module["setTempRet0"] = (function() {
+var setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-let establishStackSpace = Module["establishStackSpace"] = (function() {
+var establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-let _memmove = Module["_memmove"] = (function() {
+var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-let _decode_frame = Module["_decode_frame"] = (function() {
+var _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-let stackSave = Module["stackSave"] = (function() {
+var stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-let _memset = Module["_memset"] = (function() {
+var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-let _sbrk = Module["_sbrk"] = (function() {
+var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-let _memcpy = Module["_memcpy"] = (function() {
+var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-let _create_decoder = Module["_create_decoder"] = (function() {
+var _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
-let setThrew = Module["setThrew"] = (function() {
+var setThrew = Module["setThrew"] = (function() {
     return Module["asm"]["setThrew"].apply(null, arguments)
 });
-let stackRestore = Module["stackRestore"] = (function() {
+var stackRestore = Module["stackRestore"] = (function() {
     return Module["asm"]["stackRestore"].apply(null, arguments)
 });
-let ___errno_location = Module["___errno_location"] = (function() {
+var ___errno_location = Module["___errno_location"] = (function() {
     return Module["asm"]["___errno_location"].apply(null, arguments)
 });
-let stackAlloc = Module["stackAlloc"] = (function() {
+var stackAlloc = Module["stackAlloc"] = (function() {
     return Module["asm"]["stackAlloc"].apply(null, arguments)
 });
 Runtime.stackAlloc = Module["stackAlloc"];
@@ -1842,11 +1842,11 @@ if (memoryInitializer) {
         memoryInitializer = Module["memoryInitializerPrefixURL"] + memoryInitializer
     }
     if (ENVIRONMENT_IS_NODE || ENVIRONMENT_IS_SHELL) {
-        let data = Module["readBinary"](memoryInitializer);
+        var data = Module["readBinary"](memoryInitializer);
         HEAPU8.set(data, Runtime.GLOBAL_BASE)
     } else {
         addRunDependency("memory initializer");
-        let applyMemoryInitializer = (function(data) {
+        var applyMemoryInitializer = (function(data) {
             if (data.byteLength) data = new Uint8Array(data);
             HEAPU8.set(data, Runtime.GLOBAL_BASE);
             if (Module["memoryInitializerRequest"]) delete Module["memoryInitializerRequest"].response;
@@ -1860,7 +1860,7 @@ if (memoryInitializer) {
         }
         if (Module["memoryInitializerRequest"]) {
             function useRequest() {
-                let request = Module["memoryInitializerRequest"];
+                var request = Module["memoryInitializerRequest"];
                 if (request.status !== 200 && request.status !== 0) {
                     console.warn("a problem seems to have happened with Module.memoryInitializerRequest, status: " + request.status + ", retrying " + memoryInitializer);
                     doBrowserLoad();
@@ -1886,9 +1886,9 @@ function ExitStatus(status) {
 }
 ExitStatus.prototype = new Error;
 ExitStatus.prototype.constructor = ExitStatus;
-let initialStackTop;
-let preloadStartTime = null;
-let calledMain = false;
+var initialStackTop;
+var preloadStartTime = null;
+var calledMain = false;
 dependenciesFulfilled = function runCaller() {
     if (!Module["calledRun"]) run();
     if (!Module["calledRun"]) dependenciesFulfilled = runCaller
@@ -1896,23 +1896,23 @@ dependenciesFulfilled = function runCaller() {
 Module["callMain"] = Module.callMain = function callMain(args) {
     args = args || [];
     ensureInitRuntime();
-    let argc = args.length + 1;
+    var argc = args.length + 1;
 
     function pad() {
-        for (let i = 0; i < 4 - 1; i++) {
+        for (var i = 0; i < 4 - 1; i++) {
             argv.push(0)
         }
     }
-    let argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
+    var argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
     pad();
-    for (let i = 0; i < argc - 1; i = i + 1) {
+    for (var i = 0; i < argc - 1; i = i + 1) {
         argv.push(allocate(intArrayFromString(args[i]), "i8", ALLOC_NORMAL));
         pad()
     }
     argv.push(0);
     argv = allocate(argv, "i32", ALLOC_NORMAL);
     try {
-        let ret = Module["_main"](argc, argv, 0);
+        var ret = Module["_main"](argc, argv, 0);
         exit(ret, true)
     } catch (e) {
         if (e instanceof ExitStatus) {
@@ -1921,7 +1921,7 @@ Module["callMain"] = Module.callMain = function callMain(args) {
             Module["noExitRuntime"] = true;
             return
         } else {
-            let toLog = e;
+            var toLog = e;
             if (e && typeof e === "object" && e.stack) {
                 toLog = [e, e.stack]
             }
@@ -1984,7 +1984,7 @@ function exit(status, implicit) {
     Module["quit"](status, new ExitStatus(status))
 }
 Module["exit"] = Module.exit = exit;
-let abortDecorators = [];
+var abortDecorators = [];
 
 function abort(what) {
     if (Module["onAbort"]) {
@@ -1999,8 +1999,8 @@ function abort(what) {
     }
     ABORT = true;
     EXITSTATUS = 1;
-    let extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
-    let output = "abort(" + what + ") at " + stackTrace() + extra;
+    var extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
+    var output = "abort(" + what + ") at " + stackTrace() + extra;
     if (abortDecorators) {
         abortDecorators.forEach((function(decorator) {
             output = decorator(output, what)
@@ -2015,7 +2015,7 @@ if (Module["preInit"]) {
         Module["preInit"].pop()()
     }
 }
-let shouldRunNow = true;
+var shouldRunNow = true;
 if (Module["noInitialRun"]) {
     shouldRunNow = false
 }
