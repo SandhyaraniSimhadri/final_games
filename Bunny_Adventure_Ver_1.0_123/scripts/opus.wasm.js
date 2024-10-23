@@ -1864,7 +1864,7 @@ var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
-var _memcpy = Module["_memcpy"] = (function() {
+const _memcpy = Module["_memcpy"] = (()=> {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
 
