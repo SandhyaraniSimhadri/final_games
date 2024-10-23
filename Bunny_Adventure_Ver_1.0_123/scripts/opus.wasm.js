@@ -588,14 +588,19 @@ function assert(condition, text) {
 }
 
 function getCFunc(ident) {
-    var func = Module["_" + ident];
+    // Look for the function in the Module object with a prepended underscore
+    let func = Module["_" + ident];
+    
+    // If the function is not found in the Module object
     if (!func) {
-        try {
-            func = eval("_" + ident)
-        } catch (e) {}
+        // Dynamically search for the function in the global scope
+        func = window["_" + ident];  // This is safer than eval()
     }
+    
+    // Assert that the function exists
     assert(func, "Cannot call unknown function " + ident + " (perhaps LLVM optimizations or closure removed it?)");
-    return func
+    
+    return func;
 }
 var cwrap, ccall;
 ((function() {
@@ -677,48 +682,56 @@ var cwrap, ccall;
     }
     cwrap = function cwrap(ident, returnType, argTypes) {
         argTypes = argTypes || [];
+    
+        // Get the C function based on the identifier
         let cfunc = getCFunc(ident);
-        let numericArgs = argTypes.every((function(type) {
-            return type === "number"
-        }));
+        let numericArgs = argTypes.every(type => type === "number");
         let numericRet = returnType !== "string";
+    
+        // If all arguments are numeric and return type is not a string, return the C function directly
         if (numericRet && numericArgs) {
-            return cfunc
+            return cfunc;
         }
-        let argNames = argTypes.map((function(x, i) {
-            return "$" + i
-        }));
-        let funcstr = "(function(" + argNames.join(",") + ") {";
-        let nargs = argTypes.length;
-        if (!numericArgs) {
-            ensureJSsource();
-            funcstr += "let stack = " + JSsource["stackSave"].body + ";";
-            for (let i = 0; i < nargs; i++) {
-                let arg = argNames[i],
-                    type = argTypes[i];
-                if (type === "number") continue;
-                let convertCode = JSsource[type + "ToC"];
-                funcstr += "let " + convertCode.arguments + " = " + arg + ";";
-                funcstr += convertCode.body + ";";
-                funcstr += arg + "=(" + convertCode.returnValue + ");"
+    
+        // Define a wrapper function that will handle argument conversion and calling the C function
+        return function(...args) {
+            if (args.length !== argTypes.length) {
+                throw new Error("Incorrect number of arguments");
             }
-        }
-        let cfuncname = parseJSFunc((function() {
-            return cfunc
-        })).returnValue;
-        funcstr += "let ret = " + cfuncname + "(" + argNames.join(",") + ");";
-        if (!numericRet) {
-            let strgfy = parseJSFunc((function() {
-                return Pointer_stringify
-            })).returnValue;
-            funcstr += "ret = " + strgfy + "(ret);"
-        }
-        if (!numericArgs) {
-            ensureJSsource();
-            funcstr += JSsource["stackRestore"].body.replace("()", "(stack)") + ";"
-        }
-        funcstr += "return ret})";
-        return eval(funcstr)
+    
+            let convertedArgs = [];
+    
+            // Convert each argument based on its expected type
+            for (let i = 0; i < argTypes.length; i++) {
+                let arg = args[i];
+                let expectedType = argTypes[i];
+    
+                if (expectedType === "number") {
+                    if (typeof arg !== "number") {
+                        throw new Error(`Argument ${i} is expected to be a number`);
+                    }
+                    convertedArgs.push(arg);  // No conversion needed for numbers
+                } else if (expectedType === "string") {
+                    ensureJSsource();
+                    let convertCode = JSsource["stringToC"];
+                    let converted = convertCode(arg);  // Convert string to C-compatible format
+                    convertedArgs.push(converted);
+                } else {
+                    throw new Error(`Unsupported argument type: ${expectedType}`);
+                }
+            }
+    
+            // Call the C function with the converted arguments
+            let ret = cfunc(...convertedArgs);
+    
+            // If the return type is a string, convert it back to JavaScript string
+            if (!numericRet) {
+                ensureJSsource();
+                ret = Pointer_stringify(ret);
+            }
+    
+            return ret;
+        };
     }
 }))();
 Module["ccall"] = ccall;
@@ -1299,7 +1312,7 @@ if (!Math["imul"] || Math["imul"](4294967295, 5) !== -5) Math["imul"] = function
     let bl = b & 65535;
     return al * bl + (ah * bl + al * bh << 16) | 0
 };
-Math.imul = Math["imul"];
+Math.imul = Math["imul"] || console.log;
 if (!Math["fround"]) {
     let froundBuffer = new Float32Array(1);
     Math["fround"] = (function(x) {
@@ -1307,7 +1320,7 @@ if (!Math["fround"]) {
         return froundBuffer[0]
     })
 }
-Math.fround = Math["fround"];
+Math.fround = Math["fround"] || console.log;
 if (!Math["clz32"]) Math["clz32"] = (function(x) {
     x = x >>> 0;
     for (let i = 0; i < 32; i++) {
@@ -1315,11 +1328,11 @@ if (!Math["clz32"]) Math["clz32"] = (function(x) {
     }
     return 32
 });
-Math.clz32 = Math["clz32"];
+Math.clz32 = Math["clz32"] || console.log;
 if (!Math["trunc"]) Math["trunc"] = (function(x) {
     return x < 0 ? Math.ceil(x) : Math.floor(x)
 });
-Math.trunc = Math["trunc"];
+Math.trunc = Math["trunc"] || console.log;
 let Math_abs = Math.abs;
 let Math_cos = Math.cos;
 let Math_sin = Math.sin;
