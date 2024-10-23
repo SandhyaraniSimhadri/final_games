@@ -1454,21 +1454,26 @@ function integrateWasmJS(Module) {
 
     function lookupImport(mod, base) {
         let lookup = info;
+    
         if (mod.indexOf(".") < 0) {
-            lookup = (lookup || {})[mod]
+            lookup = lookup?.[mod]; // Use optional chaining here
         } else {
             let parts = mod.split(".");
-            lookup = (lookup || {})[parts[0]];
-            lookup = (lookup || {})[parts[1]]
+            lookup = lookup?.[parts[0]]; // Use optional chaining here
+            lookup = lookup?.[parts[1]]; // Use optional chaining here
         }
+    
         if (base) {
-            lookup = (lookup || {})[base]
+            lookup = lookup?.[base]; // Use optional chaining here
         }
+    
         if (lookup === undefined) {
-            abort("bad lookupImport to (" + mod + ")." + base)
+            abort("bad lookupImport to (" + mod + ")." + base);
         }
-        return lookup
+    
+        return lookup;
     }
+    
 
     function mergeMemory(newBuffer) {
         let oldBuffer = Module["buffer"];
