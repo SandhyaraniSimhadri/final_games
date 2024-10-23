@@ -1639,14 +1639,14 @@ function integrateWasmJS(Module) {
             return wasmReallocBuffer(size)
         }
     });
-    var finalMethod = "";
+    let finalMethod = "";
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
         if (!env["table"]) {
-            var TABLE_SIZE = Module["wasmTableSize"];
+            let TABLE_SIZE = Module["wasmTableSize"];
             if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
                 if (MAX_TABLE_SIZE !== undefined) {
                     env["table"] = new WebAssembly.Table({
@@ -1671,10 +1671,10 @@ function integrateWasmJS(Module) {
         if (!env["tableBase"]) {
             env["tableBase"] = 0
         }
-        var exports;
-        var methods = method.split(",");
-        for (var i = 0; i < methods.length; i++) {
-            var curr = methods[i];
+        let exports;
+        let methods = method.split(",");
+        for (let i = 0; i < methods.length; i++) {
+            let curr = methods[i];
             finalMethod = curr;
             if (curr === "native-wasm") {
                 if (exports = doNativeWasm(global, env, providedBuffer)) break
@@ -1689,23 +1689,23 @@ function integrateWasmJS(Module) {
         if (!exports) throw "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods";
         return exports
     });
-    var methodHandler = Module["asm"]
+    let methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
-var ASM_CONSTS = [];
+let ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-var STATIC_BUMP = 28816;
+let STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-var tempDoublePtr = STATICTOP;
+let tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    var self = _llvm_stacksave;
-    var ret = self.LLVM_SAVEDSTACKS[p];
+    let self = _llvm_stacksave;
+    let ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
@@ -1725,7 +1725,7 @@ Module["_memcpy"] = _memcpy;
 Module["_memmove"] = _memmove;
 
 function _llvm_stacksave() {
-    var self = _llvm_stacksave;
+    let self = _llvm_stacksave;
     if (!self.LLVM_SAVEDSTACKS) {
         self.LLVM_SAVEDSTACKS = []
     }
@@ -1769,51 +1769,51 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-var _malloc = Module["_malloc"] = (function() {
+let _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
+let _destroy_decoder = Module["_destroy_decoder"] = (function() {
     return Module["asm"]["_destroy_decoder"].apply(null, arguments)
 });
-var getTempRet0 = Module["getTempRet0"] = (function() {
+let getTempRet0 = Module["getTempRet0"] = (function() {
     return Module["asm"]["getTempRet0"].apply(null, arguments)
 });
-var _free = Module["_free"] = (function() {
+let _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-var runPostSets = Module["runPostSets"] = (function() {
+let runPostSets = Module["runPostSets"] = (function() {
     return Module["asm"]["runPostSets"].apply(null, arguments)
 });
-var setTempRet0 = Module["setTempRet0"] = (function() {
+let setTempRet0 = Module["setTempRet0"] = (function() {
     return Module["asm"]["setTempRet0"].apply(null, arguments)
 });
-var establishStackSpace = Module["establishStackSpace"] = (function() {
+let establishStackSpace = Module["establishStackSpace"] = (function() {
     return Module["asm"]["establishStackSpace"].apply(null, arguments)
 });
-var _memmove = Module["_memmove"] = (function() {
+let _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
+let _decode_frame = Module["_decode_frame"] = (function() {
     return Module["asm"]["_decode_frame"].apply(null, arguments)
 });
-var stackSave = Module["stackSave"] = (function() {
+let stackSave = Module["stackSave"] = (function() {
     return Module["asm"]["stackSave"].apply(null, arguments)
 });
-var _memset = Module["_memset"] = (function() {
+let _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+let _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
+let _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
     return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
 });
-var _memcpy = Module["_memcpy"] = (function() {
+let _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
+let _create_decoder = Module["_create_decoder"] = (function() {
     return Module["asm"]["_create_decoder"].apply(null, arguments)
 });
 var setThrew = Module["setThrew"] = (function() {
