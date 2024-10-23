@@ -227,8 +227,8 @@
         }
     }
 }))();
-let Module = (typeof Module !== "undefined" ? Module : {});
-
+var Module;
+if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 let moduleOverrides = {};
 for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
@@ -1188,8 +1188,7 @@ let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
 if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr("TOTAL_MEMORY should be larger than TOTAL_STACK, was " + TOTAL_MEMORY + "! (TOTAL_STACK=" + TOTAL_STACK + ")");
 if (Module["buffer"]) {
     buffer = Module["buffer"]
-} else {
-    if (typeof WebAssembly === "object" && typeof WebAssembly.Memory === "function") {
+} else if (typeof WebAssembly === "object" && typeof WebAssembly.Memory === "function") {
         Module["wasmMemory"] = new WebAssembly.Memory({
             "initial": TOTAL_MEMORY / WASM_PAGE_SIZE,
             "maximum": TOTAL_MEMORY / WASM_PAGE_SIZE
@@ -1198,7 +1197,7 @@ if (Module["buffer"]) {
     } else {
         buffer = new ArrayBuffer(TOTAL_MEMORY)
     }
-}
+
 updateGlobalBufferViews();
 
 function getTotalMemory() {
