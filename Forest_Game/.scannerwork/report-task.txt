@@ -1,0 +1,6 @@
+projectKey=Forest_game-25-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Forest_game-25-10-2024
+ceTaskId=90178b50-07a9-421f-9bfe-15f96104fca0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=90178b50-07a9-421f-9bfe-15f96104fca0
