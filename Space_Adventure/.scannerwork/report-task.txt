@@ -1,0 +1,6 @@
+projectKey=Space_adventure-25-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Space_adventure-25-10-2024
+ceTaskId=4f7f47bc-aba8-4ff0-ad79-734fc3e2267e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=4f7f47bc-aba8-4ff0-ad79-734fc3e2267e
