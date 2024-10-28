@@ -1,0 +1,467 @@
+.AlertaAdblockPlus-modal,
+.AlertaAdblockPlus-overlay {
+    position: fixed;
+    display: none
+}
+.AlertaAdblockPlus-overlay {
+    font-family: 'Roboto', sans-serif; /*fuente*/
+  background: #FF416C; /*fondo por defecto */
+  background: linear-gradient(to right, #FF4B2B, #FF416C);/*degradado*/
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000
+}
+.AlertaAdblockPlus-modal {
+    padding: 3.2em; /*naruto(relleno)*/
+  background-color: #fff; /*fondo*/
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.1); /*sombra*/
+  text-align: center; /*aliniacion del texto*/
+  line-height: 1.5; /*interlineado*/
+  border-radius: 10px; /*bordes redondeados*/
+  color: #37474F;
+    left: 50%;
+    top: 50%;
+    margin-top: -200px;
+    max-height: 90%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 2000;
+
+}
+.AlertaAdblockPlus-modal:focus {
+    outline: 0
+}
+.AlertaAdblockPlus-modal.loading {
+    overflow-y: hidden
+}
+.AlertaAdblockPlus-modal h2 {
+    color: #333;
+    font-size: 30px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: none;
+    position: relative;
+    margin: 0;
+    padding: 10;
+    line-height: 60px;
+    display: block
+}
+.AlertaAdblockPlus-modal .AlertaAdblockPlus-spacer {
+    height: 10px;
+    color: transparent;
+    border: 0
+}
+.AlertaAdblockPlus-modal button.styled {
+    color: #fff;
+    border: 0;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 10px 32px;
+    margin: 0 5px;
+    cursor: pointer;
+    box-shadow: 0 4px #DDE3EC;
+
+}
+.AlertaAdblockPlus-content,
+.AlertaAdblockPlus-icon {
+    padding: 0;
+    position: relative
+}
+.AlertaAdblockPlus-modal button.styled:not(.loading)[disabled] {
+    opacity: .4;
+    cursor: no-drop
+}
+.AlertaAdblockPlus-modal button.styled.loading {
+    box-sizing: border-box;
+    border: 4px solid transparent;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: -2px 30px;
+    vertical-align: top;
+    background-color: transparent!important;
+    color: transparent;
+    cursor: default;
+    border-radius: 100%;
+    -webkit-animation: rotate-loading 1.9s linear 0s infinite normal;
+    animation: rotate-loading 1.9s linear 0s infinite normal
+}
+.AlertaAdblockPlus-modal button:not(.styled).loading:after {
+    display: inline-block;
+    content: "";
+    margin-left: 5px;
+    vertical-align: -1px;
+    height: 6px;
+    width: 6px;
+    border: 3px solid #999;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;
+    animation: rotate-loading 1.5s linear 0s infinite normal
+}
+.AlertaAdblockPlus-checkbox input,
+.AlertaAdblockPlus-checkbox span,
+.AlertaAdblockPlus-radio input,
+.AlertaAdblockPlus-radio span {
+    vertical-align: middle
+}
+.AlertaAdblockPlus-modal .AlertaAdblockPlus-image {
+    margin: 30px auto;
+    max-width: 100%;
+}
+
+.AlertaAdblockPlus-modal .AlertaAdblockPlus-close:hover {
+    color: #d55
+}
+.AlertaAdblockPlus-modal>.AlertaAdblockPlus-checkbox,
+.AlertaAdblockPlus-modal>.AlertaAdblockPlus-input,
+.AlertaAdblockPlus-modal>.AlertaAdblockPlus-radio,
+.AlertaAdblockPlus-modal>.AlertaAdblockPlus-select,
+.AlertaAdblockPlus-modal>.AlertaAdblockPlus-textarea {
+    display: none
+}
+.AlertaAdblockPlus-content {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 300;
+    float: none;
+    margin: 0;
+    line-height: normal;
+    color: #555
+}
+.AlertaAdblockPlus-icon.AlertaAdblockPlus-info,
+.AlertaAdblockPlus-icon.AlertaAdblockPlus-question,
+.AlertaAdblockPlus-icon.AlertaAdblockPlus-warning {
+    font-size: 60px;
+    line-height: 80px;
+    text-align: center
+}
+.AlertaAdblockPlus-icon {
+    width: 80px;
+    height: 80px;
+    border: 4px solid grey;
+    border-radius: 50%;
+    margin: 20px auto 30px;
+    box-sizing: content-box;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+
+@-webkit-keyframes showSweetAlert {
+    0% {
+        -webkit-transform: scale(.7);
+        transform: scale(.7)
+    }
+    45% {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05)
+    }
+    80% {
+        -webkit-transform: scale(.95);
+        transform: scale(.95)
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+@keyframes showSweetAlert {
+    0% {
+        -webkit-transform: scale(.7);
+        transform: scale(.7)
+    }
+    45% {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05)
+    }
+    80% {
+        -webkit-transform: scale(.95);
+        transform: scale(.95)
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+@-webkit-keyframes hideSweetAlert {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1
+    }
+    100% {
+        -webkit-transform: scale(.5);
+        transform: scale(.5);
+        opacity: 0
+    }
+}
+@keyframes hideSweetAlert {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 1
+    }
+    100% {
+        -webkit-transform: scale(.5);
+        transform: scale(.5);
+        opacity: 0
+    }
+}
+.show-AlertaAdblockPlus {
+    -webkit-animation: showSweetAlert .3s;
+    animation: showSweetAlert .3s
+}
+.show-AlertaAdblockPlus.no-animation {
+    -webkit-animation: none;
+    animation: none
+}
+.hide-AlertaAdblockPlus {
+    -webkit-animation: hideSweetAlert .15s forwards;
+    animation: hideSweetAlert .15s forwards
+}
+.hide-AlertaAdblockPlus.no-animation {
+    -webkit-animation: none;
+    animation: none
+}
+@-webkit-keyframes animate-success-tip {
+    0%, 54% {
+        width: 0;
+        left: 1px;
+        top: 19px
+    }
+    70% {
+        width: 50px;
+        left: -8px;
+        top: 37px
+    }
+    84% {
+        width: 17px;
+        left: 21px;
+        top: 48px
+    }
+    100% {
+        width: 25px;
+        left: 14px;
+        top: 45px
+    }
+}
+@keyframes animate-success-tip {
+    0%, 54% {
+        width: 0;
+        left: 1px;
+        top: 19px
+    }
+    70% {
+        width: 50px;
+        left: -8px;
+        top: 37px
+    }
+    84% {
+        width: 17px;
+        left: 21px;
+        top: 48px
+    }
+    100% {
+        width: 25px;
+        left: 14px;
+        top: 45px
+    }
+}
+@-webkit-keyframes animate-success-long {
+    0%, 65% {
+        width: 0;
+        right: 46px;
+        top: 54px
+    }
+    84% {
+        width: 55px;
+        right: 0;
+        top: 35px
+    }
+    100% {
+        width: 47px;
+        right: 8px;
+        top: 38px
+    }
+}
+@keyframes animate-success-long {
+    0%, 65% {
+        width: 0;
+        right: 46px;
+        top: 54px
+    }
+    84% {
+        width: 55px;
+        right: 0;
+        top: 35px
+    }
+    100% {
+        width: 47px;
+        right: 8px;
+        top: 38px
+    }
+}
+@-webkit-keyframes rotatePlaceholder {
+    0%, 5% {
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg)
+    }
+    100%,
+    12% {
+        -webkit-transform: rotate(-405deg);
+        transform: rotate(-405deg)
+    }
+}
+@keyframes rotatePlaceholder {
+    0%, 5% {
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg)
+    }
+    100%,
+    12% {
+        -webkit-transform: rotate(-405deg);
+        transform: rotate(-405deg)
+    }
+}
+.animate-success-tip {
+    -webkit-animation: animate-success-tip .75s;
+    animation: animate-success-tip .75s
+}
+.animate-success-long {
+    -webkit-animation: animate-success-long .75s;
+    animation: animate-success-long .75s
+}
+.AlertaAdblockPlus-icon.AlertaAdblockPlus-success.animate::after {
+    -webkit-animation: rotatePlaceholder 4.25s ease-in;
+    animation: rotatePlaceholder 4.25s ease-in
+}
+@-webkit-keyframes animate-error-icon {
+    0% {
+        -webkit-transform: rotateX(100deg);
+        transform: rotateX(100deg);
+        opacity: 0
+    }
+    100% {
+        -webkit-transform: rotateX(0);
+        transform: rotateX(0);
+        opacity: 1
+    }
+}
+@keyframes animate-error-icon {
+    0% {
+        -webkit-transform: rotateX(100deg);
+        transform: rotateX(100deg);
+        opacity: 0
+    }
+    100% {
+        -webkit-transform: rotateX(0);
+        transform: rotateX(0);
+        opacity: 1
+    }
+}
+.animate-error-icon {
+    -webkit-animation: animate-error-icon .5s;
+    animation: animate-error-icon .5s
+}
+@-webkit-keyframes animate-x-mark {
+    0%, 50% {
+        -webkit-transform: scale(.4);
+        transform: scale(.4);
+        margin-top: 26px;
+        opacity: 0
+    }
+    80% {
+        -webkit-transform: scale(1.15);
+        transform: scale(1.15);
+        margin-top: -6px
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        margin-top: 0;
+        opacity: 1
+    }
+}
+@keyframes animate-x-mark {
+    0%, 50% {
+        -webkit-transform: scale(.4);
+        transform: scale(.4);
+        margin-top: 26px;
+        opacity: 0
+    }
+    80% {
+        -webkit-transform: scale(1.15);
+        transform: scale(1.15);
+        margin-top: -6px
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        margin-top: 0;
+        opacity: 1
+    }
+}
+.animate-x-mark {
+    -webkit-animation: animate-x-mark .5s;
+    animation: animate-x-mark .5s
+}
+@-webkit-keyframes pulse-warning {
+    0% {
+        border-color: #f8d486
+    }
+    100% {
+        border-color: #f8bb86
+    }
+}
+@keyframes pulse-warning {
+    0% {
+        border-color: #f8d486
+    }
+    100% {
+        border-color: #f8bb86
+    }
+}
+.pulse-warning {
+    -webkit-animation: pulse-warning .75s infinite alternate;
+    animation: pulse-warning .75s infinite alternate
+}
+@-webkit-keyframes rotate-loading {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+@keyframes rotate-loading {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+a:link,
+a:visited,
+a:active {
+    text-decoration: none;
+    color: #6B7B92;
+}
+a:hover {
+    text-decoration: underline;
+    color: #6B7B92;
+}
+
+/* ////////////////////////////////////////////////////////////////////////*/
