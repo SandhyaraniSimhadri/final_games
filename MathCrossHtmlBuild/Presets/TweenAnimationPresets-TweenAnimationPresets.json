@@ -1,0 +1,13 @@
+{
+    "keyAndValues": [
+       {
+            "key": "EQUATION_SUCCESS",
+            "useAnotherPreset": false,
+            "value": {
+                "curve": "EASE_OUT",
+                "duration": 0.1
+            },
+            "sourcePresetKey": ""
+       } 
+    ]
+}

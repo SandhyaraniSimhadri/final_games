@@ -1,0 +1,70 @@
+{
+    "keyAndValues": [
+        {
+            "key": "TP_BG",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.15094339847564698,
+                "g": 0.15094339847564698,
+                "b": 0.15094339847564698,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BG"
+        },
+        {
+            "key": "TP_BOARD_BG",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.3396226167678833,
+                "g": 0.3396226167678833,
+                "b": 0.3396226167678833,
+                "a": 0.6392157077789307
+            },
+            "sourcePresetKey": "BOARD_BG"
+        },
+        {
+            "key": "TP_TEXT",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 1.0,
+                "g": 0.899677038192749,
+                "b": 0.7877358198165894,
+                "a": 1.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "TP_HAND",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 0.8114954233169556,
+                "b": 0.6084905862808228,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "TP_SKIP",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "TP_TITLE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.1568627506494522,
+                "g": 0.4000000059604645,
+                "b": 0.7372549176216126,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

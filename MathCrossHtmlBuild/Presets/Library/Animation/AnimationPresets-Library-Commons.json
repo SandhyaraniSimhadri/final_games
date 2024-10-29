@@ -1,0 +1,60 @@
+{
+    "keyAndValues": [
+        {
+            "key": "FADE_IN",
+            "useAnotherPreset": false,
+            "value": {
+                "from": {
+                    "opacity": 1
+                },
+                "to": {
+                    "opacity": 0
+                }
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "FADE_OUT",
+            "useAnotherPreset": false,
+            "value": {
+                "from": {
+                    "opacity": 0
+                },
+                "to": {
+                    "opacity": 1
+                }
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key" : "BOTTOM_UP_SERIES",
+            "useAnotherPreset":false,
+            "sourcePresetKey":"",
+            "value": {
+                "start":{
+                    "duration":1
+                },
+                "reverse":false,
+                "groupType": "SERIES_ITEMS",
+                "delay": 0.0,
+                "animation": {
+                    "curve": "EASE_IN_OUT_BACK",
+                    "duration": 1,
+                    "speed": 0.5,
+                    "from": {
+                        "translate": {
+                            "y": 100,
+                            "x":0
+                        }
+                    },
+                    "to": {
+                        "translate": {
+                            "y": 0,
+                            "x":0
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

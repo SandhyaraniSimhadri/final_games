@@ -1,0 +1,23 @@
+{
+    "keyAndValues": [
+        {
+            "key": "BG_OVERLAY",
+            "useAnotherPreset": false,
+            "value": {
+               "start":{
+			   "r":1,
+			   "g":1,
+			   "b":1,
+			   "a":0.0
+			   },
+			   "end": {
+			   "r":1,
+			   "g":1,
+			   "b":1,
+			   "a":0.0
+			   }
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

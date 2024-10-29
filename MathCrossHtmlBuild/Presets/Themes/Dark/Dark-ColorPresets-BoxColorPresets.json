@@ -1,0 +1,224 @@
+{
+    "keyAndValues": [
+        {
+            "key": "BOX_DEFAULT_FIXED",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 0.9450980424880981,
+                "b": 0.7176470756530762,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_TEXT_DEFAULT_FIXED",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_BORDER_DEFAULT_FIXED",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_SATISFY_FIXED",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.39956390857696535,
+                "g": 0.6886792182922363,
+                "b": 0.5036996006965637,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_DEFAULT_FREE"
+        },
+        {
+            "key": "BOX_TEXT_SATISFY_FIXED",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_TEXT_DEFAULT_FIXED"
+        },
+        {
+            "key": "BOX_BORDER_SATISFY_FIXED",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_DEFAULT_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.8941176533699036,
+                "g": 0.9725490212440491,
+                "b": 0.9803921580314636,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_TEXT_DEFAULT_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.8679245114326477,
+                "g": 0.5537249445915222,
+                "b": 0.35617658495903017,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_SATISFY_FIXED"
+        },
+        {
+            "key": "BOX_BORDER_DEFAULT_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_RIGHT_FREE",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.7311320900917053,
+                "g": 1.0,
+                "b": 0.7480003237724304,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_DEFAULT_FREE"
+        },
+        {
+            "key": "BOX_TEXT_RIGHT_FREE",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+            },
+            "sourcePresetKey": "BOX_TEXT_DEFAULT_FREE"
+        },
+        {
+            "key": "BOX_BORDER_RIGHT_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_WRONG_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 0.7686274647712708,
+                "b": 0.7686274647712708,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_TEXT_DEACTIVATE"
+        },
+        {
+            "key": "BOX_TEXT_WRONG_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.6431372761726379,
+                "g": 0.1411764770746231,
+                "b": 0.1526343673467636,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BOX_TEXT_DEACTIVATE"
+        },
+        {
+            "key": "BOX_BORDER_WRONG_FREE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_HIGHLIGHT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.7019608020782471
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_HOLDER_BG_DEFAULT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 0.9450980424880981,
+                "b": 0.7176470756530762,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_HOLDER_BORDER_DEFAULT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.18490568399429321,
+                "g": 0.08490568399429321,
+                "b": 0.28490568399429321,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_HOLDER_BG_DEACTIVE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.3962264060974121,
+                "g": 0.3962264060974121,
+                "b": 0.3962264060974121,
+                "a": 0.07058823853731156
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_HOLDER_BORDER_DEACTIVE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

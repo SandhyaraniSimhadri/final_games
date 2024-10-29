@@ -1,0 +1,6 @@
+{
+	"theme":"Casual",
+	"themes": ["Book", "Dark", "Casual","Default","Simple"],
+	"development": true,
+	"storeUrl":"https://www.google.com"
+}

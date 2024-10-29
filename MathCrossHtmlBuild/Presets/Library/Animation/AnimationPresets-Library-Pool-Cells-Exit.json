@@ -1,0 +1,54 @@
+{
+    "keyAndValues": [
+{
+            "key": "POOL_CELLS_EXIT_DOWN",
+            "useAnotherPreset": false,
+            "description": "used to enter cells that need to place. when new level loaded.",
+            "value": {
+                "groupType": "SERIES_ITEMS",
+                "delay": 0.02,
+                "animation": {
+                    "groupType": "PARALLEL",
+                    "animation": [
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 3,
+                            "from": {
+                                "translate": {
+                                    "functionType": "DIRECTIONAL",
+                                    "value": {
+                                        "x": -1500
+                                    }
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "x": 0
+                                }
+                            }
+                        },
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 1.2,
+                            "from": {
+                                "translate": {
+                                    "y": 0
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "y": 2500
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+
+            
+        }
+        
+    ]
+}

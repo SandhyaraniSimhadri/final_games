@@ -1,0 +1,58 @@
+{
+    "keyAndValues": [
+   {
+            "key": "HINTS_AT_START",
+            "useAnotherPreset": false,
+            "value": 5,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "HINT_REWARD_FOR_ADS",
+            "useAnotherPreset": false,
+            "value": 5,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_OUTLINE_THICKNESS",
+            "useAnotherPreset": false,
+            "value": 2.0,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOX_DISABLE_ALPHA",
+            "useAnotherPreset": false,
+            "value": 0.009999999776482582,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GRID_SPACING",
+            "useAnotherPreset": false,
+            "value": 5.0,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "CELL_POOL_SPACING",
+            "useAnotherPreset": false,
+            "value": 20.0,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "TC_SUN_EFFECT_ROTATION_SPEED",
+            "useAnotherPreset": false,
+            "value": 5.0,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "EQUATION_CELL_SUCCESS_MID_SCALE",
+            "useAnotherPreset": false,
+            "value": 1.2999999523162842,
+            "sourcePresetKey": ""
+        },
+        {
+            "key":"HINT_REWARD_FOR_LEVEL_COMPLETE",
+            "useAnotherPreset": false,
+        "value": 2,
+            "sourcePresetKey": ""
+        }
+    ]
+}

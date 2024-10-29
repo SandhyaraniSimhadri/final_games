@@ -1,0 +1,48 @@
+{
+    "keyAndValues": [
+        {
+            "key": "TC_TEXT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.20754718780517579,
+                "g": 0.20754718780517579,
+                "b": 0.20754718780517579,
+                "a": 0.7607843279838562
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "TC_BUTTON_CONTINUE",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.2078431397676468,
+                "g": 0.2078431397676468,
+                "b": 0.2078431397676468,
+                "a": 0.7607843279838562
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "TC_BUTTON_RESTART",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.2078431397676468,
+                "g": 0.2078431397676468,
+                "b": 0.2078431397676468,
+                "a": 0.7607843279838562
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "TC_SUN_EFFECT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.1383054256439209,
+                "g": 0.2641509175300598,
+                "b": 0.1684838980436325,
+                "a": 0.0941176488995552
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "keyAndValues": [
+        {
+            "key": "CELL_ADD",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "assign"
+        },
+        {
+            "key": "CELL_RETURN",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "return"
+        },
+        {
+            "key": "COMPLETE",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "complete_clip"
+        },
+        {
+            "key": "TUTORIAL_COMPLETE",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "tutorial_complete"
+        },
+        {
+            "key": "EQUATION_SUCCESS",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "correct-2-46134"
+        },
+        {
+            "key": "DEFAULT_BUTTONS",
+            "useAnotherPreset": false,
+            "sourcePresetKey": "",
+            "value": "Buttons/button_1"
+        },
+        {
+            "key": "GP_BUTTONS",
+            "useAnotherPreset": true,
+            "sourcePresetKey": "DEFAULT_BUTTONS",
+            "value": ""
+        },
+        {
+            "key": "MORE_BUTTONS",
+            "useAnotherPreset": true,
+            "sourcePresetKey": "DEFAULT_BUTTONS",
+            "value": ""
+        }
+        ,
+        {
+            "key": "TC_BUTTONS",
+            "useAnotherPreset": true,
+            "sourcePresetKey": "DEFAULT_BUTTONS",
+            "value": ""
+        }
+
+    ]
+}

@@ -1,0 +1,6 @@
+projectKey=Math_cross-29-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Math_cross-29-10-2024
+ceTaskId=b35d0b0a-e70c-48d2-bdb2-08ab295d40d9
+ceTaskUrl=http://localhost:9000/api/ce/task?id=b35d0b0a-e70c-48d2-bdb2-08ab295d40d9

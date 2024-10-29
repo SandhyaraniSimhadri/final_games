@@ -1,0 +1,58 @@
+{
+    "keyAndValues": [
+
+        {
+            "key": "CELL_RETURN_TO_DEFAULT",
+            "useAnotherPreset": false,
+            "description": "used to return cells to original position when drag or click.",
+            "value": {
+                "curve": "EASE_OUT",
+                "duration": 0.2,
+                "speed": 1,
+                "points": [
+                    {
+                        "time": 0,
+                        "opacity": {
+                            "type": "ABSOLUTE",
+                            "value": 0.1
+                        },
+                        "position": {
+                            "functionType": "EVALUATE",
+                            "type": "ABSOLUTE",
+                            "value": "start.position"
+                        },
+                        "size": {
+                            "functionType": "EVALUATE",
+                            "type": "ABSOLUTE",
+                            "value": "start.size"
+                        }
+                    },
+                    {
+                        "time": 0.1,
+                        "opacity": {
+                            "type": "ABSOLUTE",
+                            "value": 1
+                        }
+                    },
+                    {
+                        "time": 0.2,
+                        "opacity": {
+                            "type": "ABSOLUTE",
+                            "value": 0.1
+                        },
+                        "position": {
+                            "functionType": "EVALUATE",
+                            "type": "ABSOLUTE",
+                            "value": "target.position"
+                        },
+                        "size": {
+                            "functionType": "EVALUATE",
+                            "type": "ABSOLUTE",
+                            "value": "target.size"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

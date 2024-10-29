@@ -1,0 +1,92 @@
+{
+    "keyAndValues": [
+        {
+            "key": "GP_SKIP_ADS_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.7450980544090271,
+                "g": 0.3176470696926117,
+                "b": 0.21568627655506135,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GP_SKIP_ADS_TEXT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GP_HINT_BUTTON_ADS_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.7450980544090271,
+                "g": 0.3176470696926117,
+                "b": 0.21568627655506135,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GP_HINT_BUTTON_ADS_TEXT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GP_HINT_BUTTON_COUNT_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.8160377144813538,
+                "g": 0.8937106728553772,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": "BUTTONS"
+        },
+        {
+            "key": "GP_BUTTONS",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "GP_LEVEL",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.1568627506494522,
+                "g": 0.4000000059604645,
+                "b": 0.7372549176216126,
+                "a": 1.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "GP_HINT_BUTTON_COUNT_TEXT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.21698111295700074,
+                "g": 0.21698111295700074,
+                "b": 0.21698111295700074,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

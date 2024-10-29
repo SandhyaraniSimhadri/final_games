@@ -1,0 +1,72 @@
+{
+    "keyAndValues": [
+
+        {
+            "key": "BOARD_EXIT_SLIDE",
+            "useAnotherPreset": false,
+            "description": "used to exit board. when new level loaded.",
+            "value": {
+                "curve": "EASE_IN",
+                "duration": 0.2,
+                "speed": 1,
+                "points": [
+                    {
+                        "time": 0,
+                        "position": {
+                            "x": 0 
+                        },
+                        "groupOpacity": 1
+                    },
+                    {
+                        "time": 0.2,
+                        "position": {
+                            "functionType": "DIRECTIONAL",
+                            "value": {
+                                "x": -2000
+                            }
+                        },
+                        "groupOpacity": 0
+                    }
+                ]
+            }
+        },
+        {
+            "key": "BOARD_EXIT_BOOK",
+            "useAnotherPreset": false,
+            "description": "used to exit board. when new level loaded.",
+            "value": {
+                "curve": "EASE_OUT_CUBIC",
+                "speed": 2,
+                "duration": 1,
+                "points": [
+                    {
+                        "time": 0,
+                        "translate": {
+                            "x": 0
+                        },
+                        "scale": {
+                            "x": 1,
+                            "y": 1
+                        },
+                        "groupOpacity": 1
+                    },
+                    {
+                        "time": 1,
+                        "scale": {
+                            "x": 0.001,
+                            "y": 1.2
+                        },
+                        "translate":{
+                            "functionType": "DIRECTIONAL",
+                            "value": {
+                                "x": -1025
+                            }
+                        },
+                        "groupOpacity": 0
+                    }
+                ]
+            }
+        }
+        
+    ]
+}

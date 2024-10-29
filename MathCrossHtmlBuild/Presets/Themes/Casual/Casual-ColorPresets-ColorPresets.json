@@ -1,0 +1,70 @@
+{
+    "keyAndValues": [
+   {
+        "key":"LOADING",
+        "useAnotherPreset": false,
+        "value": {
+           	   "r": 1.0,
+				   "g": 0.5141509771347046,
+				   "b": 0.5141509771347046,
+				   "a": 1.0
+        },
+        "sourcePresetKey": ""
+       },
+        {
+            "key": "DEFAULT_BUTTONS",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.9228528141975403,
+                "g": 1.0,
+                "b": 0.7783018946647644,
+                "a": 0.9843137264251709
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.9764706492424011,
+                "g": 0.9647059440612793,
+                "b": 0.9764706492424011,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "BOARD_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.22745098173618318
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "CELL_POOL_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.26274511218070986
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "SCENE_LOADING",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

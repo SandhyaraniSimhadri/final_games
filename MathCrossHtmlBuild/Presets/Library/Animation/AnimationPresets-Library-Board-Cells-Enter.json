@@ -1,0 +1,53 @@
+{
+    "keyAndValues": [
+        
+        {
+            "key": "BOARD_CELLS_ENTER_TOP_CORNER",
+            "useAnotherPreset": false,
+            "description": "used to enter cells. when new level loaded.",
+            "value": {
+                "groupType": "SERIES_ITEMS",
+                "delay": 0.005,
+                "animation": {
+                    "groupType": "PARALLEL",
+                    "animation": [
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 1.2,
+                            "from": {
+                                "translate": {
+                                    "value": {
+                                        "x": 1500
+                                    },
+                                    "functionType": "DIRECTIONAL"
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "x": 0
+                                }
+                            }
+                        },
+                        {
+                            "curve": "EASE_OUT",
+                            "duration": 1,
+                            "speed": 1.2,
+                            "from": {
+                                "translate": {
+                                    "y": -1500
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "y": 0
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

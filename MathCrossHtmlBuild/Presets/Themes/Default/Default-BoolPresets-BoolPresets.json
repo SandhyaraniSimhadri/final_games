@@ -1,0 +1,35 @@
+{
+    "keyAndValues": [
+
+        {
+            "key": "LC_WIN_PARTICLES",
+            "useAnotherPreset": false,
+            "value": true,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "SKIP_FEATURE",
+            "useAnotherPreset": false,
+            "value": true,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "HINT_FEATURE",
+            "useAnotherPreset": false,
+            "value": true,
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "GP_RATING_BUTTON",
+            "useAnotherPreset": false,
+            "value": true,
+            "sourcePresetKey": ""
+        },
+        {
+            "key":"MUSIC",
+            "useAnotherPreset": false,
+            "value": false,
+            "sourcePresetKey": ""
+        }
+    ]
+}

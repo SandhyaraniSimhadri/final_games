@@ -1,0 +1,232 @@
+{
+    "keyAndValues": [
+       
+        {
+            "key": "BOARD_EXIT",
+            "useAnotherPreset": true,
+            "description": "used to exit board. when new level loaded.",
+            "value": {},
+            "sourcePresetKey": "BOARD_EXIT_BOOK"
+        },
+        {
+            "key": "BOARD_ENTER",
+            "useAnotherPreset": true,
+            "description": "used to enter board. when new level loaded.",
+            "value": {},
+            "sourcePresetKey": "BOARD_ENTER_BOOK"
+        },
+        {
+            "key": "BOARD_CELLS_ENTER",
+            "useAnotherPreset": true,
+            "description": "used to enter cells. when new level loaded.",
+            "value": {},
+            "sourcePresetKey": "NONE",
+            "overrides": {}
+        },
+        {
+            "key": "BOARD_CELLS_EXIT",
+            "useAnotherPreset": true,
+            "description": "used to exit cells. when new level loaded.",
+            "value": {},
+            "sourcePresetKey": "NONE"
+        },
+        {
+            "key": "POOL_CELLS_ENTER",
+            "useAnotherPreset": true,
+            "description": "used to enter cells that need to place. when new level loaded.",
+            "value": {},
+            "sourcePresetKey": "POOL_CELLS_ENTER_UP"
+        },
+        {
+            "key": "GP_BUTTONS",
+            "useAnotherPreset": true,
+            "sourcePresetKey": "BOTTOM_UP_SERIES",
+            "value": {},
+            "overrides": {
+                "start": {
+                    "duration": 0.2
+                },
+                "delay": 0.1,
+                "reverse": false
+            }
+        },
+        {
+            "key": "MP_SHOW",
+            "useAnotherPreset": false,
+            "value": {
+                "speed": 10,
+                "from": {
+                    "opacity": 0
+                },
+                "to": {
+                    "opacity": 0.5
+                },
+                "children": [
+                    {
+                        "target": "CONTENT",
+                        "speed": 0.4,
+                        "curve": "EASE_OUT_ELASTIC",
+                        "from": {
+                            "translate": {
+                                "x": -1080,
+                                "y": 0
+                            }
+                        },
+                        "to": {
+                            "translate": {
+                                "x": 0,
+                                "y": 0
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "key": "MP_HIDE",
+            "useAnotherPreset": false,
+            "value": {
+                "speed": 10,
+                "from": {
+                    "opacity": 0.5
+                },
+                "to": {
+                    "opacity": 0
+                },
+                "children": [
+                    {
+                        "target": "CONTENT",
+                        "speed": 5,
+                        "curve": "EASE_OUT",
+                        "from": {
+                            "translate": {
+                                "x": 0,
+                                "y": 0
+                            }
+                        },
+                        "to": {
+                            "translate": {
+                                "x": 3080,
+                                "y": 0
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "key": "LEVEL_COMPLETE_START",
+            "useAnotherPreset": false,
+            "value": {
+                "groupType": "COMPLEX",
+                "animation": [
+                    {
+                        "target": "BOARD",
+                        "speed": 4,
+                        "from": {
+                            "scale": {
+                                "x": 1,
+                                "y": 1
+                            }
+                        },
+                        "to": {
+                            "scale": {
+                                "x": 0.8,
+                                "y": 0.8
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "key": "LEVEL_COMPLETE_RETURN",
+            "useAnotherPreset": false,
+            "value": {
+                "groupType": "COMPLEX",
+                "animation": [
+                    {
+                        "target": "BOARD",
+                        "speed": 2,
+                        "from": {
+                            "scale": {
+                                "x": 0.8,
+                                "y": 0.8
+                            }
+                        },
+                        "to": {
+                            "scale": {
+                                "x": 1,
+                                "y": 1
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "key": "TOAST_EFFECT",
+            "useAnotherPreset": false,
+            "value": {
+                "speed": 0.6,
+                "points": [
+                    {
+                        "time": 0,
+                        "opacity": 0
+                    },
+                    {
+                        "time": 0.2,
+                        "opacity": 0.2
+                    },
+                    {
+                        "time": 0.8,
+                        "opacity": 0.2
+                    },
+                    {
+                        "time": 1,
+                        "opacity": 0
+                    }
+                ],
+                "children": [
+                    {
+                        "groupType": "SERIES",
+                        "target": "ToastEffect",
+                        "animation": [
+                            {
+                                "speed":3,
+                                "from": {
+                                    "position": {
+                                        "x": 2000,
+                                        "y": 800
+                                    }
+                                },
+                                "to": {
+                                    "position": {
+                                        "x": 540,
+                                        "y": 800
+                                    }
+                                }
+                            },
+                            {
+                                "duration": 0.99
+                            },
+                            {
+                                "speed": 3,
+                                "from": {
+                                    "position": {
+                                        "x": 0
+                                    }
+                                },
+                                "to": {
+                                    "position": {
+                                        "x": -1460
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

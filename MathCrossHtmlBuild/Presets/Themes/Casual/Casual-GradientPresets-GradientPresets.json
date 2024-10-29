@@ -1,0 +1,78 @@
+{
+    "keyAndValues": [
+        {
+            "key": "BG_OVERLAY",
+            "useAnotherPreset": false,
+            "value": {
+               "start":{
+				   "r": 1.0,
+				   "g": 0.5141509771347046,
+				   "b": 0.5141509771347046,
+				   "a": 1.0
+			   },
+			   "end": {
+				   "r": 0.0,
+				   "g": 0.6770033836364746,
+				   "b": 1.0,
+				   "a": 1.0
+			   }
+            },
+            "sourcePresetKey": ""
+        },
+		{
+            "key": "MP_CONTENT",
+            "useAnotherPreset": false,
+            "value": {
+               "start":{
+				   "r": 1.0,
+				   "g": 0.5141509771347046,
+				   "b": 0.5141509771347046,
+				   "a": 0.1
+			   },
+			   "end": {
+				   "r": 0.0,
+				   "g": 0.6770033836364746,
+				   "b": 1.0,
+				   "a": 0.3
+			   }
+            },
+            "sourcePresetKey": ""
+        },
+		{
+			"key": "TC_BG_OVERLAY",
+			"useAnotherPreset": false,
+			"value": {
+				"start": {
+					"r": 0.4980392,
+					"g": 0.2509804,
+					"b": 0.9058824,
+					"a": 1.0
+				},
+				"end": {
+					"r": 0.4980392,
+					"g": 0.2509804,
+					"b": 0.9058824,
+					"a": 1.0
+				}
+			}
+		},
+		{
+			"key": "TC_BOTTOM_OVERLAY",
+			"useAnotherPreset": false,
+			"value": {
+						"start": {
+					"r": 0.4980392,
+					"g": 0.2509804,
+					"b": 0.9058824,
+					"a": 1.0
+				},
+				"end": {
+					"r": 0.4980392,
+					"g": 0.2509804,
+					"b": 0.9058824,
+					"a": 1.0
+				}
+			}
+		}
+    ]
+}

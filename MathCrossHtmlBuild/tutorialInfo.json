@@ -1,0 +1,130 @@
+{
+    "puzzleInfo": {
+        "gridSize": {
+            "x": 5,
+            "y": 5
+        },
+        "holders": [
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 0
+                },
+                "value": "7",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 1
+                },
+                "value": "+",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 0,
+                    "y": 2
+                },
+                "value": "8",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 1,
+                    "y": 2
+                },
+                "value": "+",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 3,
+                    "y": 2
+                },
+                "value": "=",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 3
+                },
+                "value": "=",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 4
+                },
+                "value": "9",
+                "isFixed": true
+            },
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 2
+                },
+                "value": "2",
+                "isFixed": false
+            },
+            {
+                "coordinate": {
+                    "x": 4,
+                    "y": 2
+                },
+                "value": "10",
+                "isFixed": false
+            }
+        ],
+        "equations": [
+            {
+                "coordinate": {
+                    "x": 2,
+                    "y": 0
+                },
+                "direction": 1,
+                "count": 0
+            },
+            {
+                "coordinate": {
+                    "x": 0,
+                    "y": 2
+                },
+                "direction": 0,
+                "count": 0
+            }
+        ]
+    },
+    "steps": [
+        {
+            "title": "",
+            "message": "Tap to select an empty cell. The tap to select the correct candidate to make the equation true",
+            "actions": [
+                {
+                    "actionType": 0,
+                    "target": {
+                        "x": 2,
+                        "y": 2
+                    },
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "title": "",
+            "message": "You can also drag a candidate to the correct cell",
+            "actions": [
+                {
+                    "actionType": 1,
+                    "target": {
+                        "x": 4,
+                        "y": 2
+                    },
+                    "value": "10"
+                }
+            ]
+        }
+    ]
+}

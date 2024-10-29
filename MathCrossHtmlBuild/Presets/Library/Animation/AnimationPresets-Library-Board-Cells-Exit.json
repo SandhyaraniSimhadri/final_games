@@ -1,0 +1,101 @@
+{
+    "keyAndValues": [
+
+        {
+            "key": "BOARD_CELLS_EXIT_BOTTOM_CORNER",
+            "useAnotherPreset": false,
+            "description": "used to exit cells. when new level loaded.",
+            "value": {
+                "groupType": "SERIES_ITEMS",
+                "delay": 0.005,
+                "animation": {
+                    "groupType": "PARALLEL",
+                    "animation": [
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 3,
+                            "from": {
+                                "translate": {
+                                    "x": 0
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "functionType": "DIRECTIONAL",
+                                    "value": {
+                                        "x": -1500
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 2,
+                            "from": {
+                                "translate": {
+                                    "y": 0
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "y": 2500
+                                },
+                                "opacityGroup": 0
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "key": "BOARD_CELLS_EXIT_TOP_CORNER",
+            "useAnotherPreset": false,
+            "description": "used to exit cells. when new level loaded.",
+            "value": {
+                "groupType": "SERIES_ITEMS",
+                "delay": 0.005,
+                "animation": {
+                    "groupType": "PARALLEL",
+                    "animation": [
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 3,
+                            "from": {
+                                "translate": {
+                                    "x": 0
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "functionType": "DIRECTIONAL",
+                                    "value": {
+                                        "x": -1500
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "curve": "EASE_IN",
+                            "duration": 1,
+                            "speed": 2,
+                            "from": {
+                                "translate": {
+                                    "y": 0
+                                }
+                            },
+                            "to": {
+                                "translate": {
+                                    "y": -2500
+                                },
+                                "opacityGroup": 0
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

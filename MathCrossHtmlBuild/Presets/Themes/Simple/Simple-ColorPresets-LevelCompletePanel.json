@@ -1,0 +1,59 @@
+{
+    "keyAndValues": [
+        {
+            "key": "LC_EFFECT_TEXT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.062745101749897,
+                "g": 0.8156862854957581,
+                "b": 0.0784313753247261,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "LC_EFFECT_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "LC_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.4627451002597809
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "WIN_PARTICLE_FIRST",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 0.0,
+                "b": 0.5018105506896973,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "WIN_PARTICLE_SECOND",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.9635404944419861,
+                "g": 1.0,
+                "b": 0.6556603908538818,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

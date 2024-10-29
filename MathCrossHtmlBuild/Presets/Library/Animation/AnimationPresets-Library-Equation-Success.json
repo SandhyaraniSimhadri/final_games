@@ -1,0 +1,102 @@
+{
+    "keyAndValues": [
+ 
+        {
+            "key": "EQUATION_SUCCESS_POP_WITH_ANGLE",
+            "useAnotherPreset": false,
+            "value": {
+                "curve": "EASE_OUT",
+                "duration": 1,
+                "speed": 3.33,
+                "points": [
+                    {
+                        "time": 0,
+                        "scale": 1,
+                        "angle": 0
+                    },
+                    {
+                        "time": 0.6,
+                        "scale": 1.2,
+                        "angle": {
+                            "functionType": "RANDOM",
+                            "value": [
+                                25,
+                                -25
+                            ]
+                        }
+                    },
+                    {
+                        "time": 1,
+                        "scale": 1.0,
+                        "angle": 0
+                    }
+                ]
+            }
+        },
+    {
+            "key": "EQUATION_SUCCESS_POP",
+            "useAnotherPreset": false,
+            "value": {
+                "curve": "EASE_OUT",
+                "duration": 1,
+                "speed": 3.33,
+                "points": [
+                    {
+                        "time": 0,
+                        "scale": 1
+                    },
+                    {
+                        "time": 0.6,
+                        "scale": 1.2
+                    },
+                    {
+                        "time": 1,
+                    "scale": 1.0
+                    }
+                ]
+            }
+        },
+
+{
+            "key": "EQUATION_SUCCESS_TINT",
+            "useAnotherPreset": false,
+            "value": {
+                "curve": "EASE_OUT",
+                "duration": 1,
+                "speed": 2.4,
+                "points": [
+                    {
+                        "time": 0,
+                        "overlayColor": {
+                            "r": 0.270,
+                            "g": 0.36,
+                            "b": 0.654,
+                            "a": 0
+                        }
+                    },
+                    {
+                        "time": 0.6,
+                        "overlayColor": {
+                            "r": 0.270,
+                            "g": 0.36,
+                            "b": 0.654,
+                            "a": 0.6
+                        }
+                    },
+                    {
+                        "time": 1,
+                        "overlayColor": {
+                            "r": 0.270,
+                            "g": 0.36,
+                            "b": 0.654,
+                            "a": 0
+                        }
+                    }
+
+                ]
+            }
+        }
+
+        
+    ]
+}

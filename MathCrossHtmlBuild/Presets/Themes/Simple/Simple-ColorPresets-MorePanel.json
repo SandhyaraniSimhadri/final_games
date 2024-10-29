@@ -1,0 +1,59 @@
+{
+    "keyAndValues": [
+        {
+            "key": "MP_BG",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.3529411852359772
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "MP_CONTENT",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        },
+        {
+            "key": "MORE_TITLE",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.1568627506494522,
+                "g": 0.4000000059604645,
+                "b": 0.7372549176216126,
+                "a": 1.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "MORE_BUTTONS",
+            "useAnotherPreset": true,
+            "value": {
+                "r": 0.1568627506494522,
+                "g": 0.4000000059604645,
+                "b": 0.7372549176216126,
+                "a": 1.0
+            },
+            "sourcePresetKey": "DEFAULT_BUTTONS"
+        },
+        {
+            "key": "MORE_CLOSE_BUTTON",
+            "useAnotherPreset": false,
+            "value": {
+                "r": 0.3396226167678833,
+                "g": 0.3380206227302551,
+                "b": 0.33826395869255068,
+                "a": 1.0
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

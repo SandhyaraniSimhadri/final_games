@@ -1,0 +1,42 @@
+{
+    "keyAndValues": [
+        {
+            "key": "BG_OVERLAY",
+            "useAnotherPreset": false,
+            "value": {
+               "start":{
+				   "r": 1.0,
+				   "g": 0.5141509771347046,
+				   "b": 0.5141509771347046,
+				   "a": 1.0
+			   },
+			   "end": {
+				   "r": 0.0,
+				   "g": 0.6770033836364746,
+				   "b": 1.0,
+				   "a": 1.0
+			   }
+            },
+            "sourcePresetKey": ""
+        },
+		{
+            "key": "MP_CONTENT",
+            "useAnotherPreset": false,
+            "value": {
+               "start":{
+				   "r": 1.0,
+				   "g": 0.5141509771347046,
+				   "b": 0.5141509771347046,
+				   "a": 0
+			   },
+			   "end": {
+				   "r": 0.0,
+				   "g": 0.6770033836364746,
+				   "b": 1.0,
+				   "a": 0
+			   }
+            },
+            "sourcePresetKey": ""
+        }
+    ]
+}

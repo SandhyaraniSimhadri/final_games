@@ -1,0 +1,46 @@
+{
+    "keyAndValues": [
+        {
+            "key": "CORNER_TYPE",
+            "useAnotherPreset": false,
+            "value": "Round",
+            "sourcePresetKey": ""
+        },
+		{
+            "key": "BOARD_BG",
+            "useAnotherPreset": true,
+            "value": "",
+            "sourcePresetKey": "CORNER_TYPE"
+        },
+		{
+            "key": "CELL_POOL_BG",
+            "useAnotherPreset": true,
+            "value": "Round",
+            "sourcePresetKey": "CORNER_TYPE"
+        },
+		{
+            "key": "CELL_HOLDER",
+            "useAnotherPreset": true,
+            "value": "",
+            "sourcePresetKey": "CORNER_TYPE"
+        },
+		{
+            "key": "MEMBER_CELL",
+            "useAnotherPreset": true,
+            "value": "",
+            "sourcePresetKey": "CORNER_TYPE"
+        },
+		{
+            "key": "MP_CONTENT",
+            "useAnotherPreset": true,
+            "value": "",
+            "sourcePresetKey": "CORNER_TYPE"
+        },
+		{
+			"key":"BG",
+			"useAnotherPreset":false,
+			"value":"Image",
+			"sourcePresetKey":""
+		}
+    ]
+}

@@ -1,0 +1,86 @@
+{
+    "keyAndValues": [
+
+        {
+            "key": "CELL_ADD_TO_DEFAULT",
+            "useAnotherPreset": false,
+            "description": "used to add cells to board when drag or click.",
+            "value": {
+                "groupType": "SERIES",
+                "animation": [
+                    {
+                        "groupType": "PARALLEL",
+                        "animation": [
+                            {
+                                "curve": "EASE_IN",
+                                "duration": 0.2,
+                                "points": [
+                                    {
+                                        "time": 0,
+                                        "position": {
+                                            "functionType": "EVALUATE",
+                                            "type": "ABSOLUTE",
+                                            "value": "{x:start.position.x}"
+                                        }
+                                    },
+                                    {
+                                        "time": 0.2,
+                                        "position": {
+                                            "type": "ABSOLUTE",
+                                            "functionType": "EVALUATE",
+                                            "value": "{x:target.position.x}"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "curve": "EASE_OUT",
+                                "duration": 0.2,
+                                "points": [
+                                    {
+                                        "time": 0,
+                                        "position": {
+                                            "functionType": "EVALUATE",
+                                            "type": "ABSOLUTE",
+                                            "value": "{y:start.position.y}"
+                                        }
+                                    },
+                                    {
+                                        "time": 0.2,
+                                        "position": {
+                                            "type": "ABSOLUTE",
+                                            "functionType": "EVALUATE",
+                                            "value": "{y:target.position.y}"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "curve": "LINEAR",
+                        "duration": 0.16666666666666666,
+                        "points": [
+                            {
+                                "time": 0,
+                                "size": {
+                                    "type": "ABSOLUTE",
+                                    "functionType": "EVALUATE",
+                                    "value": "{x:start.size.x,y:start.size.y}"
+                                }
+                            },
+                            {
+                                "time": 0.16666666666666666,
+                                "size": {
+                                    "type": "ABSOLUTE",
+                                    "functionType": "EVALUATE",
+                                    "value": "{x:target.size.x,y:target.size.y}"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
