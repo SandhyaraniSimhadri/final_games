@@ -1,0 +1,6 @@
+projectKey=In_orbit-29-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=In_orbit-29-10-2024
+ceTaskId=0b4de477-28c0-400f-b746-3fa7f14492e1
+ceTaskUrl=http://localhost:9000/api/ce/task?id=0b4de477-28c0-400f-b746-3fa7f14492e1
