@@ -1,0 +1,6 @@
+projectKey=Snowball_world-30-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Snowball_world-30-10-2024
+ceTaskId=b3ce15c8-170e-4ad4-b546-56105f2aa4c2
+ceTaskUrl=http://localhost:9000/api/ce/task?id=b3ce15c8-170e-4ad4-b546-56105f2aa4c2
