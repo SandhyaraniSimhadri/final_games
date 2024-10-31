@@ -238,10 +238,8 @@ var ModuleFunctions = {
     getTempRet0: function() {
         return Module["asm"]["getTempRet0"].apply(null, arguments);
     },
-    // Add more functions...
 };
 
-// Attach ModuleFunctions to Module
 Object.assign(Module, ModuleFunctions);
 
 let moduleOverrides = {};
