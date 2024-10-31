@@ -1866,35 +1866,43 @@ let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
 // Ensure `Module` is globally accessible and assign if undefined
-let Module = globalThis.Module || {};
+// Ensure Module is defined globally and accessible
+window.Module = window.Module || {};
 
-// Define functions within an IIFE, then attach them to `Module`
-(() => {
-    Module["_memmove"] = function() {
-        return Module["asm"]["_memmove"].apply(null, arguments);
-    };
+// Define functions and attach to Module
+const assignFunctions = () => {
+    const asm = Module.asm || {}; // Fallback to an empty object if asm is not defined
 
     Module["_malloc"] = function() {
-        return Module["asm"]["_malloc"].apply(null, arguments);
+        return asm["_malloc"].apply(null, arguments);
     };
 
     Module["_free"] = function() {
-        return Module["asm"]["_free"].apply(null, arguments);
+        return asm["_free"].apply(null, arguments);
     };
 
-    // Add additional function assignments here as needed...
-})();
+    Module["_memmove"] = function() {
+        return asm["_memmove"].apply(null, arguments);
+    };
 
-var _memset = Module["_memset"] = (function() {
-    return Module["asm"]["_memset"].apply(null, arguments)
-});
-var _sbrk = Module["_sbrk"] = (function() {
-    return Module["asm"]["_sbrk"].apply(null, arguments)
-});
+    Module["_memset"] = function() {
+        return asm["_memset"].apply(null, arguments);
+    };
 
-var _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments)
-});
+    Module["_sbrk"] = function() {
+        return asm["_sbrk"].apply(null, arguments);
+    };
+
+    Module["_memcpy"] = function() {
+        return asm["_memcpy"].apply(null, arguments);
+    };
+
+    // Add additional function assignments here...
+};
+
+// Immediately invoke to assign functions
+assignFunctions();
+
 
 /* eslint-enable no-var */
 
