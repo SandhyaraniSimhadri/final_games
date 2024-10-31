@@ -1,15 +1,15 @@
 ((function() {
     "use strict";
-    var VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    var VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
-    var OPUS_SIG = [65, 95, 79, 80, 85, 83];
+    let VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    let VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
+    let OPUS_SIG = [65, 95, 79, 80, 85, 83];
     
-    var _decoder = null;
-    var _audioBuffer = null;
-    var _inputPointer = null;
-    var _outputBuffer = null;
-    var _outputPointer = null;
-    var _outputOffset = 0;
+    let _decoder = null;
+    let _audioBuffer = null;
+    let _inputPointer = null;
+    let _outputBuffer = null;
+    let _outputPointer = null;
+    let _outputOffset = 0;
     
     // Ready promise resolves when onRuntimeInitialized called
     let readyPromiseResolve = null;
@@ -21,8 +21,8 @@
     };
 
     function ReadVInt(data, position, length, initialMask) {
-        var value = data.getUint8(position) & initialMask;
-        for (var i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
+        let value = data.getUint8(position) & initialMask;
+        for (let i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
         return value
     }
 
@@ -44,9 +44,9 @@
 
     function ReadInt24(data, position)
     {
-        var first = data.getInt8(position);
-        var sign = first >> 7;
-        var value = first & 0b1111111;
+        let first = data.getInt8(position);
+        let sign = first >> 7;
+        let value = first & 0b1111111;
 
         value = (value << 8) | data.getUint8(position);
         value = (value << 8) | data.getUint8(position);
@@ -59,9 +59,9 @@
     }
 
     function CreateDecoder(duration) {
-        var frequency = 48e3;
-        var channels = 1;
-        var bufferSize = 2048;
+        let frequency = 48e3;
+        let channels = 1;
+        let bufferSize = 2048;
         // the true size should be "duration - codecDelay"
         // but we also write the "discardpadding" at the end 
         // of the buffer before discarding it, so we need 1 opus frame of
