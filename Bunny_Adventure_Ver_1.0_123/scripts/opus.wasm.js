@@ -605,8 +605,6 @@ function getCFunc(ident) {
     return func;
 }
 
-
-
 let cwrap, ccall;
 ((function() {
     let JSfuncs = {
@@ -906,6 +904,7 @@ function copySlabData(slab, ret, size, singleType) {
 
     return ret;
 }
+
 
 Module["allocate"] = allocate;
 
