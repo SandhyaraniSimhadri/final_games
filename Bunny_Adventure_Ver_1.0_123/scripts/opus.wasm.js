@@ -1744,21 +1744,22 @@ function integrateWasmJS(Module) {
         let methods = method.split(",");
         for (let curr of methods) {
             finalMethod = curr;
-            
             if (curr === "native-wasm") {
                 exports = doNativeWasm(global, env, providedBuffer);
+                if (exports) break;
+                
             } else if (curr === "asmjs") {
-                exports = doJustAsm(global, env, providedBuffer);
+                if (exports = doJustAsm(global, env, providedBuffer)) break;
             } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                exports = doWasmPolyfill(global, env, providedBuffer, curr);
+                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
+                if (exports) {
+                    break; // Use the extracted value in the condition
+                }
             } else {
                 abort("bad method: " + curr);
             }
-        
-            if (exports) {
-                break;
-            }
         }
+
         
         
         if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
@@ -1772,7 +1773,7 @@ STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "opus.wasm.js.mem" : null;
-const STATIC_BUMP = 28816;
+var STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 const tempDoublePtr = STATICTOP;
