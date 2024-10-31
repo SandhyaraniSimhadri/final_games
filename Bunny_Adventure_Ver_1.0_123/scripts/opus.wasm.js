@@ -227,18 +227,20 @@
         }
     }
 }))();
+// Using an object to hold functions
 var Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
-var moduleOverrides = {};
-for (var key in Module) {
+
+let moduleOverrides = {};
+for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
         moduleOverrides[key] = Module[key]
     }
 }
-var ENVIRONMENT_IS_WEB = false;
-var ENVIRONMENT_IS_WORKER = false;
-var ENVIRONMENT_IS_NODE = false;
-var ENVIRONMENT_IS_SHELL = false;
+let ENVIRONMENT_IS_WEB = false;
+let ENVIRONMENT_IS_WORKER = false;
+let ENVIRONMENT_IS_NODE = false;
+let ENVIRONMENT_IS_SHELL = false;
 if (Module["ENVIRONMENT"]) {
     if (Module["ENVIRONMENT"] === "WEB") {
         ENVIRONMENT_IS_WEB = true
@@ -260,17 +262,17 @@ if (Module["ENVIRONMENT"]) {
 if (ENVIRONMENT_IS_NODE) {
     if (!Module["print"]) Module["print"] = console.log;
     if (!Module["printErr"]) Module["printErr"] = console.warn;
-    var nodeFS;
-    var nodePath;
+    let nodeFS;
+    let nodePath;
     Module["read"] = function shell_read(filename, binary) {
         if (!nodeFS) nodeFS = require("fs");
         if (!nodePath) nodePath = require("path");
         filename = nodePath["normalize"](filename);
-        var ret = nodeFS["readFileSync"](filename);
+        let ret = nodeFS["readFileSync"](filename);
         return binary ? ret : ret.toString()
     };
     Module["readBinary"] = function readBinary(filename) {
-        var ret = Module["read"](filename, true);
+        let ret = Module["read"](filename, true);
         if (!ret.buffer) {
             ret = new Uint8Array(ret)
         }
@@ -293,7 +295,7 @@ if (ENVIRONMENT_IS_NODE) {
     }
     process["on"]("uncaughtException", (function(ex) {
         if (!(ex instanceof ExitStatus)) {
-            throw ex
+            throw new Error( ex)
         }
     }));
     Module["inspect"] = (function() {
@@ -306,14 +308,14 @@ if (ENVIRONMENT_IS_NODE) {
         Module["read"] = read
     } else {
         Module["read"] = function shell_read() {
-            throw "no read() available"
+            throw new Error("no read() available")
         }
     }
     Module["readBinary"] = function readBinary(f) {
         if (typeof readbuffer === "function") {
             return new Uint8Array(readbuffer(f))
         }
-        var data = read(f, "binary");
+        let data = read(f, "binary");
         assert(typeof data === "object");
         return data
     };
@@ -329,14 +331,14 @@ if (ENVIRONMENT_IS_NODE) {
     }
 } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
     Module["read"] = function shell_read(url) {
-        var xhr = new XMLHttpRequest;
+        let xhr = new XMLHttpRequest;
         xhr.open("GET", url, false);
         xhr.send(null);
         return xhr.responseText
     };
     if (ENVIRONMENT_IS_WORKER) {
         Module["readBinary"] = function readBinary(url) {
-            var xhr = new XMLHttpRequest;
+            let xhr = new XMLHttpRequest;
             xhr.open("GET", url, false);
             xhr.responseType = "arraybuffer";
             xhr.send(null);
@@ -344,7 +346,7 @@ if (ENVIRONMENT_IS_NODE) {
         }
     }
     Module["readAsync"] = function readAsync(url, onload, onerror) {
-        var xhr = new XMLHttpRequest;
+        let xhr = new XMLHttpRequest;
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
         xhr.onload = function xhr_onload() {
@@ -368,7 +370,7 @@ if (ENVIRONMENT_IS_NODE) {
             console.warn(x)
         }
     } else {
-        var TRY_USE_DUMP = false;
+        let TRY_USE_DUMP = false;
         if (!Module["print"]) Module["print"] = TRY_USE_DUMP && typeof dump !== "undefined" ? (function(x) {
             dump(x)
         }) : (function(x) {})
@@ -382,7 +384,7 @@ if (ENVIRONMENT_IS_NODE) {
         })
     }
 } else {
-    throw "Unknown runtime environment. Where are we?"
+    throw new Error("Unknown runtime environment. Where are we?")
 }
 
 function globalEval(x) {
@@ -407,20 +409,21 @@ if (!Module["thisProgram"]) {
 }
 if (!Module["quit"]) {
     Module["quit"] = (function(status, toThrow) {
-        throw toThrow
+        throw new Error( toThrow)
     })
 }
-Module.print = Module["print"];
-Module.printErr = Module["printErr"];
+Module.print = Module["print"] || console.log;
+Module.printErr = Module["printErr"] || console.log;
 Module["preRun"] = [];
 Module["postRun"] = [];
-for (var key in moduleOverrides) {
+for (let key in moduleOverrides) {
     if (moduleOverrides.hasOwnProperty(key)) {
         Module[key] = moduleOverrides[key]
     }
 }
+let tempRet0;
 moduleOverrides = undefined;
-var Runtime = {
+let Runtime = {
     setTempRet0: (function(value) {
         tempRet0 = value;
         return value
@@ -454,7 +457,7 @@ var Runtime = {
                     if (type[type.length - 1] === "*") {
                         return Runtime.QUANTUM_SIZE
                     } else if (type[0] === "i") {
-                        var bits = parseInt(type.substr(1));
+                        let bits = parseInt(type.substr(1));
                         assert(bits % 8 === 0);
                         return bits / 8
                     } else {
@@ -484,7 +487,7 @@ var Runtime = {
         return Math.min(size || (type ? Runtime.getNativeFieldSize(type) : 0), Runtime.QUANTUM_SIZE)
     }),
     dynCall: (function(sig, ptr, args) {
-        if (args && args.length) {
+       if (args?.length) {
             return Module["dynCall_" + sig].apply(null, [ptr].concat(args))
         } else {
             return Module["dynCall_" + sig].call(null, ptr)
@@ -492,13 +495,13 @@ var Runtime = {
     }),
     functionPointers: [],
     addFunction: (function(func) {
-        for (var i = 0; i < Runtime.functionPointers.length; i++) {
+        for (let i = 0; i < Runtime.functionPointers.length; i++) {
             if (!Runtime.functionPointers[i]) {
                 Runtime.functionPointers[i] = func;
                 return 2 * (1 + i)
             }
         }
-        throw "Finished up all reserved function pointers. Use a higher value for RESERVED_FUNCTION_POINTERS."
+        throw new Error("Finished up all reserved function pointers. Use a higher value for RESERVED_FUNCTION_POINTERS.")
     }),
     removeFunction: (function(index) {
         Runtime.functionPointers[(index - 2) / 2] = null
@@ -516,7 +519,7 @@ var Runtime = {
         if (!Runtime.funcWrappers[sig]) {
             Runtime.funcWrappers[sig] = {}
         }
-        var sigCache = Runtime.funcWrappers[sig];
+        let sigCache = Runtime.funcWrappers[sig];
         if (!sigCache[func]) {
             if (sig.length === 1) {
                 sigCache[func] = function dynCall_wrapper() {
@@ -535,26 +538,26 @@ var Runtime = {
         return sigCache[func]
     }),
     getCompilerSetting: (function(name) {
-        throw "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work"
+        throw new Error( "You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work")
     }),
     stackAlloc: (function(size) {
-        var ret = STACKTOP;
+        let ret = STACKTOP;
         STACKTOP = STACKTOP + size | 0;
         STACKTOP = STACKTOP + 15 & -16;
         return ret
     }),
     staticAlloc: (function(size) {
-        var ret = STATICTOP;
+        let ret = STATICTOP;
         STATICTOP = STATICTOP + size | 0;
         STATICTOP = STATICTOP + 15 & -16;
         return ret
     }),
     dynamicAlloc: (function(size) {
-        var ret = HEAP32[DYNAMICTOP_PTR >> 2];
-        var end = (ret + size + 15 | 0) & -16;
+        let ret = HEAP32[DYNAMICTOP_PTR >> 2];
+        let end = (ret + size + 15 | 0) & -16;
         HEAP32[DYNAMICTOP_PTR >> 2] = end;
         if (end >= TOTAL_MEMORY) {
-            var success = enlargeMemory();
+            let success = enlargeMemory();
             if (!success) {
                 HEAP32[DYNAMICTOP_PTR >> 2] = ret;
                 return 0
@@ -562,12 +565,12 @@ var Runtime = {
         }
         return ret
     }),
-    alignMemory: (function(size, quantum) {
-        var ret = size = Math.ceil(size / (quantum ? quantum : 16)) * (quantum ? quantum : 16);
+    alignMemory: (function(size, quantum=16) {
+         let ret = Math.ceil(size / quantum) * quantum;
         return ret
     }),
     makeBigInt: (function(low, high, unsigned) {
-        var ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
+        let ret = unsigned ? +(low >>> 0) + +(high >>> 0) * 4294967296 : +(low >>> 0) + +(high | 0) * 4294967296;
         return ret
     }),
     GLOBAL_BASE: 1024,
@@ -575,8 +578,8 @@ var Runtime = {
     __dummy__: 0
 };
 Module["Runtime"] = Runtime;
-var ABORT = 0;
-var EXITSTATUS = 0;
+let ABORT = 0;
+let EXITSTATUS = 0;
 
 function assert(condition, text) {
     if (!condition) {
@@ -585,18 +588,23 @@ function assert(condition, text) {
 }
 
 function getCFunc(ident) {
-    var func = Module["_" + ident];
+    // Look for the function in the Module object with a prepended underscore
+    let func = Module["_" + ident];
+    
+    // If the function is not found in the Module object
     if (!func) {
-        try {
-            func = eval("_" + ident)
-        } catch (e) {}
+        // Dynamically search for the function in the global scope
+        func = window["_" + ident];  // This is safer than eval()
     }
+    
+    // Assert that the function exists
     assert(func, "Cannot call unknown function " + ident + " (perhaps LLVM optimizations or closure removed it?)");
-    return func
+    
+    return func;
 }
-var cwrap, ccall;
+let cwrap, ccall;
 ((function() {
-    var JSfuncs = {
+    let JSfuncs = {
         "stackSave": (function() {
             Runtime.stackSave()
         }),
@@ -604,31 +612,31 @@ var cwrap, ccall;
             Runtime.stackRestore()
         }),
         "arrayToC": (function(arr) {
-            var ret = Runtime.stackAlloc(arr.length);
+            let ret = Runtime.stackAlloc(arr.length);
             writeArrayToMemory(arr, ret);
             return ret
         }),
         "stringToC": (function(str) {
-            var ret = 0;
+            let ret = 0;
             if (str !== null && str !== undefined && str !== 0) {
-                var len = (str.length << 2) + 1;
+                let len = (str.length << 2) + 1;
                 ret = Runtime.stackAlloc(len);
                 stringToUTF8(str, ret, len)
             }
             return ret
         })
     };
-    var toC = {
+    let toC = {
         "string": JSfuncs["stringToC"],
         "array": JSfuncs["arrayToC"]
     };
     ccall = function ccallFunc(ident, returnType, argTypes, args, opts) {
-        var func = getCFunc(ident);
-        var cArgs = [];
-        var stack = 0;
+        let func = getCFunc(ident);
+        let cArgs = [];
+        let stack = 0;
         if (args) {
-            for (var i = 0; i < args.length; i++) {
-                var converter = toC[argTypes[i]];
+            for (let i = 0; i < args.length; i++) {
+                let converter = toC[argTypes[i]];
                 if (converter) {
                     if (stack === 0) stack = Runtime.stackSave();
                     cArgs[i] = converter(args[i])
@@ -637,10 +645,11 @@ var cwrap, ccall;
                 }
             }
         }
-        var ret = func.apply(null, cArgs);
+    let ret = func(...cArgs);
+
         if (returnType === "string") ret = Pointer_stringify(ret);
         if (stack !== 0) {
-            if (opts && opts.async) {
+           if (opts?.async){
                 EmterpreterAsync.asyncFinalizers.push((function() {
                     Runtime.stackRestore(stack)
                 }));
@@ -650,22 +659,22 @@ var cwrap, ccall;
         }
         return ret
     };
-    var sourceRegex = /^function\s*[a-zA-Z$_0-9]*\s*\(([^)]*)\)\s*{\s*([^*]*?)[\s;]*(?:return\s*(.*?)[;\s]*)?}$/;
+    let sourceRegex = /^function\s+[a-zA-Z$_][a-zA-Z$_0-9]*\s*\(([a-zA-Z0-9$_,\s]*)\)\s*{([\s\S]*?)}?$/;
 
     function parseJSFunc(jsfunc) {
-        var parsed = jsfunc.toString().match(sourceRegex).slice(1);
+        let parsed = jsfunc.toString().match(sourceRegex).slice(1);
         return {
             arguments: parsed[0],
             body: parsed[1],
             returnValue: parsed[2]
         }
     }
-    var JSsource = null;
+    let JSsource = null;
 
     function ensureJSsource() {
         if (!JSsource) {
             JSsource = {};
-            for (var fun in JSfuncs) {
+            for (let fun in JSfuncs) {
                 if (JSfuncs.hasOwnProperty(fun)) {
                     JSsource[fun] = parseJSFunc(JSfuncs[fun])
                 }
@@ -674,48 +683,56 @@ var cwrap, ccall;
     }
     cwrap = function cwrap(ident, returnType, argTypes) {
         argTypes = argTypes || [];
-        var cfunc = getCFunc(ident);
-        var numericArgs = argTypes.every((function(type) {
-            return type === "number"
-        }));
-        var numericRet = returnType !== "string";
+    
+        // Get the C function based on the identifier
+        let cfunc = getCFunc(ident);
+        let numericArgs = argTypes.every(type => type === "number");
+        let numericRet = returnType !== "string";
+    
+        // If all arguments are numeric and return type is not a string, return the C function directly
         if (numericRet && numericArgs) {
-            return cfunc
+            return cfunc;
         }
-        var argNames = argTypes.map((function(x, i) {
-            return "$" + i
-        }));
-        var funcstr = "(function(" + argNames.join(",") + ") {";
-        var nargs = argTypes.length;
-        if (!numericArgs) {
-            ensureJSsource();
-            funcstr += "var stack = " + JSsource["stackSave"].body + ";";
-            for (var i = 0; i < nargs; i++) {
-                var arg = argNames[i],
-                    type = argTypes[i];
-                if (type === "number") continue;
-                var convertCode = JSsource[type + "ToC"];
-                funcstr += "var " + convertCode.arguments + " = " + arg + ";";
-                funcstr += convertCode.body + ";";
-                funcstr += arg + "=(" + convertCode.returnValue + ");"
+    
+        // Define a wrapper function that will handle argument conversion and calling the C function
+        return function(...args) {
+            if (args.length !== argTypes.length) {
+                throw new Error("Incorrect number of arguments");
             }
-        }
-        var cfuncname = parseJSFunc((function() {
-            return cfunc
-        })).returnValue;
-        funcstr += "var ret = " + cfuncname + "(" + argNames.join(",") + ");";
-        if (!numericRet) {
-            var strgfy = parseJSFunc((function() {
-                return Pointer_stringify
-            })).returnValue;
-            funcstr += "ret = " + strgfy + "(ret);"
-        }
-        if (!numericArgs) {
-            ensureJSsource();
-            funcstr += JSsource["stackRestore"].body.replace("()", "(stack)") + ";"
-        }
-        funcstr += "return ret})";
-        return eval(funcstr)
+    
+            let convertedArgs = [];
+    
+            // Convert each argument based on its expected type
+            for (let i = 0; i < argTypes.length; i++) {
+                let arg = args[i];
+                let expectedType = argTypes[i];
+    
+                if (expectedType === "number") {
+                    if (typeof arg !== "number") {
+                        throw new Error(`Argument ${i} is expected to be a number`);
+                    }
+                    convertedArgs.push(arg);  // No conversion needed for numbers
+                } else if (expectedType === "string") {
+                    ensureJSsource();
+                    let convertCode = JSsource["stringToC"];
+                    let converted = convertCode(arg);  // Convert string to C-compatible format
+                    convertedArgs.push(converted);
+                } else {
+                    throw new Error(`Unsupported argument type: ${expectedType}`);
+                }
+            }
+    
+            // Call the C function with the converted arguments
+            let ret = cfunc(...convertedArgs);
+    
+            // If the return type is a string, convert it back to JavaScript string
+            if (!numericRet) {
+                ensureJSsource();
+                ret = Pointer_stringify(ret);
+            }
+    
+            return ret;
+        };
     }
 }))();
 Module["ccall"] = ccall;
@@ -737,9 +754,31 @@ function setValue(ptr, value, type, noSafe) {
         case "i32":
             HEAP32[ptr >> 2] = value;
             break;
-        case "i64":
-            tempI64 = [value >>> 0, (tempDouble = value, +Math_abs(tempDouble) >= 1 ? tempDouble > 0 ? (Math_min(+Math_floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0 : ~~+Math_ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0 : 0)], HEAP32[ptr >> 2] = tempI64[0], HEAP32[ptr + 4 >> 2] = tempI64[1];
-            break;
+      case "i64":{
+    let tempDouble = value;
+    let tempI64;
+
+    if (Math.abs(tempDouble) >= 1) {
+        if (tempDouble > 0) {
+            tempI64 = [
+                value >>> 0,
+                (Math.min(Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
+            ];
+        } else {
+            tempI64 = [
+                value >>> 0,
+                (Math.ceil((tempDouble - (~~tempDouble >>> 0)) / 4294967296) | 0) >>> 0
+            ];
+        }
+    } else {
+        tempI64 = [value >>> 0, 0];
+    }
+
+    // Assign values to HEAP32
+    HEAP32[ptr >> 2] = tempI64[0];
+    HEAP32[(ptr + 4) >> 2] = tempI64[1];
+    break;
+}
         case "float":
             HEAPF32[ptr >> 2] = value;
             break;
@@ -776,11 +815,11 @@ function getValue(ptr, type, noSafe) {
     return null
 }
 Module["getValue"] = getValue;
-var ALLOC_NORMAL = 0;
-var ALLOC_STACK = 1;
-var ALLOC_STATIC = 2;
-var ALLOC_DYNAMIC = 3;
-var ALLOC_NONE = 4;
+let ALLOC_NORMAL = 0;
+let ALLOC_STACK = 1;
+let ALLOC_STATIC = 2;
+let ALLOC_DYNAMIC = 3;
+let ALLOC_NONE = 4;
 Module["ALLOC_NORMAL"] = ALLOC_NORMAL;
 Module["ALLOC_STACK"] = ALLOC_STACK;
 Module["ALLOC_STATIC"] = ALLOC_STATIC;
@@ -788,65 +827,81 @@ Module["ALLOC_DYNAMIC"] = ALLOC_DYNAMIC;
 Module["ALLOC_NONE"] = ALLOC_NONE;
 
 function allocate(slab, types, allocator, ptr) {
-    var zeroinit, size;
-    if (typeof slab === "number") {
-        zeroinit = true;
-        size = slab
-    } else {
-        zeroinit = false;
-        size = slab.length
-    }
-    var singleType = typeof types === "string" ? types : null;
-    var ret;
-    if (allocator == ALLOC_NONE) {
-        ret = ptr
-    } else {
-        ret = [typeof _malloc === "function" ? _malloc : Runtime.staticAlloc, Runtime.stackAlloc, Runtime.staticAlloc, Runtime.dynamicAlloc][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length))
-    }
+    const { zeroinit, size } = determineSlabProperties(slab);
+    const singleType = typeof types === "string" ? types : null;
+    const ret = allocateMemory(allocator, ptr, size, singleType);
+
     if (zeroinit) {
-        var ptr = ret,
-            stop;
-        assert((ret & 3) == 0);
-        stop = ret + (size & ~3);
-        for (; ptr < stop; ptr += 4) {
-            HEAP32[ptr >> 2] = 0
-        }
-        stop = ret + size;
-        while (ptr < stop) {
-            HEAP8[ptr++ >> 0] = 0
-        }
-        return ret
+        initializeMemory(ret, size);
+        return ret;
     }
+
+    return copySlabData(slab, ret, size, singleType);
+}
+
+function determineSlabProperties(slab) {
+    if (typeof slab === "number") {
+        return { zeroinit: true, size: slab };
+    }
+    return { zeroinit: false, size: slab.length };
+}
+
+function allocateMemory(allocator, ptr, size, singleType) {
+    if (allocator == ALLOC_NONE) {
+        return ptr;
+    }
+    return [
+        typeof _malloc === "function" ? _malloc : Runtime.staticAlloc,
+        Runtime.stackAlloc,
+        Runtime.staticAlloc,
+        Runtime.dynamicAlloc
+    ][allocator === undefined ? ALLOC_STATIC : allocator](Math.max(size, singleType ? 1 : types.length));
+}
+
+function initializeMemory(ret, size) {
+    assert((ret & 3) === 0);
+    const stop = ret + (size & ~3);
+    for (let ptr = ret; ptr < stop; ptr += 4) {
+        HEAP32[ptr >> 2] = 0;
+    }
+    for (let ptr = stop; ptr < ret + size; ptr++) {
+        HEAP8[ptr >> 0] = 0;
+    }
+}
+
+function copySlabData(slab, ret, size, singleType) {
     if (singleType === "i8") {
         if (slab.subarray || slab.slice) {
-            HEAPU8.set(slab, ret)
+            HEAPU8.set(slab, ret);
         } else {
-            HEAPU8.set(new Uint8Array(slab), ret)
+            HEAPU8.set(new Uint8Array(slab), ret);
         }
-        return ret
+        return ret;
     }
-    var i = 0,
-        type, typeSize, previousType;
+
+    let i = 0, previousType;
     while (i < size) {
-        var curr = slab[i];
+        let curr = slab[i];
         if (typeof curr === "function") {
-            curr = Runtime.getFunctionIndex(curr)
+            curr = Runtime.getFunctionIndex(curr);
         }
-        type = singleType || types[i];
+        const type = singleType || types[i];
+
         if (type === 0) {
             i++;
-            continue
+            continue;
         }
-        if (type == "i64") type = "i32";
-        setValue(ret + i, curr, type);
-        if (previousType !== type) {
-            typeSize = Runtime.getNativeTypeSize(type);
-            previousType = type
-        }
-        i += typeSize
+
+        const finalType = type === "i64" ? "i32" : type;
+        setValue(ret + i, curr, finalType);
+        const typeSize = (previousType !== finalType) ? Runtime.getNativeTypeSize(finalType) : 0;
+        previousType = finalType;
+        i += typeSize;
     }
-    return ret
+
+    return ret;
 }
+
 Module["allocate"] = allocate;
 
 function getMemory(size) {
@@ -857,38 +912,37 @@ function getMemory(size) {
 Module["getMemory"] = getMemory;
 
 function Pointer_stringify(ptr, length) {
-    if (length === 0 || !ptr) return "";
-    var hasUtf = 0;
-    var t;
-    var i = 0;
-    while (1) {
-        t = HEAPU8[ptr + i >> 0];
+    if (length === 0 || !ptr) return ""; // Early return for edge cases
+
+    let i = 0, hasUtf = 0, t;
+    
+    // Determine string length if not provided
+    if (!length) {
+        while (HEAPU8[ptr + i]) i++;
+        length = i;
+    }
+
+    // Check if the string contains UTF-8 characters
+    for (i = 0; i < length; i++) {
+        t = HEAPU8[ptr + i];
         hasUtf |= t;
-        if (t == 0 && !length) break;
-        i++;
-        if (length && i == length) break
+        if (!t) break;
     }
-    if (!length) length = i;
-    var ret = "";
+
+    // Fast path for ASCII strings
     if (hasUtf < 128) {
-        var MAX_CHUNK = 1024;
-        var curr;
-        while (length > 0) {
-            curr = String.fromCharCode.apply(String, HEAPU8.subarray(ptr, ptr + Math.min(length, MAX_CHUNK)));
-            ret = ret ? ret + curr : curr;
-            ptr += MAX_CHUNK;
-            length -= MAX_CHUNK
-        }
-        return ret
+        return readAsciiString(ptr, length);
     }
-    return Module["UTF8ToString"](ptr)
+
+    // Handle UTF-8 strings
+    return Module["UTF8ToString"](ptr);
 }
 Module["Pointer_stringify"] = Pointer_stringify;
 
 function AsciiToString(ptr) {
-    var str = "";
+    let str = "";
     while (1) {
-        var ch = HEAP8[ptr++ >> 0];
+        let ch = HEAP8[ptr++ >> 0];
         if (!ch) return str;
         str += String.fromCharCode(ch)
     }
@@ -899,52 +953,68 @@ function stringToAscii(str, outPtr) {
     return writeAsciiToMemory(str, outPtr, false)
 }
 Module["stringToAscii"] = stringToAscii;
-var UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
-
+let UTF8Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : undefined;
 function UTF8ArrayToString(u8Array, idx) {
-    var endPtr = idx;
-    while (u8Array[endPtr]) ++endPtr;
+    let endPtr = findStringEnd(u8Array, idx);
+    
     if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
-        return UTF8Decoder.decode(u8Array.subarray(idx, endPtr))
+        return UTF8Decoder.decode(u8Array.subarray(idx, endPtr));
     } else {
-        var u0, u1, u2, u3, u4, u5;
-        var str = "";
-        while (1) {
-            u0 = u8Array[idx++];
-            if (!u0) return str;
-            if (!(u0 & 128)) {
-                str += String.fromCharCode(u0);
-                continue
-            }
-            u1 = u8Array[idx++] & 63;
-            if ((u0 & 224) == 192) {
-                str += String.fromCharCode((u0 & 31) << 6 | u1);
-                continue
-            }
-            u2 = u8Array[idx++] & 63;
-            if ((u0 & 240) == 224) {
-                u0 = (u0 & 15) << 12 | u1 << 6 | u2
+        return decodeUTF8(u8Array, idx, endPtr);
+    }
+}
+
+function findStringEnd(u8Array, idx) {
+    let endPtr = idx;
+    while (u8Array[endPtr]) ++endPtr;
+    return endPtr;
+}
+
+function decodeUTF8(u8Array, idx, endPtr) {
+    let str = "";
+    while (idx < endPtr) {
+        let u0 = u8Array[idx++];
+        if (!u0) return str;
+        str += decodeCodePoint(u8Array, u0, idx);
+    }
+    return str;
+}
+
+function decodeCodePoint(u8Array, u0, idx) {
+    if (!(u0 & 128)) return String.fromCharCode(u0);
+    
+    let u1 = u8Array[idx++] & 63;
+    if ((u0 & 224) === 192) {
+        return String.fromCharCode((u0 & 31) << 6 | u1);
+    }
+    
+    let u2 = u8Array[idx++] & 63;
+    if ((u0 & 240) === 224) {
+        u0 = (u0 & 15) << 12 | u1 << 6 | u2;
+    } else {
+        let u3 = u8Array[idx++] & 63;
+        if ((u0 & 248) === 240) {
+            u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | u3;
+        } else {
+            let u4 = u8Array[idx++] & 63;
+            if ((u0 & 252) === 248) {
+                u0 = (u0 & 3) << 24 | u1 << 18 | u2 << 12 | u3 << 6 | u4;
             } else {
-                u3 = u8Array[idx++] & 63;
-                if ((u0 & 248) == 240) {
-                    u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | u3
-                } else {
-                    u4 = u8Array[idx++] & 63;
-                    if ((u0 & 252) == 248) {
-                        u0 = (u0 & 3) << 24 | u1 << 18 | u2 << 12 | u3 << 6 | u4
-                    } else {
-                        u5 = u8Array[idx++] & 63;
-                        u0 = (u0 & 1) << 30 | u1 << 24 | u2 << 18 | u3 << 12 | u4 << 6 | u5
-                    }
-                }
-            }
-            if (u0 < 65536) {
-                str += String.fromCharCode(u0)
-            } else {
-                var ch = u0 - 65536;
-                str += String.fromCharCode(55296 | ch >> 10, 56320 | ch & 1023)
+                let u5 = u8Array[idx++] & 63;
+                u0 = (u0 & 1) << 30 | u1 << 24 | u2 << 18 | u3 << 12 | u4 << 6 | u5;
             }
         }
+    }
+    
+    return createUTF16Pair(u0);
+}
+
+function createUTF16Pair(u0) {
+    if (u0 < 65536) {
+        return String.fromCharCode(u0);
+    } else {
+        let ch = u0 - 65536;
+        return String.fromCharCode(55296 | (ch >> 10), 56320 | (ch & 1023));
     }
 }
 Module["UTF8ArrayToString"] = UTF8ArrayToString;
@@ -955,49 +1025,28 @@ function UTF8ToString(ptr) {
 Module["UTF8ToString"] = UTF8ToString;
 
 function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
-    if (!(maxBytesToWrite > 0)) return 0;
-    var startIdx = outIdx;
-    var endIdx = outIdx + maxBytesToWrite - 1;
-    for (var i = 0; i < str.length; ++i) {
-        var u = str.charCodeAt(i);
-        if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-        if (u <= 127) {
-            if (outIdx >= endIdx) break;
-            outU8Array[outIdx++] = u
-        } else if (u <= 2047) {
-            if (outIdx + 1 >= endIdx) break;
-            outU8Array[outIdx++] = 192 | u >> 6;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 65535) {
-            if (outIdx + 2 >= endIdx) break;
-            outU8Array[outIdx++] = 224 | u >> 12;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 2097151) {
-            if (outIdx + 3 >= endIdx) break;
-            outU8Array[outIdx++] = 240 | u >> 18;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
-        } else if (u <= 67108863) {
-            if (outIdx + 4 >= endIdx) break;
-            outU8Array[outIdx++] = 248 | u >> 24;
-            outU8Array[outIdx++] = 128 | u >> 18 & 63;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
+    if (maxBytesToWrite <= 0) return 0;
+
+    let startIdx = outIdx;
+    let i=0;
+    while (i < str.length) {
+        let u = str.charCodeAt(i);
+
+        // Handle surrogate pairs (Unicode code points > 0xFFFF)
+        if (isSurrogate(u)) {
+            u = handleSurrogate(str, i); // Handle surrogate
+            i += 2; // Move to the next character after the surrogate pair
         } else {
-            if (outIdx + 5 >= endIdx) break;
-            outU8Array[outIdx++] = 252 | u >> 30;
-            outU8Array[outIdx++] = 128 | u >> 24 & 63;
-            outU8Array[outIdx++] = 128 | u >> 18 & 63;
-            outU8Array[outIdx++] = 128 | u >> 12 & 63;
-            outU8Array[outIdx++] = 128 | u >> 6 & 63;
-            outU8Array[outIdx++] = 128 | u & 63
+            i++; // Increment normally for non-surrogate characters
         }
+
+        const res = encodeUTF8(u, outU8Array, outIdx, maxBytesToWrite, endIdx);
+        if (res === -1) break; // Exit if not enough space
+        outIdx += res; // Update output index
     }
-    outU8Array[outIdx] = 0;
-    return outIdx - startIdx
+
+    outU8Array[outIdx] = 0; // Null-terminate the output array
+    return outIdx - startIdx;
 }
 Module["stringToUTF8Array"] = stringToUTF8Array;
 
@@ -1007,45 +1056,53 @@ function stringToUTF8(str, outPtr, maxBytesToWrite) {
 Module["stringToUTF8"] = stringToUTF8;
 
 function lengthBytesUTF8(str) {
-    var len = 0;
-    for (var i = 0; i < str.length; ++i) {
-        var u = str.charCodeAt(i);
-        if (u >= 55296 && u <= 57343) u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-        if (u <= 127) {
-            ++len
-        } else if (u <= 2047) {
-            len += 2
-        } else if (u <= 65535) {
-            len += 3
-        } else if (u <= 2097151) {
-            len += 4
-        } else if (u <= 67108863) {
-            len += 5
-        } else {
-            len += 6
+    let len = 0;
+    let i = 0;
+    
+    while (i < str.length) {
+        let u = str.charCodeAt(i);
+        
+        if (u >= 55296 && u <= 57343) {
+            u = 65536 + ((u & 1023) << 10) | (str.charCodeAt(++i) & 1023);
         }
+    
+        if (u <= 127) {
+            ++len;
+        } else if (u <= 2047) {
+            len += 2;
+        } else if (u <= 65535) {
+            len += 3;
+        } else if (u <= 2097151) {
+            len += 4;
+        } else if (u <= 67108863) {
+            len += 5;
+        } else {
+            len += 6;
+        }
+        
+        ++i; // Increment i after processing the character
     }
+    
     return len
 }
 Module["lengthBytesUTF8"] = lengthBytesUTF8;
-var UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
+let UTF16Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : undefined;
 
 function demangle(func) {
-    var __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
+    let __cxa_demangle_func = Module["___cxa_demangle"] || Module["__cxa_demangle"];
     if (__cxa_demangle_func) {
         try {
-            var s = func.substr(1);
-            var len = lengthBytesUTF8(s) + 1;
-            var buf = _malloc(len);
+            let s = func.substr(1);
+            let len = lengthBytesUTF8(s) + 1;
+            let buf = _malloc(len);
             stringToUTF8(s, buf, len);
-            var status = _malloc(4);
-            var ret = __cxa_demangle_func(buf, 0, 0, status);
+            let status = _malloc(4);
+            let ret = __cxa_demangle_func(buf, 0, 0, status);
             if (getValue(status, "i32") === 0 && ret) {
                 return Pointer_stringify(ret)
             }
         } catch (e) {} finally {
             if (buf) _free(buf);
-            if (status) _free(status);
             if (ret) _free(ret)
         }
         return func
@@ -1055,15 +1112,15 @@ function demangle(func) {
 }
 
 function demangleAll(text) {
-    var regex = /__Z[\w\d_]+/g;
-    return text.replace(regex, (function(x) {
-        var y = demangle(x);
-        return x === y ? x : x + " [" + y + "]"
-    }))
+    let regex = /__Z\w+/g; // Updated regex to use \w directly
+    return text.replace(regex, x => {
+        let y = demangle(x);
+        return x === y ? x : `${x} [${y}]`; // Using template literals for readability
+    });
 }
 
 function jsStackTrace() {
-    var err = new Error;
+    let err = new Error;
     if (!err.stack) {
         try {
             throw new Error(0)
@@ -1078,13 +1135,13 @@ function jsStackTrace() {
 }
 
 function stackTrace() {
-    var js = jsStackTrace();
+    let js = jsStackTrace();
     if (Module["extraStackTrace"]) js += "\n" + Module["extraStackTrace"]();
     return demangleAll(js)
 }
 Module["stackTrace"] = stackTrace;
-var WASM_PAGE_SIZE = 65536;
-var ASMJS_PAGE_SIZE = 16777216;
+let WASM_PAGE_SIZE = 65536;
+let ASMJS_PAGE_SIZE = 16777216;
 
 function alignUp(x, multiple) {
     if (x % multiple > 0) {
@@ -1092,7 +1149,7 @@ function alignUp(x, multiple) {
     }
     return x
 }
-var HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
+let HEAP, buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
 
 function updateGlobalBuffer(buf) {
     Module["buffer"] = buffer = buf
@@ -1108,9 +1165,9 @@ function updateGlobalBufferViews() {
     Module["HEAPF32"] = HEAPF32 = new Float32Array(buffer);
     Module["HEAPF64"] = HEAPF64 = new Float64Array(buffer)
 }
-var STATIC_BASE, STATICTOP, staticSealed;
-var STACK_BASE, STACKTOP, STACK_MAX;
-var DYNAMIC_BASE, DYNAMICTOP_PTR;
+let STATIC_BASE, STATICTOP, staticSealed;
+let STACK_BASE, STACKTOP, STACK_MAX;
+let DYNAMIC_BASE, DYNAMICTOP_PTR;
 STATIC_BASE = STATICTOP = STACK_BASE = STACKTOP = STACK_MAX = DYNAMIC_BASE = DYNAMICTOP_PTR = 0;
 staticSealed = false;
 
@@ -1119,15 +1176,20 @@ function abortOnCannotGrowMemory() {
 }
 
 function enlargeMemory() {
-    abortOnCannotGrowMemory()
+    let memoryGrowthSuccess = tryToGrowMemory();  // This is a placeholder for your actual logic
+
+    if (!memoryGrowthSuccess) {
+        return abortOnCannotGrowMemory();  // Return false if it fails
+    }
+    
+    return true;  
 }
-var TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
-var TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
+let TOTAL_STACK = Module["TOTAL_STACK"] || 5242880;
+let TOTAL_MEMORY = Module["TOTAL_MEMORY"] || 67108864;
 if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr("TOTAL_MEMORY should be larger than TOTAL_STACK, was " + TOTAL_MEMORY + "! (TOTAL_STACK=" + TOTAL_STACK + ")");
 if (Module["buffer"]) {
     buffer = Module["buffer"]
-} else {
-    if (typeof WebAssembly === "object" && typeof WebAssembly.Memory === "function") {
+} else if (typeof WebAssembly === "object" && typeof WebAssembly.Memory === "function") {
         Module["wasmMemory"] = new WebAssembly.Memory({
             "initial": TOTAL_MEMORY / WASM_PAGE_SIZE,
             "maximum": TOTAL_MEMORY / WASM_PAGE_SIZE
@@ -1136,7 +1198,7 @@ if (Module["buffer"]) {
     } else {
         buffer = new ArrayBuffer(TOTAL_MEMORY)
     }
-}
+
 updateGlobalBufferViews();
 
 function getTotalMemory() {
@@ -1144,7 +1206,7 @@ function getTotalMemory() {
 }
 HEAP32[0] = 1668509029;
 HEAP16[1] = 25459;
-if (HEAPU8[2] !== 115 || HEAPU8[3] !== 99) throw "Runtime error: expected the system to be little-endian!";
+if (HEAPU8[2] !== 115 || HEAPU8[3] !== 99)   throw new Error( "Runtime error: expected the system to be little-endian!");
 Module["HEAP"] = HEAP;
 Module["buffer"] = buffer;
 Module["HEAP8"] = HEAP8;
@@ -1158,12 +1220,12 @@ Module["HEAPF64"] = HEAPF64;
 
 function callRuntimeCallbacks(callbacks) {
     while (callbacks.length > 0) {
-        var callback = callbacks.shift();
+        let callback = callbacks.shift();
         if (typeof callback == "function") {
             callback();
             continue
         }
-        var func = callback.func;
+        let func = callback.func;
         if (typeof func === "number") {
             if (callback.arg === undefined) {
                 Module["dynCall_v"](func)
@@ -1175,13 +1237,13 @@ function callRuntimeCallbacks(callbacks) {
         }
     }
 }
-var __ATPRERUN__ = [];
-var __ATINIT__ = [];
-var __ATMAIN__ = [];
-var __ATEXIT__ = [];
-var __ATPOSTRUN__ = [];
-var runtimeInitialized = false;
-var runtimeExited = false;
+let __ATPRERUN__ = [];
+let __ATINIT__ = [];
+let __ATMAIN__ = [];
+let __ATEXIT__ = [];
+let __ATPOSTRUN__ = [];
+let runtimeInitialized = false;
+let runtimeExited = false;
 
 function preRun() {
     if (Module["preRun"]) {
@@ -1244,30 +1306,22 @@ function addOnPostRun(cb) {
 Module["addOnPostRun"] = addOnPostRun;
 
 function intArrayFromString(stringy, dontAddNull, length) {
-    var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
-    var u8array = new Array(len);
-    var numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
+    let len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
+    let u8array = new Array(len);
+    let numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
     if (dontAddNull) u8array.length = numBytesWritten;
     return u8array
 }
 Module["intArrayFromString"] = intArrayFromString;
 
 function intArrayToString(array) {
-    var ret = [];
-    for (var i = 0; i < array.length; i++) {
-        var chr = array[i];
-        if (chr > 255) {
-            chr &= 255
-        }
-        ret.push(String.fromCharCode(chr))
-    }
-    return ret.join("")
+    return Array.from(array, chr => String.fromCharCode(chr > 255 ? chr & 255 : chr)).join("");
 }
 Module["intArrayToString"] = intArrayToString;
 
 function writeStringToMemory(string, buffer, dontAddNull) {
     Runtime.warnOnce("writeStringToMemory is deprecated and should not be called! Use stringToUTF8() instead!");
-    var lastChar, end;
+    let lastChar, end;
     if (dontAddNull) {
         end = buffer + lengthBytesUTF8(string);
         lastChar = HEAP8[end]
@@ -1283,63 +1337,63 @@ function writeArrayToMemory(array, buffer) {
 Module["writeArrayToMemory"] = writeArrayToMemory;
 
 function writeAsciiToMemory(str, buffer, dontAddNull) {
-    for (var i = 0; i < str.length; ++i) {
+    for (let i = 0; i < str.length; ++i) {
         HEAP8[buffer++ >> 0] = str.charCodeAt(i)
     }
     if (!dontAddNull) HEAP8[buffer >> 0] = 0
 }
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 if (!Math["imul"] || Math["imul"](4294967295, 5) !== -5) Math["imul"] = function imul(a, b) {
-    var ah = a >>> 16;
-    var al = a & 65535;
-    var bh = b >>> 16;
-    var bl = b & 65535;
+    let ah = a >>> 16;
+    let al = a & 65535;
+    let bh = b >>> 16;
+    let bl = b & 65535;
     return al * bl + (ah * bl + al * bh << 16) | 0
 };
-Math.imul = Math["imul"];
+Math.imul = Math["imul"] || console.log;
 if (!Math["fround"]) {
-    var froundBuffer = new Float32Array(1);
+    let froundBuffer = new Float32Array(1);
     Math["fround"] = (function(x) {
         froundBuffer[0] = x;
         return froundBuffer[0]
     })
 }
-Math.fround = Math["fround"];
+Math.fround = Math["fround"] || console.log;
 if (!Math["clz32"]) Math["clz32"] = (function(x) {
     x = x >>> 0;
-    for (var i = 0; i < 32; i++) {
+    for (let i = 0; i < 32; i++) {
         if (x & 1 << 31 - i) return i
     }
     return 32
 });
-Math.clz32 = Math["clz32"];
+Math.clz32 = Math["clz32"] || console.log;
 if (!Math["trunc"]) Math["trunc"] = (function(x) {
     return x < 0 ? Math.ceil(x) : Math.floor(x)
 });
-Math.trunc = Math["trunc"];
-var Math_abs = Math.abs;
-var Math_cos = Math.cos;
-var Math_sin = Math.sin;
-var Math_tan = Math.tan;
-var Math_acos = Math.acos;
-var Math_asin = Math.asin;
-var Math_atan = Math.atan;
-var Math_atan2 = Math.atan2;
-var Math_exp = Math.exp;
-var Math_log = Math.log;
-var Math_sqrt = Math.sqrt;
-var Math_ceil = Math.ceil;
-var Math_floor = Math.floor;
-var Math_pow = Math.pow;
-var Math_imul = Math.imul;
-var Math_fround = Math.fround;
-var Math_round = Math.round;
-var Math_min = Math.min;
-var Math_clz32 = Math.clz32;
-var Math_trunc = Math.trunc;
-var runDependencies = 0;
-var runDependencyWatcher = null;
-var dependenciesFulfilled = null;
+Math.trunc = Math["trunc"] || console.log;
+let Math_abs = Math.abs;
+let Math_cos = Math.cos;
+let Math_sin = Math.sin;
+let Math_tan = Math.tan;
+let Math_acos = Math.acos;
+let Math_asin = Math.asin;
+let Math_atan = Math.atan;
+let Math_atan2 = Math.atan2;
+let Math_exp = Math.exp;
+let Math_log = Math.log;
+let Math_sqrt = Math.sqrt;
+let Math_ceil = Math.ceil;
+let Math_floor = Math.floor;
+let Math_pow = Math.pow;
+let Math_imul = Math.imul;
+let Math_fround = Math.fround;
+let Math_round = Math.round;
+let Math_min = Math.min;
+let Math_clz32 = Math.clz32;
+let Math_trunc = Math.trunc;
+let runDependencies = 0;
+let runDependencyWatcher = null;
+let dependenciesFulfilled = null;
 
 function addRunDependency(id) {
     runDependencies++;
@@ -1360,7 +1414,7 @@ function removeRunDependency(id) {
             runDependencyWatcher = null
         }
         if (dependenciesFulfilled) {
-            var callback = dependenciesFulfilled;
+            let callback = dependenciesFulfilled;
             dependenciesFulfilled = null;
             callback()
         }
@@ -1369,21 +1423,21 @@ function removeRunDependency(id) {
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
-var memoryInitializer = null;
+let memoryInitializer = null;
 
 function integrateWasmJS(Module) {
-    var method = Module["wasmJSMethod"] || "native-wasm";
+    let method = Module["wasmJSMethod"] || "native-wasm";
     Module["wasmJSMethod"] = method;
-    var wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
-	var wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
-    var asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
+    let wasmTextFile = Module["wasmTextFile"] || "opus.wasm.wast";
+	let wasmBinaryFile = Module["wasmBinaryFile"] || self["cr_opusWasmBinaryUrl"] || "opus.wasm.wasm";
+    let asmjsCodeFile = Module["asmjsCodeFile"] || "opus.wasm.temp.asm.js";
     if (typeof Module["locateFile"] === "function") {
         wasmTextFile = Module["locateFile"](wasmTextFile);
         wasmBinaryFile = Module["locateFile"](wasmBinaryFile);
         asmjsCodeFile = Module["locateFile"](asmjsCodeFile)
     }
-    var wasmPageSize = 64 * 1024;
-    var asm2wasmImports = {
+    let wasmPageSize = 64 * 1024;
+    let asm2wasmImports = {
         "f64-rem": (function(x, y) {
             return x % y
         }),
@@ -1406,39 +1460,44 @@ function integrateWasmJS(Module) {
             debugger
         })
     };
-    var info = {
+    let info = {
         "global": null,
         "env": null,
         "asm2wasm": asm2wasmImports,
         "parent": Module
     };
-    var exports = null;
+    let exports = null;
 
     function lookupImport(mod, base) {
-        var lookup = info;
+        let lookup = info;
+    
         if (mod.indexOf(".") < 0) {
-            lookup = (lookup || {})[mod]
+            lookup = lookup?.[mod]; // Use optional chaining here
         } else {
-            var parts = mod.split(".");
-            lookup = (lookup || {})[parts[0]];
-            lookup = (lookup || {})[parts[1]]
+            let parts = mod.split(".");
+            lookup = lookup?.[parts[0]]; // Use optional chaining here
+            lookup = lookup?.[parts[1]]; // Use optional chaining here
         }
+    
         if (base) {
-            lookup = (lookup || {})[base]
+            lookup = lookup?.[base]; // Use optional chaining here
         }
+    
         if (lookup === undefined) {
-            abort("bad lookupImport to (" + mod + ")." + base)
+            abort("bad lookupImport to (" + mod + ")." + base);
         }
-        return lookup
+    
+        return lookup;
     }
+    
 
     function mergeMemory(newBuffer) {
-        var oldBuffer = Module["buffer"];
+        let oldBuffer = Module["buffer"];
         if (newBuffer.byteLength < oldBuffer.byteLength) {
             Module["printErr"]("the new buffer in mergeMemory is smaller than the previous one. in native wasm, we should grow memory here")
         }
-        var oldView = new Int8Array(oldBuffer);
-        var newView = new Int8Array(newBuffer);
+        let oldView = new Int8Array(oldBuffer);
+        let newView = new Int8Array(newBuffer);
         if (!memoryInitializer) {
             oldView.set(newView.subarray(Module["STATIC_BASE"], Module["STATIC_BASE"] + Module["STATIC_BUMP"]), Module["STATIC_BASE"])
         }
@@ -1446,20 +1505,15 @@ function integrateWasmJS(Module) {
         updateGlobalBuffer(newBuffer);
         updateGlobalBufferViews()
     }
-    var WasmTypes = {
-        none: 0,
-        i32: 1,
-        i64: 2,
-        f32: 3,
-        f64: 4
-    };
 
     function fixImports(imports) {
         if (!0) return imports;
-        var ret = {};
-        for (var i in imports) {
-            var fixed = i;
-            if (fixed[0] == "_") fixed = fixed.substr(1);
+        let ret = {};
+        for (let i in imports) {
+            let fixed = i;
+            if (fixed.startsWith("_")) {
+                fixed = fixed.slice(1); // Alternatively, use slice instead of substr
+            }
             ret[fixed] = imports[i]
         }
         return ret
@@ -1467,14 +1521,14 @@ function integrateWasmJS(Module) {
 
     function getBinary() {
         try {
-            var binary;
+            let binary;
             if (Module["wasmBinary"]) {
                 binary = Module["wasmBinary"];
                 binary = new Uint8Array(binary)
             } else if (Module["readBinary"]) {
                 binary = Module["readBinary"](wasmBinaryFile)
             } else {
-                throw "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)"
+                throw new Error( "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)")
             }
             return binary
         } catch (err) {
@@ -1503,8 +1557,24 @@ function integrateWasmJS(Module) {
     function doJustAsm(global, env, providedBuffer) {
         if (typeof Module["asm"] !== "function" || Module["asm"] === methodHandler) {
             if (!Module["asmPreload"]) {
-                eval(Module["read"](asmjsCodeFile))
-            } else {
+                // Fetch the asm.js or WebAssembly code from the specified file
+                fetch(asmjsCodeFile)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.arrayBuffer(); // Get the raw bytes
+                    })
+                    .then(bytes => WebAssembly.instantiate(bytes, { env: Module['env'] }))
+                    .then(result => {
+                        Module['asm'] = result.instance.exports; // Export the instance
+                        console.log('ASM.js code loaded and executed successfully.');
+                    })
+                    .catch(error => {
+                        console.error('Error loading WebAssembly:', error);
+                    });
+            }
+            else {
                 Module["asm"] = Module["asmPreload"]
             }
         }
@@ -1564,7 +1634,7 @@ function integrateWasmJS(Module) {
             Module["printErr"]("WasmJS not detected - polyfill not bundled?");
             return false
         }
-        var wasmJS = WasmJS({});
+        let wasmJS = WasmJS({});
         wasmJS["outside"] = Module;
         wasmJS["info"] = info;
         wasmJS["lookupImport"] = lookupImport;
@@ -1575,13 +1645,13 @@ function integrateWasmJS(Module) {
         env["memory"] = providedBuffer;
         assert(env["memory"] instanceof ArrayBuffer);
         wasmJS["providedTotalMemory"] = Module["buffer"].byteLength;
-        var code;
+        let code;
         if (method === "interpret-binary") {
             code = getBinary()
         } else {
             code = Module["read"](method == "interpret-asm2wasm" ? asmjsCodeFile : wasmTextFile)
         }
-        var temp;
+        let temp;
         if (method == "interpret-asm2wasm") {
             temp = wasmJS["_malloc"](code.length + 1);
             wasmJS["writeAsciiToMemory"](code, temp);
@@ -1595,7 +1665,7 @@ function integrateWasmJS(Module) {
             wasmJS["HEAPU8"].set(code, temp);
             wasmJS["_load_binary2wasm"](temp, code.length)
         } else {
-            throw "what? " + method
+            throw new Error( "what? " + method)
         }
         wasmJS["_free"](temp);
         wasmJS["_instantiate"](temp);
@@ -1607,20 +1677,22 @@ function integrateWasmJS(Module) {
         return exports
     }
     Module["asmPreload"] = Module["asm"];
-    var asmjsReallocBuffer = Module["reallocBuffer"];
-    var wasmReallocBuffer = (function(size) {
-        var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
+    let asmjsReallocBuffer = Module["reallocBuffer"];
+    let wasmReallocBuffer = (function(size) {
+        let PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE;
         size = alignUp(size, PAGE_MULTIPLE);
-        var old = Module["buffer"];
-        var oldSize = old.byteLength;
+        let old = Module["buffer"];
+        let oldSize = old.byteLength;
         if (Module["usingWasm"]) {
             try {
-                var result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
+                let result = Module["wasmMemory"].grow((size - oldSize) / wasmPageSize);
                 if (result !== (-1 | 0)) {
-                    return Module["buffer"] = Module["wasmMemory"].buffer
+                    Module["buffer"] = Module["wasmMemory"].buffer; // Extracted assignment
+                    return Module["buffer"]; // Return the assigned value
                 } else {
-                    return null
+                    return null; // Return null if the condition is not met
                 }
+                
             } catch (e) {
                 return null
             }
@@ -1636,14 +1708,14 @@ function integrateWasmJS(Module) {
             return wasmReallocBuffer(size)
         }
     });
-    var finalMethod = "";
+    let finalMethod = "";
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
         if (!env["table"]) {
-            var TABLE_SIZE = Module["wasmTableSize"];
+            let TABLE_SIZE = Module["wasmTableSize"];
             if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
                 if (MAX_TABLE_SIZE !== undefined) {
                     env["table"] = new WebAssembly.Table({
@@ -1668,28 +1740,35 @@ function integrateWasmJS(Module) {
         if (!env["tableBase"]) {
             env["tableBase"] = 0
         }
-        var exports;
-        var methods = method.split(",");
-        for (var i = 0; i < methods.length; i++) {
-            var curr = methods[i];
+        let exports;
+        let methods = method.split(",");
+        for (let curr of methods) {
             finalMethod = curr;
             if (curr === "native-wasm") {
-                if (exports = doNativeWasm(global, env, providedBuffer)) break
+                exports = doNativeWasm(global, env, providedBuffer);
+                if (exports) break;
+                
             } else if (curr === "asmjs") {
-                if (exports = doJustAsm(global, env, providedBuffer)) break
+                if (exports = doJustAsm(global, env, providedBuffer)) break;
             } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                if (exports = doWasmPolyfill(global, env, providedBuffer, curr)) break
+                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
+                if (exports) {
+                    break; // Use the extracted value in the condition
+                }
             } else {
-                abort("bad method: " + curr)
+                abort("bad method: " + curr);
             }
         }
-        if (!exports) throw "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods";
+
+        
+        
+        if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         return exports
     });
-    var methodHandler = Module["asm"]
+    let methodHandler = Module["asm"]
 }
 integrateWasmJS(Module);
-var ASM_CONSTS = [];
+let ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
 STATICTOP = STATIC_BASE + 28816;
 __ATINIT__.push();
@@ -1697,7 +1776,7 @@ memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasm
 var STATIC_BUMP = 28816;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
-var tempDoublePtr = STATICTOP;
+const tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
@@ -1706,7 +1785,6 @@ function _llvm_stackrestore(p) {
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
 }
-
 function ___setErrNo(value) {
     if (Module["___errno_location"]) HEAP32[Module["___errno_location"]() >> 2] = value;
     return value
@@ -1766,65 +1844,34 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 var _malloc = Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
-var _destroy_decoder = Module["_destroy_decoder"] = (function() {
-    return Module["asm"]["_destroy_decoder"].apply(null, arguments)
-});
-var getTempRet0 = Module["getTempRet0"] = (function() {
-    return Module["asm"]["getTempRet0"].apply(null, arguments)
-});
+
 var _free = Module["_free"] = (function() {
     return Module["asm"]["_free"].apply(null, arguments)
 });
-var runPostSets = Module["runPostSets"] = (function() {
-    return Module["asm"]["runPostSets"].apply(null, arguments)
-});
-var setTempRet0 = Module["setTempRet0"] = (function() {
-    return Module["asm"]["setTempRet0"].apply(null, arguments)
-});
-var establishStackSpace = Module["establishStackSpace"] = (function() {
-    return Module["asm"]["establishStackSpace"].apply(null, arguments)
-});
+
+
 var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
-var _decode_frame = Module["_decode_frame"] = (function() {
-    return Module["asm"]["_decode_frame"].apply(null, arguments)
-});
-var stackSave = Module["stackSave"] = (function() {
-    return Module["asm"]["stackSave"].apply(null, arguments)
-});
+
 var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
 var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
-var _emscripten_get_global_libc = Module["_emscripten_get_global_libc"] = (function() {
-    return Module["asm"]["_emscripten_get_global_libc"].apply(null, arguments)
-});
+
 var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
-var _create_decoder = Module["_create_decoder"] = (function() {
-    return Module["asm"]["_create_decoder"].apply(null, arguments)
-});
-var setThrew = Module["setThrew"] = (function() {
-    return Module["asm"]["setThrew"].apply(null, arguments)
-});
-var stackRestore = Module["stackRestore"] = (function() {
-    return Module["asm"]["stackRestore"].apply(null, arguments)
-});
-var ___errno_location = Module["___errno_location"] = (function() {
-    return Module["asm"]["___errno_location"].apply(null, arguments)
-});
-var stackAlloc = Module["stackAlloc"] = (function() {
-    return Module["asm"]["stackAlloc"].apply(null, arguments)
-});
+
+
+
 Runtime.stackAlloc = Module["stackAlloc"];
 Runtime.stackSave = Module["stackSave"];
 Runtime.stackRestore = Module["stackRestore"];
@@ -1839,11 +1886,11 @@ if (memoryInitializer) {
         memoryInitializer = Module["memoryInitializerPrefixURL"] + memoryInitializer
     }
     if (ENVIRONMENT_IS_NODE || ENVIRONMENT_IS_SHELL) {
-        var data = Module["readBinary"](memoryInitializer);
+        let data = Module["readBinary"](memoryInitializer);
         HEAPU8.set(data, Runtime.GLOBAL_BASE)
     } else {
         addRunDependency("memory initializer");
-        var applyMemoryInitializer = (function(data) {
+        let applyMemoryInitializer = (function(data) {
             if (data.byteLength) data = new Uint8Array(data);
             HEAPU8.set(data, Runtime.GLOBAL_BASE);
             if (Module["memoryInitializerRequest"]) delete Module["memoryInitializerRequest"].response;
@@ -1852,12 +1899,12 @@ if (memoryInitializer) {
 
         function doBrowserLoad() {
             Module["readAsync"](memoryInitializer, applyMemoryInitializer, (function() {
-                throw "could not load memory initializer " + memoryInitializer
+                throw new Error( "could not load memory initializer " + memoryInitializer)
             }))
         }
         if (Module["memoryInitializerRequest"]) {
             function useRequest() {
-                var request = Module["memoryInitializerRequest"];
+                let request = Module["memoryInitializerRequest"];
                 if (request.status !== 200 && request.status !== 0) {
                     console.warn("a problem seems to have happened with Module.memoryInitializerRequest, status: " + request.status + ", retrying " + memoryInitializer);
                     doBrowserLoad();
@@ -1883,9 +1930,9 @@ function ExitStatus(status) {
 }
 ExitStatus.prototype = new Error;
 ExitStatus.prototype.constructor = ExitStatus;
-var initialStackTop;
-var preloadStartTime = null;
-var calledMain = false;
+let initialStackTop;
+let preloadStartTime = null;
+let calledMain = false;
 dependenciesFulfilled = function runCaller() {
     if (!Module["calledRun"]) run();
     if (!Module["calledRun"]) dependenciesFulfilled = runCaller
@@ -1893,23 +1940,23 @@ dependenciesFulfilled = function runCaller() {
 Module["callMain"] = Module.callMain = function callMain(args) {
     args = args || [];
     ensureInitRuntime();
-    var argc = args.length + 1;
+    let argc = args.length + 1;
 
     function pad() {
-        for (var i = 0; i < 4 - 1; i++) {
+        for (let i = 0; i < 4 - 1; i++) {
             argv.push(0)
         }
     }
-    var argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
+    let argv = [allocate(intArrayFromString(Module["thisProgram"]), "i8", ALLOC_NORMAL)];
     pad();
-    for (var i = 0; i < argc - 1; i = i + 1) {
+    for (let i = 0; i < argc - 1; i = i + 1) {
         argv.push(allocate(intArrayFromString(args[i]), "i8", ALLOC_NORMAL));
         pad()
     }
     argv.push(0);
     argv = allocate(argv, "i32", ALLOC_NORMAL);
     try {
-        var ret = Module["_main"](argc, argv, 0);
+        let ret = Module["_main"](argc, argv, 0);
         exit(ret, true)
     } catch (e) {
         if (e instanceof ExitStatus) {
@@ -1918,7 +1965,7 @@ Module["callMain"] = Module.callMain = function callMain(args) {
             Module["noExitRuntime"] = true;
             return
         } else {
-            var toLog = e;
+            let toLog = e;
             if (e && typeof e === "object" && e.stack) {
                 toLog = [e, e.stack]
             }
@@ -1968,7 +2015,10 @@ function exit(status, implicit) {
     if (implicit && Module["noExitRuntime"]) {
         return
     }
-    if (Module["noExitRuntime"]) {} else {
+    if (Module["noExitRuntime"]) {
+        return
+    }
+     else {
         ABORT = true;
         EXITSTATUS = status;
         STACKTOP = initialStackTop;
@@ -1981,7 +2031,7 @@ function exit(status, implicit) {
     Module["quit"](status, new ExitStatus(status))
 }
 Module["exit"] = Module.exit = exit;
-var abortDecorators = [];
+let abortDecorators = [];
 
 function abort(what) {
     if (Module["onAbort"]) {
@@ -1996,14 +2046,14 @@ function abort(what) {
     }
     ABORT = true;
     EXITSTATUS = 1;
-    var extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
-    var output = "abort(" + what + ") at " + stackTrace() + extra;
+    let extra = "\nIf this abort() is unexpected, build with -s ASSERTIONS=1 which can give more information.";
+    let output = "abort(" + what + ") at " + stackTrace() + extra;
     if (abortDecorators) {
         abortDecorators.forEach((function(decorator) {
             output = decorator(output, what)
         }))
     }
-    throw output
+    throw new Error(output)
 }
 Module["abort"] = Module.abort = abort;
 if (Module["preInit"]) {
@@ -2012,7 +2062,7 @@ if (Module["preInit"]) {
         Module["preInit"].pop()()
     }
 }
-var shouldRunNow = true;
+let shouldRunNow = true;
 if (Module["noInitialRun"]) {
     shouldRunNow = false
 }
