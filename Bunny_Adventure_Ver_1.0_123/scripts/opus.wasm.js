@@ -421,6 +421,8 @@ for (let key in moduleOverrides) {
         Module[key] = moduleOverrides[key]
     }
 }
+
+
 let tempRet0;
 moduleOverrides = undefined;
 let Runtime = {
@@ -602,6 +604,9 @@ function getCFunc(ident) {
     
     return func;
 }
+
+
+
 let cwrap, ccall;
 ((function() {
     let JSfuncs = {
