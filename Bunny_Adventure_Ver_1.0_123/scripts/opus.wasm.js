@@ -388,9 +388,8 @@ if (ENVIRONMENT_IS_NODE) {
 }
 
 function globalEval(x) {
-    eval(x);
+    eval.call(null, x)
 }
-
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
         globalEval(Module["read"](f))
