@@ -66,7 +66,7 @@
         // but we also write the "discardpadding" at the end 
         // of the buffer before discarding it, so we need 1 opus frame of
         // extra space. max size of a frame is 120ms
-        var length = CalculateAudioBufferSize(frequency, channels, duration + 120);
+        let length = CalculateAudioBufferSize(frequency, channels, duration + 120);
         _audioBuffer = new Float32Array(length);
         if (!_outputBuffer) {
             _outputPointer = Module._malloc(bufferSize << 2);
@@ -183,18 +183,18 @@
     }
 
     function ParseMaster(data, position, length) {
-        var firstByte, tagLength, id, sizeLength, mask, size;
-        var end = position + length;
+        let firstByte, tagLength, id, sizeLength, mask, size;
+        let end = position + length;
         while (position < end) {
             firstByte = data.getUint8(position);
             tagLength = VINT_SIZES[firstByte];
-            if (tagLength > 4 || tagLength == 0) throw "Invalid tag length " + tagLength;
+            if (tagLength > 4 || tagLength == 0)  throw new Error ("Invalid tag length " + tagLength);
             id = ReadVInt(data, position, tagLength, 255);
             position += tagLength;
             firstByte = data.getUint8(position);
             sizeLength = VINT_SIZES[firstByte];
             mask = VINT_MASKS[sizeLength];
-            if (sizeLength == 0) throw "Invalid size length";
+            if (sizeLength == 0)  throw new Error ("Invalid size length");
             size = ReadVInt(data, position, sizeLength, mask);
             position += sizeLength;
             switch (id) {
@@ -388,8 +388,9 @@ if (ENVIRONMENT_IS_NODE) {
 }
 
 function globalEval(x) {
-    eval.call(null, x)
+    eval(x);
 }
+
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
         globalEval(Module["read"](f))
