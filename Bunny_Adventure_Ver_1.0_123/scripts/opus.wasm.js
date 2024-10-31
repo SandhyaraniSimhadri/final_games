@@ -228,16 +228,10 @@
     }
 }))();// Using an object to hold functions
 // Using an object to hold functions
-// let Module = {};
-// if (typeof Module === "undefined" || Module === null) {
-//     Module = {};
-// }
-const ModuleSingleton = (() => {
-    let moduleInstance = typeof Module !== "undefined" ? Module : {};
-    return moduleInstance;
-})();
-const Module = ModuleSingleton;
-
+/* eslint-disable no-var */
+var Module;
+if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
+/* eslint-enable no-var */
 let moduleOverrides = {};
 for (let key in Module) {
     if (Module.hasOwnProperty(key)) {
