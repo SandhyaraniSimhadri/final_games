@@ -227,6 +227,7 @@
         }
     }
 }))();// Using an object to hold functions
+// Using an object to hold functions
 var Module;
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 
