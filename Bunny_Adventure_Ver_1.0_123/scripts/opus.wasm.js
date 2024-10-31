@@ -904,8 +904,6 @@ function copySlabData(slab, ret, size, singleType) {
 
     return ret;
 }
-
-
 Module["allocate"] = allocate;
 
 function getMemory(size) {
