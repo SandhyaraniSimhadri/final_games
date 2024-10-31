@@ -1,28 +1,28 @@
 ((function() {
-    "use strict";
-    var VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    var VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
-    var OPUS_SIG = [65, 95, 79, 80, 85, 83];
+
+    let VINT_SIZES = [0, 8, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    let VINT_MASKS = [255, 127, 63, 31, 15, 7, 3, 1, 0];
+    let OPUS_SIG = [65, 95, 79, 80, 85, 83];
     
-    var _decoder = null;
-    var _audioBuffer = null;
-    var _inputPointer = null;
-    var _outputBuffer = null;
-    var _outputPointer = null;
-    var _outputOffset = 0;
+    let _decoder = null;
+    let _audioBuffer = null;
+    let _inputPointer = null;
+    let _outputBuffer = null;
+    let _outputPointer = null;
+    let _outputOffset = 0;
     
     // Ready promise resolves when onRuntimeInitialized called
     let readyPromiseResolve = null;
     const readyPromise = new Promise(resolve => readyPromiseResolve = resolve);
     
-    Module = {
+  let  Module = {
         // When WASM has finished loading, resolve the ready promise
         onRuntimeInitialized: readyPromiseResolve
     };
 
     function ReadVInt(data, position, length, initialMask) {
-        var value = data.getUint8(position) & initialMask;
-        for (var i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
+        let value = data.getUint8(position) & initialMask;
+        for (let i = 1; i < length; i++) value = (value << 8) + data.getUint8(position + i);
         return value
     }
 
@@ -44,9 +44,9 @@
 
     function ReadInt24(data, position)
     {
-        var first = data.getInt8(position);
-        var sign = first >> 7;
-        var value = first & 0b1111111;
+        let first = data.getInt8(position);
+        let sign = first >> 7;
+        let value = first & 0b1111111;
 
         value = (value << 8) | data.getUint8(position);
         value = (value << 8) | data.getUint8(position);
@@ -59,14 +59,14 @@
     }
 
     function CreateDecoder(duration) {
-        var frequency = 48e3;
-        var channels = 1;
-        var bufferSize = 2048;
+        let frequency = 48e3;
+        let channels = 1;
+        let bufferSize = 2048;
         // the true size should be "duration - codecDelay"
         // but we also write the "discardpadding" at the end 
         // of the buffer before discarding it, so we need 1 opus frame of
         // extra space. max size of a frame is 120ms
-        var length = CalculateAudioBufferSize(frequency, channels, duration + 120);
+        let length = CalculateAudioBufferSize(frequency, channels, duration + 120);
         _audioBuffer = new Float32Array(length);
         if (!_outputBuffer) {
             _outputPointer = Module._malloc(bufferSize << 2);
@@ -107,10 +107,10 @@
 
     function WriteOutput (ret) {
         if (ret + _outputOffset > 0) {
-            var tempBuffer;
-            var writePosition = _outputOffset;
+            let tempBuffer;
+            let writePosition = _outputOffset;
             if (_outputOffset < 0) {
-                var trim = -_outputOffset;
+                let trim = -_outputOffset;
                 tempBuffer = new Float32Array(Module.HEAPU8.buffer, _outputPointer + trim * 4, ret - trim);
                 writePosition = 0;
             }
@@ -128,9 +128,9 @@
     }
 
     function ParseFrame(data) {
-        var length = data.length;
+        let length = data.length;
         Module.HEAPU8.set(data, _inputPointer);
-        var ret = Module._decode_frame(_decoder, _inputPointer, length, _outputPointer, 4096);
+        let ret = Module._decode_frame(_decoder, _inputPointer, length, _outputPointer, 4096);
         if (ret > 0) {
             WriteOutput(ret);
         } else {
@@ -139,24 +139,21 @@
     }
 
     function ParseBlock(data, position, size) {
-        var firstByte, tagLength, mask, trackEntry, timeCode, flags, lacing;
+        let firstByte, tagLength, flags, lacing;
         firstByte = data.getUint8(position);
         tagLength = VINT_SIZES[firstByte];
-        mask = VINT_MASKS[tagLength];
-        trackEntry = ReadVInt(data, position, tagLength, mask);
         position += tagLength;
-        timeCode = data.getInt16(position);
         position += 2;
         flags = data.getUint8(position);
         position += 1;
         size -= tagLength + 3;
         lacing = flags & 6;
-        if (lacing) throw "Lacing not supported";
+        if (lacing)   throw new Error("Lacing not supported");
         ParseFrame(new Uint8Array(data.buffer, position, size))
     }
 
     function ParseDuration(data, position, size) {
-        var duration;
+        let duration;
         if (size == 4) duration = data.getFloat32(position);
         else if (size == 8) duration = data.getFloat64(position);
         else throw new Error("Invalid size");
@@ -167,20 +164,20 @@
         // NOTE discard in an integer
         // postive values are trailing, negative are leading
         // value is in nanoseconds
-        var discardDuration = ParseIntTag(data, position, size);
+        let discardDuration = ParseIntTag(data, position, size);
         if (discardDuration < 0)
             throw new Error("Cannot discard leading block data");
-        var discardFrames = Math.floor(discardDuration * 0.000048);
+        let discardFrames = Math.floor(discardDuration * 0.000048);
         _outputOffset -= discardFrames;
     }
 
     function ParseDelay(data, position, size) {
-        var discardDuration = ReadVInt(data, position, size, 0xFF);
+        let discardDuration = ReadVInt(data, position, size, 0xFF);
         _outputOffset = -Math.floor(discardDuration * 0.000048)
     }
 
     function TestOpus(data, position) {
-        for (var i = 0, l = 6; i < l; i++) {
+        for (let i = 0, l = 6; i < l; i++) {
             if (data.getUint8(position + i) != OPUS_SIG[i]) throw new Error("Contains non opus data")
         }
     }
