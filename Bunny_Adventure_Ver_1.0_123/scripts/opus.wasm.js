@@ -1427,6 +1427,7 @@ function removeRunDependency(id) {
     }
 }
 
+
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
@@ -1774,6 +1775,14 @@ function integrateWasmJS(Module) {
     });
     let methodHandler = Module["asm"]
 }
+
+
+
+
+
+
+
+
 integrateWasmJS(Module);
 let ASM_CONSTS = [];
 STATIC_BASE = Runtime.GLOBAL_BASE;
