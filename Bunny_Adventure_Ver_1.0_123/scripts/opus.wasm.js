@@ -1791,7 +1791,7 @@ const tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    let self = _llvm_stacksave;
+    var self = _llvm_stacksave;
     let ret = self.LLVM_SAVEDSTACKS[p];
     self.LLVM_SAVEDSTACKS.splice(p, 1);
     Runtime.stackRestore(ret)
