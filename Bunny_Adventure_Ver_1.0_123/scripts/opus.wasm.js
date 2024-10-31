@@ -228,15 +228,15 @@
     }
 }))();// Using an object to hold functions
 // Using an object to hold functions
-let Module = {};
-if (typeof Module === "undefined" || Module === null) {
-    Module = {};
-}
-// const ModuleSingleton = (() => {
-//     let moduleInstance = typeof Module !== "undefined" ? Module : {};
-//     return moduleInstance;
-// })();
-// const Module = ModuleSingleton;
+// let Module = {};
+// if (typeof Module === "undefined" || Module === null) {
+//     Module = {};
+// }
+const ModuleSingleton = (() => {
+    let moduleInstance = typeof Module !== "undefined" ? Module : {};
+    return moduleInstance;
+})();
+const Module = ModuleSingleton;
 
 let moduleOverrides = {};
 for (let key in Module) {
