@@ -1167,6 +1167,10 @@ function updateGlobalBufferViews() {
     Module["HEAPF32"] = HEAPF32 = new Float32Array(buffer);
     Module["HEAPF64"] = HEAPF64 = new Float64Array(buffer)
 }
+
+
+
+
 let STATIC_BASE, STATICTOP, staticSealed;
 let STACK_BASE, STACKTOP, STACK_MAX;
 let DYNAMIC_BASE, DYNAMICTOP_PTR;
@@ -1422,6 +1426,7 @@ function removeRunDependency(id) {
         }
     }
 }
+
 Module["removeRunDependency"] = removeRunDependency;
 Module["preloadedImages"] = {};
 Module["preloadedAudios"] = {};
