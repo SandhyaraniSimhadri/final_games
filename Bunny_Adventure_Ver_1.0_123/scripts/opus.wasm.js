@@ -1865,6 +1865,20 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
+// var _malloc = Module["_malloc"] = (function() {
+//     return Module["asm"]["_malloc"].apply(null, arguments)
+// });
+
+// var _free = Module["_free"] = (function() {
+//     return Module["asm"]["_free"].apply(null, arguments)
+// });
+
+
+// var _memmove = Module["_memmove"] = (function() {
+//     return Module["asm"]["_memmove"].apply(null, arguments)
+// });
+
+
 // eslint-disable-next-line no-var
 // Sonar suppress: Suppressing for compatibility in game environment
 var Module = typeof Module !== "undefined" ? Module : {};
@@ -1885,7 +1899,6 @@ var _free = Module["_free"] = function() {
 var _memmove = Module["_memmove"] = function() {
     return Module["asm"]["_memmove"].apply(null, arguments);
 };
-
 
 var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
