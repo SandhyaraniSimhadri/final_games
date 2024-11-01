@@ -1865,17 +1865,29 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
-const Module = typeof Module !== "undefined" ? Module : {};
+var _malloc = Module["_malloc"] = (function() {
+    return Module["asm"]["_malloc"].apply(null, arguments)
+});
 
-// Define each function as an arrow function to avoid `var`
-const _malloc = Module["_malloc"] = (...args) => Module["asm"]["_malloc"].apply(null, args);
-const _free = Module["_free"] = (...args) => Module["asm"]["_free"].apply(null, args);
-const _memmove = Module["_memmove"] = (...args) => Module["asm"]["_memmove"].apply(null, args);
-const _memset = Module["_memset"] = (...args) => Module["asm"]["_memset"].apply(null, args);
-const _sbrk = Module["_sbrk"] = (...args) => Module["asm"]["_sbrk"].apply(null, args);
-const _memcpy = Module["_memcpy"] = (...args) => Module["asm"]["_memcpy"].apply(null, args);
+var _free = Module["_free"] = (function() {
+    return Module["asm"]["_free"].apply(null, arguments)
+});
 
-// Add additional methods here in the same format...
+
+var _memmove = Module["_memmove"] = (function() {
+    return Module["asm"]["_memmove"].apply(null, arguments)
+});
+
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
+var _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments)
+});
+
+var _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments)
+});
 
 /* eslint-enable no-var */
 
