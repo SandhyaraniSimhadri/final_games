@@ -1865,51 +1865,32 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
-// Check if Module exists or initialize it
-if (typeof Module === "undefined") {
-    Module = {};
-}
+const Module = (() => {
+    // Local scope inside IIFE
+    const localModule = typeof Module !== "undefined" ? Module : {};
 
-// Using defineProperty to avoid `var` and maintain compatibility
-Object.defineProperties(Module, {
-    _malloc: {
-        value: function() {
-            return Module.asm._malloc.apply(null, arguments);
-        },
-        writable: false,
-    },
-    _free: {
-        value: function() {
-            return Module.asm._free.apply(null, arguments);
-        },
-        writable: false,
-    },
-    _memmove: {
-        value: function() {
-            return Module.asm._memmove.apply(null, arguments);
-        },
-        writable: false,
-    },
-    _memset: {
-        value: function() {
-            return Module.asm._memset.apply(null, arguments);
-        },
-        writable: false,
-    },
-    _sbrk: {
-        value: function() {
-            return Module.asm._sbrk.apply(null, arguments);
-        },
-        writable: false,
-    },
-    _memcpy: {
-        value: function() {
-            return Module.asm._memcpy.apply(null, arguments);
-        },
-        writable: false,
-    },
-    // Add additional functions as necessary
-});
+    // Define functions directly on `localModule`
+    localModule._malloc = function() {
+        return localModule.asm._malloc.apply(null, arguments);
+    };
+    localModule._free = function() {
+        return localModule.asm._free.apply(null, arguments);
+    };
+    localModule._memmove = function() {
+        return localModule.asm._memmove.apply(null, arguments);
+    };
+    localModule._memset = function() {
+        return localModule.asm._memset.apply(null, arguments);
+    };
+    localModule._sbrk = function() {
+        return localModule.asm._sbrk.apply(null, arguments);
+    };
+    localModule._memcpy = function() {
+        return localModule.asm._memcpy.apply(null, arguments);
+    };
+
+    return localModule; // Expose `localModule` as `Module`
+})();
 
 
 /* eslint-enable no-var */
