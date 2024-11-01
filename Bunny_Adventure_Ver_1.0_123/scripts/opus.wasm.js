@@ -1865,33 +1865,38 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
-const Module = (() => {
-    // Local scope inside IIFE
-    const localModule = typeof Module !== "undefined" ? Module : {};
+// eslint-disable-next-line no-var
+// Sonar suppress: Suppressing for compatibility in game environment
+var Module = typeof Module !== "undefined" ? Module : {};
 
-    // Define functions directly on `localModule`
-    localModule._malloc = function() {
-        return localModule.asm._malloc.apply(null, arguments);
-    };
-    localModule._free = function() {
-        return localModule.asm._free.apply(null, arguments);
-    };
-    localModule._memmove = function() {
-        return localModule.asm._memmove.apply(null, arguments);
-    };
-    localModule._memset = function() {
-        return localModule.asm._memset.apply(null, arguments);
-    };
-    localModule._sbrk = function() {
-        return localModule.asm._sbrk.apply(null, arguments);
-    };
-    localModule._memcpy = function() {
-        return localModule.asm._memcpy.apply(null, arguments);
-    };
+// Define each function with Sonar suppressions for `var` usage
+// eslint-disable-next-line no-var
+var _malloc = Module["_malloc"] = function() {
+    return Module["asm"]["_malloc"].apply(null, arguments);
+};
 
-    return localModule; // Expose `localModule` as `Module`
-})();
+// Repeat for other functions as needed
+// eslint-disable-next-line no-var
+var _free = Module["_free"] = function() {
+    return Module["asm"]["_free"].apply(null, arguments);
+};
 
+// eslint-disable-next-line no-var
+var _memmove = Module["_memmove"] = function() {
+    return Module["asm"]["_memmove"].apply(null, arguments);
+};
+
+
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
+var _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments)
+});
+
+var _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments)
+});
 
 /* eslint-enable no-var */
 
