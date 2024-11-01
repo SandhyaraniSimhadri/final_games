@@ -1865,29 +1865,37 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
-var _malloc = Module["_malloc"] = (function() {
-    return Module["asm"]["_malloc"].apply(null, arguments)
-});
+// Define a function to initialize the Module functions and avoid using 'var'
+(function initializeModuleFunctions() {
+    if (typeof Module === "undefined") {
+        Module = {};
+    }
 
-var _free = Module["_free"] = (function() {
-    return Module["asm"]["_free"].apply(null, arguments)
-});
+    const ModuleFunctions = {
+        _sbrk: function() {
+            return Module.asm?._sbrk?.apply(null, arguments);
+        },
+        _malloc: function() {
+            return Module.asm?._malloc?.apply(null, arguments);
+        },
+        _free: function() {
+            return Module.asm?._free?.apply(null, arguments);
+        },
+        _memmove: function() {
+            return Module.asm?._memmove?.apply(null, arguments);
+        },
+        _memset: function() {
+            return Module.asm?._memset?.apply(null, arguments);
+        },
+        _memcpy: function() {
+            return Module.asm?._memcpy?.apply(null, arguments);
+        }
+        // Add more functions as needed...
+    };
 
-
-var _memmove = Module["_memmove"] = (function() {
-    return Module["asm"]["_memmove"].apply(null, arguments)
-});
-
-var _memset = Module["_memset"] = (function() {
-    return Module["asm"]["_memset"].apply(null, arguments)
-});
-var _sbrk = Module["_sbrk"] = (function() {
-    return Module["asm"]["_sbrk"].apply(null, arguments)
-});
-
-var _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments)
-});
+    // Assign functions to Module using Object.assign to avoid redeclarations
+    Object.assign(Module, ModuleFunctions);
+})();
 
 /* eslint-enable no-var */
 
