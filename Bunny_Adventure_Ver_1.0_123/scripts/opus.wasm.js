@@ -1865,37 +1865,52 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 /* eslint-disable no-var */
-// Define a function to initialize the Module functions and avoid using 'var'
-(function initializeModuleFunctions() {
-    if (typeof Module === "undefined") {
-        Module = {};
-    }
+// Check if Module exists or initialize it
+if (typeof Module === "undefined") {
+    Module = {};
+}
 
-    const ModuleFunctions = {
-        _sbrk: function() {
-            return Module.asm?._sbrk?.apply(null, arguments);
+// Using defineProperty to avoid `var` and maintain compatibility
+Object.defineProperties(Module, {
+    _malloc: {
+        value: function() {
+            return Module.asm._malloc.apply(null, arguments);
         },
-        _malloc: function() {
-            return Module.asm?._malloc?.apply(null, arguments);
+        writable: false,
+    },
+    _free: {
+        value: function() {
+            return Module.asm._free.apply(null, arguments);
         },
-        _free: function() {
-            return Module.asm?._free?.apply(null, arguments);
+        writable: false,
+    },
+    _memmove: {
+        value: function() {
+            return Module.asm._memmove.apply(null, arguments);
         },
-        _memmove: function() {
-            return Module.asm?._memmove?.apply(null, arguments);
+        writable: false,
+    },
+    _memset: {
+        value: function() {
+            return Module.asm._memset.apply(null, arguments);
         },
-        _memset: function() {
-            return Module.asm?._memset?.apply(null, arguments);
+        writable: false,
+    },
+    _sbrk: {
+        value: function() {
+            return Module.asm._sbrk.apply(null, arguments);
         },
-        _memcpy: function() {
-            return Module.asm?._memcpy?.apply(null, arguments);
-        }
-        // Add more functions as needed...
-    };
+        writable: false,
+    },
+    _memcpy: {
+        value: function() {
+            return Module.asm._memcpy.apply(null, arguments);
+        },
+        writable: false,
+    },
+    // Add additional functions as necessary
+});
 
-    // Assign functions to Module using Object.assign to avoid redeclarations
-    Object.assign(Module, ModuleFunctions);
-})();
 
 /* eslint-enable no-var */
 
