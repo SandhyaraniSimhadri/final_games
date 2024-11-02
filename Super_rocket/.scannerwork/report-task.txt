@@ -1,0 +1,6 @@
+projectKey=Super_rocket-02-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Super_rocket-02-11-2024
+ceTaskId=a1bc51fc-5e81-4cb5-899d-0d11a6a9ee9c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=a1bc51fc-5e81-4cb5-899d-0d11a6a9ee9c
