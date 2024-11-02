@@ -1,0 +1,6 @@
+projectKey=Brice_on_ice-22-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Brice_on_ice-22-10-2024
+ceTaskId=07c40a5f-1a1e-422b-8236-288d2336cb92
+ceTaskUrl=http://localhost:9000/api/ce/task?id=07c40a5f-1a1e-422b-8236-288d2336cb92
