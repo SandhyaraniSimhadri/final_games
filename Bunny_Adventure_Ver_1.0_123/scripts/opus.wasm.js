@@ -1878,19 +1878,13 @@ var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
 
-const Module = {
-    // Simulate existing properties if needed for backward compatibility
-    _memset: null
-};
-
-// Ensure that `_memset` is correctly initialized
-const _memsetWrapper = function() {
-    return Module["asm"]["_memset"].apply(null, arguments);
-};
-Module["_memset"] = _memsetWrapper;
-
-// Make it globally accessible
-window._memset = _memsetWrapper;
+(function() {
+    let _memset = Module["asm"]["_memset"].apply(null, arguments);
+    Module["_memset"] = _memset;
+    
+    // Expose it globally if needed
+    window._memset = _memset;
+})();
 
 var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
