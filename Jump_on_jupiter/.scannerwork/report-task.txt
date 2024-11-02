@@ -1,0 +1,6 @@
+projectKey=Jump_on_jupiter-02-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Jump_on_jupiter-02-11-2024
+ceTaskId=5900e9c3-9136-4bc6-87d3-a830a9cb69ea
+ceTaskUrl=http://localhost:9000/api/ce/task?id=5900e9c3-9136-4bc6-87d3-a830a9cb69ea
