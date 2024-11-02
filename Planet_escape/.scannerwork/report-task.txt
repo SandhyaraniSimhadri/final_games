@@ -1,0 +1,6 @@
+projectKey=Planet_escape-02-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Planet_escape-02-11-2024
+ceTaskId=1a4b628a-e5ce-4fa9-85f8-4cee315da355
+ceTaskUrl=http://localhost:9000/api/ce/task?id=1a4b628a-e5ce-4fa9-85f8-4cee315da355
