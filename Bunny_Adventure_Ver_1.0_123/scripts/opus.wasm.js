@@ -1885,9 +1885,11 @@ var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
-Module["_memcpy"] = (function() {
+// NOSONAR
+const _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments);
 });
+
 
 /* eslint-enable no-var */
 
