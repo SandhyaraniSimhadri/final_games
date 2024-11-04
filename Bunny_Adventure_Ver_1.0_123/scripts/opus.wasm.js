@@ -1878,20 +1878,9 @@ var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
 
-function initializeMemset() {
-    if (Module["asm"] && Module["asm"]["_memset"]) {
-        const _memset = Module["asm"]["_memset"].bind(null);
-        Module["_memset"] = _memset;
-        window._memset = _memset;
-    } else {
-        // Retry or throw an error if needed
-        console.error("Module['asm']['_memset'] is not ready yet.");
-    }
-}
-
-// Call this function after `Module` is fully initialized
-initializeMemset();
-
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
 var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
