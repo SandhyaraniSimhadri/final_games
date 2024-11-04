@@ -1862,36 +1862,38 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-(function() {
-    const asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
-    Module["asm"] = asm;
+// Create a Module object if it doesn't already exist
+var Module = Module || {};
 
-    // Use const and let within the IIFE
-    const _malloc = Module["_malloc"] = (...args) => {
+// Initialize the asm module
+Module["asm"] = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+
+// Use an object to hold the functions
+const memoryFunctions = {
+    _malloc: function(...args) {
         return Module["asm"]["_malloc"].apply(null, args);
-    };
-
-    const _free = Module["_free"] = (...args) => {
+    },
+    _free: function(...args) {
         return Module["asm"]["_free"].apply(null, args);
-    };
-
-    const _memmove = Module["_memmove"] = (...args) => {
+    },
+    _memmove: function(...args) {
         return Module["asm"]["_memmove"].apply(null, args);
-    };
-
-    const _memset = Module["_memset"] = (...args) => {
+    },
+    _memset: function(...args) {
         return Module["asm"]["_memset"].apply(null, args);
-    };
-
-    const _sbrk = Module["_sbrk"] = (...args) => {
+    },
+    _sbrk: function(...args) {
         return Module["asm"]["_sbrk"].apply(null, args);
-    };
-
-    // NOSONAR START
-    const _memcpy = Module["_memcpy"] = (...args) => {
+    },
+    _memcpy: function(...args) {
         return Module["asm"]["_memcpy"].apply(null, args);
-    };
-})();
+    }
+};
+
+// Assign functions to the Module for global access
+Object.keys(memoryFunctions).forEach(funcName => {
+    Module[funcName] = memoryFunctions[funcName];
+});
 // NOSONAR END
 /* eslint-enable no-var */
 
