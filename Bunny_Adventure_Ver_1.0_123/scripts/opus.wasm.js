@@ -1886,7 +1886,7 @@ var _sbrk = Module["_sbrk"] = (function() {
 });
 
 // NOSONAR
-const _memcpy = Module["_memcpy"] = (function() {
+var _memcpy = Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments);
 });
 
