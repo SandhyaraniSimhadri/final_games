@@ -1862,35 +1862,36 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+// Assuming Module is defined elsewhere and has the necessary structure
+const asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
-/* eslint-disable no-var */
-var _malloc = Module["_malloc"] = (function() {
-    return Module["asm"]["_malloc"].apply(null, arguments)
-});
 
-var _free = Module["_free"] = (function() {
-    return Module["asm"]["_free"].apply(null, arguments)
-});
+// Use let and const instead of var
+const _malloc = Module["_malloc"] = (...args) => {
+    return Module["asm"]["_malloc"].apply(null, args);
+};
 
+const _free = Module["_free"] = (...args) => {
+    return Module["asm"]["_free"].apply(null, args);
+};
 
-var _memmove = Module["_memmove"] = (function() {
-    return Module["asm"]["_memmove"].apply(null, arguments)
-});
+const _memmove = Module["_memmove"] = (...args) => {
+    return Module["asm"]["_memmove"].apply(null, args);
+};
 
-var _memset = Module["_memset"] = (function() {
-    return Module["asm"]["_memset"].apply(null, arguments)
-});
-var _sbrk = Module["_sbrk"] = (function() {
-    return Module["asm"]["_sbrk"].apply(null, arguments)
-});
+const _memset = Module["_memset"] = (...args) => {
+    return Module["asm"]["_memset"].apply(null, args);
+};
 
-// NOSONAR
-const _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments);
-});
+const _sbrk = Module["_sbrk"] = (...args) => {
+    return Module["asm"]["_sbrk"].apply(null, args);
+};
 
-
+// NOSONAR START
+const _memcpy = Module["_memcpy"] = (...args) => {
+    return Module["asm"]["_memcpy"].apply(null, args);
+};
+// NOSONAR END
 /* eslint-enable no-var */
 
 Runtime.stackAlloc = Module["stackAlloc"];
