@@ -1862,35 +1862,36 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-// Assuming Module is defined elsewhere and has the necessary structure
-const asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
-Module["asm"] = asm;
+(function() {
+    const asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+    Module["asm"] = asm;
 
-// Use let and const instead of var
-const _malloc = Module["_malloc"] = (...args) => {
-    return Module["asm"]["_malloc"].apply(null, args);
-};
+    // Use const and let within the IIFE
+    const _malloc = Module["_malloc"] = (...args) => {
+        return Module["asm"]["_malloc"].apply(null, args);
+    };
 
-const _free = Module["_free"] = (...args) => {
-    return Module["asm"]["_free"].apply(null, args);
-};
+    const _free = Module["_free"] = (...args) => {
+        return Module["asm"]["_free"].apply(null, args);
+    };
 
-const _memmove = Module["_memmove"] = (...args) => {
-    return Module["asm"]["_memmove"].apply(null, args);
-};
+    const _memmove = Module["_memmove"] = (...args) => {
+        return Module["asm"]["_memmove"].apply(null, args);
+    };
 
-const _memset = Module["_memset"] = (...args) => {
-    return Module["asm"]["_memset"].apply(null, args);
-};
+    const _memset = Module["_memset"] = (...args) => {
+        return Module["asm"]["_memset"].apply(null, args);
+    };
 
-const _sbrk = Module["_sbrk"] = (...args) => {
-    return Module["asm"]["_sbrk"].apply(null, args);
-};
+    const _sbrk = Module["_sbrk"] = (...args) => {
+        return Module["asm"]["_sbrk"].apply(null, args);
+    };
 
-// NOSONAR START
-const _memcpy = Module["_memcpy"] = (...args) => {
-    return Module["asm"]["_memcpy"].apply(null, args);
-};
+    // NOSONAR START
+    const _memcpy = Module["_memcpy"] = (...args) => {
+        return Module["asm"]["_memcpy"].apply(null, args);
+    };
+})();
 // NOSONAR END
 /* eslint-enable no-var */
 
