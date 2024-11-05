@@ -1885,9 +1885,21 @@ var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
-var _memcpy = Module["_memcpy"] = (function() {
-    return Module["asm"]["_memcpy"].apply(null, arguments)
+let _memcpy;
+
+
+// Use getters to initialize these functions only when first accessed
+Object.defineProperty(Module, "_memcpy", {
+    get: function() {
+        if (!_memcpy) {
+            _memcpy = function() {
+                return Module["asm"]["_memcpy"].apply(null, arguments);
+            };
+        }
+        return _memcpy;
+    }
 });
+
 
 /* eslint-enable no-var */
 
