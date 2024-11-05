@@ -1,0 +1,6 @@
+projectKey=Raccoon_rescue-05-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Raccoon_rescue-05-11-2024
+ceTaskId=32af8c11-ae85-45db-b3da-8c9d60f73eda
+ceTaskUrl=http://localhost:9000/api/ce/task?id=32af8c11-ae85-45db-b3da-8c9d60f73eda
