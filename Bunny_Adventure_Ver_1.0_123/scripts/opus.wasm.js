@@ -1887,19 +1887,16 @@ var _sbrk = Module["_sbrk"] = (function() {
 
 let _memcpy;
 
+Module.onRuntimeInitialized = function() {
+    // Initialize _memcpy
+    _memcpy = Module["_memcpy"] = function() {
+        return Module["asm"]["_memcpy"].apply(null, arguments);
+    };
 
-// Use getters to initialize these functions only when first accessed
-Object.defineProperty(Module, "_memcpy", {
-    get: function() {
-        if (!_memcpy) {
-            _memcpy = function() {
-                return Module["asm"]["_memcpy"].apply(null, arguments);
-            };
-        }
-        return _memcpy;
-    }
-});
 
+
+    // Any additional code that depends on _memcpy or _memmove should go here
+};
 
 /* eslint-enable no-var */
 
