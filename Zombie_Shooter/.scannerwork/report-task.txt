@@ -1,0 +1,6 @@
+projectKey=Zombie_shooter-05-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Zombie_shooter-05-11-2024
+ceTaskId=0bf7bef5-7229-4eac-a58e-027f87e485ce
+ceTaskUrl=http://localhost:9000/api/ce/task?id=0bf7bef5-7229-4eac-a58e-027f87e485ce
