@@ -1862,39 +1862,33 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-// Create a Module object if it doesn't already exist
-var Module = Module || {};
-
-// Initialize the asm module
-Module["asm"] = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
-
-// Use an object to hold the functions
-const memoryFunctions = {
-    _malloc: function(...args) {
-        return Module["asm"]["_malloc"].apply(null, args);
-    },
-    _free: function(...args) {
-        return Module["asm"]["_free"].apply(null, args);
-    },
-    _memmove: function(...args) {
-        return Module["asm"]["_memmove"].apply(null, args);
-    },
-    _memset: function(...args) {
-        return Module["asm"]["_memset"].apply(null, args);
-    },
-    _sbrk: function(...args) {
-        return Module["asm"]["_sbrk"].apply(null, args);
-    },
-    _memcpy: function(...args) {
-        return Module["asm"]["_memcpy"].apply(null, args);
-    }
-};
-
-// Assign functions to the Module for global access
-Object.keys(memoryFunctions).forEach(funcName => {
-    Module[funcName] = memoryFunctions[funcName];
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+Module["asm"] = asm;
+/* eslint-disable no-var */
+var _malloc = Module["_malloc"] = (function() {
+    return Module["asm"]["_malloc"].apply(null, arguments)
 });
-// NOSONAR END
+
+var _free = Module["_free"] = (function() {
+    return Module["asm"]["_free"].apply(null, arguments)
+});
+
+
+var _memmove = Module["_memmove"] = (function() {
+    return Module["asm"]["_memmove"].apply(null, arguments)
+});
+
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
+var _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments)
+});
+
+var _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments)
+});
+
 /* eslint-enable no-var */
 
 Runtime.stackAlloc = Module["stackAlloc"];
