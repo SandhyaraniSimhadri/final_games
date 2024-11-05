@@ -1,0 +1,6 @@
+projectKey=Super_cowboy-05-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Super_cowboy-05-11-2024
+ceTaskId=3c01c80a-8e68-4613-a2a2-2a7225b94d8c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=3c01c80a-8e68-4613-a2a2-2a7225b94d8c
