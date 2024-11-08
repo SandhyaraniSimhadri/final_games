@@ -1,0 +1,6 @@
+projectKey=Ball_adventure-08-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Ball_adventure-08-11-2024
+ceTaskId=905c59bb-f147-455c-9723-ac91c7d7b20b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=905c59bb-f147-455c-9723-ac91c7d7b20b
