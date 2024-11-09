@@ -1,6 +1,6 @@
-projectKey=Snow_race-22-10-2024
+projectKey=Snow_race-08-11-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Snow_race-22-10-2024
-ceTaskId=52fa2a84-f483-4392-b262-3a66d0dd9bac
-ceTaskUrl=http://localhost:9000/api/ce/task?id=52fa2a84-f483-4392-b262-3a66d0dd9bac
+dashboardUrl=http://localhost:9000/dashboard?id=Snow_race-08-11-2024
+ceTaskId=879522a4-a01c-4593-ba5e-f3772d6649d3
+ceTaskUrl=http://localhost:9000/api/ce/task?id=879522a4-a01c-4593-ba5e-f3772d6649d3
