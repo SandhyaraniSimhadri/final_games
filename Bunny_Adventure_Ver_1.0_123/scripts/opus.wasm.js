@@ -1862,42 +1862,41 @@ Module.asmLibraryArg = {
     "STACKTOP": STACKTOP,
     "STACK_MAX": STACK_MAX
 };
-(() => {
-    var asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
-    Module["asm"] = asm;
+let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
+Module["asm"] = asm;
 
-    var _malloc = Module["_malloc"] = function() {
-        return Module["asm"]["_malloc"].apply(null, arguments);
-    };
+let _malloc = Module["_malloc"] = (function() {
+    return Module["asm"]["_malloc"].apply(null, arguments)
+});
 
-    var _free = Module["_free"] = function() {
-        return Module["asm"]["_free"].apply(null, arguments);
-    };
+var _free = Module["_free"] = (function() {
+    return Module["asm"]["_free"].apply(null, arguments)
+});
+var _memcpy = Module["_memcpy"] = (function() {
+    return Module["asm"]["_memcpy"].apply(null, arguments)
+});
 
-    var _memcpy = Module["_memcpy"] = function() {
-        return Module["asm"]["_memcpy"].apply(null, arguments);
-    };
+var _memmove = Module["_memmove"] = (function() {
+    return Module["asm"]["_memmove"].apply(null, arguments)
+});
 
-    var _memmove = Module["_memmove"] = function() {
-        return Module["asm"]["_memmove"].apply(null, arguments);
-    };
+var _memset = Module["_memset"] = (function() {
+    return Module["asm"]["_memset"].apply(null, arguments)
+});
+var _sbrk = Module["_sbrk"] = (function() {
+    return Module["asm"]["_sbrk"].apply(null, arguments)
+});
 
-    var _memset = Module["_memset"] = function() {
-        return Module["asm"]["_memset"].apply(null, arguments);
-    };
 
-    var _sbrk = Module["_sbrk"] = function() {
-        return Module["asm"]["_sbrk"].apply(null, arguments);
-    };
 
-    // Bind Runtime properties to Module
-    Runtime.stackAlloc = Module["stackAlloc"];
-    Runtime.stackSave = Module["stackSave"];
-    Runtime.stackRestore = Module["stackRestore"];
-    Runtime.establishStackSpace = Module["establishStackSpace"];
-    Runtime.setTempRet0 = Module["setTempRet0"];
-    Runtime.getTempRet0 = Module["getTempRet0"];
-})();
+
+
+Runtime.stackAlloc = Module["stackAlloc"];
+Runtime.stackSave = Module["stackSave"];
+Runtime.stackRestore = Module["stackRestore"];
+Runtime.establishStackSpace = Module["establishStackSpace"];
+Runtime.setTempRet0 = Module["setTempRet0"];
+Runtime.getTempRet0 = Module["getTempRet0"];
 Module["asm"] = asm;
 if (memoryInitializer) {
     if (typeof Module["locateFile"] === "function") {
