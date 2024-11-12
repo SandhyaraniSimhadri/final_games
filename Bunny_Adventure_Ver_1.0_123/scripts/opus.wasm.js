@@ -1717,88 +1717,104 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "asmjs";
     Module["asm"] = function(global, env, providedBuffer) {
-        global = fixImports(global);
-        env = fixImports(env);
+        try {
+            console.log("Starting asm initialization...");
     
-        // Ensure table is initialized if not present
-        if (!env["table"]) {
-            const TABLE_SIZE = Module["wasmTableSize"] || 1024;
-            const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            // Fix imports
+            global = fixImports(global);
+            env = fixImports(env);
     
-            // Check if WebAssembly.Table is supported
-            if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
-                if (MAX_TABLE_SIZE !== undefined) {
-                    env["table"] = new WebAssembly.Table({
-                        "initial": TABLE_SIZE,
-                        "maximum": MAX_TABLE_SIZE,
-                        "element": "anyfunc"
-                    });
+            // Table Initialization
+            if (!env["table"]) {
+                const TABLE_SIZE = Module["wasmTableSize"] || 1024;
+                const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+    
+                // Check WebAssembly.Table availability
+                if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
+                    if (MAX_TABLE_SIZE !== undefined) {
+                        env["table"] = new WebAssembly.Table({
+                            "initial": TABLE_SIZE,
+                            "maximum": MAX_TABLE_SIZE,
+                            "element": "anyfunc"
+                        });
+                    } else {
+                        env["table"] = new WebAssembly.Table({
+                            "initial": TABLE_SIZE,
+                            "element": "anyfunc"
+                        });
+                    }
                 } else {
-                    env["table"] = new WebAssembly.Table({
-                        "initial": TABLE_SIZE,
-                        "element": "anyfunc"
-                    });
+                    // Fallback to array if WebAssembly.Table is not available
+                    env["table"] = new Array(TABLE_SIZE);
                 }
-            } else {
-                // Fallback to regular array for table if WebAssembly.Table is not available
-                env["table"] = new Array(TABLE_SIZE);
+                Module["wasmTable"] = env["table"];
+                console.log("Table initialized:", env["table"]);
             }
-            Module["wasmTable"] = env["table"];
-        }
     
-        // Ensure memory base is set
-        if (!env["memoryBase"]) {
-            env["memoryBase"] = Module["STATIC_BASE"] || 0; // Fallback if STATIC_BASE is undefined
-        }
+            // Set memory base if not set
+            if (!env["memoryBase"]) {
+                env["memoryBase"] = Module["STATIC_BASE"] || 0; // Fallback if STATIC_BASE is undefined
+            }
     
-        if (!env["tableBase"]) {
-            env["tableBase"] = 0;
-        }
+            // Set table base if not set
+            if (!env["tableBase"]) {
+                env["tableBase"] = 0;
+            }
     
-        let exports;  // We use `let` here to declare `exports` as a block-scoped variable
-        const methods = method.split(",");  // We use `const` here because `methods` does not need reassignment
+            // Export variable initialization
+            let exports = null;
+            const methods = method.split(","); // List of methods to try
     
-        // Debugging logs to check the methods being used and the environment
-        console.log("Available methods:", methods);
-        console.log("Module environment:", env);
+            console.log("Available methods to try:", methods);
     
-        // Loop through methods and try each
-        for (let i = 0; i < methods.length; i++) {
-            const curr = methods[i];  // Use `const` for `curr` since it's not reassigned in each iteration
-            finalMethod = curr;
+            // Iterate over the methods
+            for (let i = 0; i < methods.length; i++) {
+                const curr = methods[i];
+                console.log("Trying method:", curr);
     
-            // Debugging log for the current method
-            console.log("Trying method:", curr);
+                // Check for each method
+                if (curr === "native-wasm") {
+                    exports = doNativeWasm(global, env, providedBuffer);
+                    if (exports) {
+                        console.log("WASM Native method succeeded.");
+                        break;
+                    }
     
-            if (curr === "native-wasm") {
-                exports = doNativeWasm(global, env, providedBuffer);
-                if (exports) break;
+                } else if (curr === "asmjs") {
+                    exports = doJustAsm(global, env, providedBuffer);
+                    if (exports) {
+                        console.log("ASMJS method succeeded.");
+                        break;
+                    }
     
-            } else if (curr === "asmjs") {
-                exports = doJustAsm(global, env, providedBuffer);
-                if (exports) break;
+                } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
+                    exports = doWasmPolyfill(global, env, providedBuffer, curr);
+                    if (exports) {
+                        console.log(curr, "method succeeded.");
+                        break;
+                    }
     
-            } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                exports = doWasmPolyfill(global, env, providedBuffer, curr);
-                if (exports) {
-                    break;
+                } else {
+                    console.error("Bad method: ", curr);
+                    abort("bad method: " + curr);
                 }
-    
-            } else {
-                abort("bad method: " + curr);
             }
-        }
     
-        // Final debug log before returning the result
-        if (!exports) {
-            console.error("No binaryen method succeeded.");
-            throw new Error("No binaryen method succeeded. Consider enabling more options like interpreting if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
-        }
+            // Check if we successfully got exports
+            if (!exports) {
+                throw new Error("No binaryen method succeeded. Consider enabling more options like interpreting.");
+            }
     
-        return exports;
+            console.log("ASM initialization complete, returning exports.");
+            return exports;
+    
+        } catch (error) {
+            console.error("Error during asm initialization:", error);
+            throw error; // Re-throw after logging
+        }
     };
     
-    
+
 
     let methodHandler = Module["asm"]
 }
