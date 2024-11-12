@@ -1714,20 +1714,21 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "asmjs";
     Module["asm"] = function(global, env, providedBuffer) {
+        // Fix imports for global and env
         global = fixImports(global);
         env = fixImports(env);
     
-        // Initialize the table if necessary
+        // Initialize the WebAssembly table if necessary
         initializeTable(env);
     
-        // Set memory and table base
+        // Set memoryBase and tableBase in the environment if not already set
         setMemoryBase(env);
         setTableBase(env);
     
-        // Process the methods
+        // Try to process each method and return the first successful one
         const exports = processMethods(global, env, providedBuffer);
     
-        // If no method succeeded, throw an error
+        // If no method was successful, throw an error
         if (!exports) {
             throw new Error("No binaryen method succeeded. Consider enabling more options like interpreting.");
         }
@@ -1735,7 +1736,7 @@ function integrateWasmJS(Module) {
         return exports;
     };
     
-    // Function to initialize the table if not already present
+    // Function to initialize the WebAssembly table in the environment
     function initializeTable(env) {
         if (!env["table"]) {
             const TABLE_SIZE = Module["wasmTableSize"] || 1024;
@@ -1744,14 +1745,14 @@ function integrateWasmJS(Module) {
             if (isWebAssemblyAvailable()) {
                 env["table"] = createWebAssemblyTable(TABLE_SIZE, MAX_TABLE_SIZE);
             } else {
-                env["table"] = new Array(TABLE_SIZE);
+                env["table"] = new Array(TABLE_SIZE); // Fallback to a regular array
             }
     
             Module["wasmTable"] = env["table"];
         }
     }
     
-    // Helper to check if WebAssembly is available
+    // Helper function to check if WebAssembly is available
     function isWebAssemblyAvailable() {
         return typeof WebAssembly === "object" && typeof WebAssembly.Table === "function";
     }
@@ -1760,7 +1761,7 @@ function integrateWasmJS(Module) {
     function createWebAssemblyTable(TABLE_SIZE, MAX_TABLE_SIZE) {
         const options = {
             initial: TABLE_SIZE,
-            element: "anyfunc"
+            element: "anyfunc",
         };
         if (MAX_TABLE_SIZE !== undefined) {
             options.maximum = MAX_TABLE_SIZE;
@@ -1768,36 +1769,33 @@ function integrateWasmJS(Module) {
         return new WebAssembly.Table(options);
     }
     
-    // Function to set the memory base if not already set
+    // Function to set memoryBase in the environment if not already set
     function setMemoryBase(env) {
         if (!env["memoryBase"]) {
             env["memoryBase"] = Module["STATIC_BASE"];
         }
     }
     
-    // Function to set the table base if not already set
+    // Function to set tableBase in the environment if not already set
     function setTableBase(env) {
         if (!env["tableBase"]) {
             env["tableBase"] = 0;
         }
     }
     
-    // Function to process methods and execute the first valid one
+    // Function to process the methods and return the first valid export
     function processMethods(global, env, providedBuffer) {
         const methods = method.split(",");
-        for (let i = 0; i < methods.length; i++) {
-            const curr = methods[i];
-    
-            let exports = handleMethod(curr, global, env, providedBuffer);
+        for (let curr of methods) {
+            const exports = handleMethod(curr, global, env, providedBuffer);
             if (exports) {
-                return exports; // Return the first valid exports found
+                return exports; // Return the first successful export
             }
         }
-    
-        return null; // No valid exports found
+        return null; // No valid export found
     }
     
-    // Function to handle each method
+    // Function to handle a specific method
     function handleMethod(curr, global, env, providedBuffer) {
         switch (curr) {
             case "native-wasm":
@@ -1810,7 +1808,7 @@ function integrateWasmJS(Module) {
                 return doWasmPolyfill(global, env, providedBuffer, curr);
             default:
                 abort("bad method: " + curr);
-                return null;
+                return null; // Return null for an invalid method
         }
     }
     
