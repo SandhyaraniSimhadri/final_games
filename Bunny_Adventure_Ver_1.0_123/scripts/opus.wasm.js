@@ -1814,15 +1814,18 @@ function _emscripten_memcpy_big(dest, src, num) {
     return dest
 }
 
-
 function _llvm_stacksave() {
-    var self = _llvm_stacksave;
+    const self = _llvm_stacksave; // Use const to reference the function itself
     if (!self.LLVM_SAVEDSTACKS) {
-        self.LLVM_SAVEDSTACKS = []
+        self.LLVM_SAVEDSTACKS = [];
     }
     self.LLVM_SAVEDSTACKS.push(Runtime.stackSave());
-    return self.LLVM_SAVEDSTACKS.length - 1
+
+    // Using let to declare `ret` in block scope, removing the need for `var`
+    let ret = self.LLVM_SAVEDSTACKS[self.LLVM_SAVEDSTACKS.length - 1];
+    return self.LLVM_SAVEDSTACKS.length - 1;
 }
+
 DYNAMICTOP_PTR = allocate(1, "i32", ALLOC_STATIC);
 STACK_BASE = STACKTOP = Runtime.alignMemory(STATICTOP);
 STACK_MAX = STACK_BASE + TOTAL_STACK;
