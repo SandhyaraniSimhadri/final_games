@@ -1712,6 +1712,7 @@ function integrateWasmJS(Module) {
             return Module["buffer"] !== old ? Module["buffer"] : null
         }
     });
+    let finalMethod = "asmjs";
     Module["reallocBuffer"] = (function(size) {
         if (finalMethod === "asmjs") {
             return asmjsReallocBuffer(size)
@@ -1719,7 +1720,6 @@ function integrateWasmJS(Module) {
             return wasmReallocBuffer(size)
         }
     });
-    let finalMethod = "";
     Module["asm"] = function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
