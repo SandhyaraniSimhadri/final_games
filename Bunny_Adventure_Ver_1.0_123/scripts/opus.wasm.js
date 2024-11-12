@@ -1878,10 +1878,10 @@ var _memmove = Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
 
-var _memset = Module["_memset"] = (function() {
+Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
