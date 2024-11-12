@@ -390,23 +390,8 @@ if (ENVIRONMENT_IS_NODE) {
 }
 
 function globalEval(x) {
-    // Only allow code execution if it's a trusted string
-    if (isValidCode(x)) {
-        try {
-            eval(x);  // Executes the dynamic code in the current scope
-        } catch (e) {
-            console.error('Error executing dynamic code:', e);
-        }
-    } else {
-        console.error("Unsafe code detected.");
-    }
+    eval(x);
 }
-
-// A simple example of validation, you can extend this
-function isValidCode(code) {
-    return /^console\.log/.test(code);  // Allow only specific patterns like console.log
-}
-
 
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
