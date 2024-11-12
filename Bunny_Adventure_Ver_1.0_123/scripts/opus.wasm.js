@@ -279,7 +279,7 @@ if (ENVIRONMENT_IS_NODE) {
         return ret
     };
     Module["load"] = function load(f) {
-        globalEval(read(f))
+        read(f)
     };
     if (!Module["thisProgram"]) {
         if (process["argv"].length > 1) {
@@ -386,13 +386,10 @@ if (ENVIRONMENT_IS_NODE) {
     throw new Error("Unknown runtime environment. Where are we?")
 }
 
-function globalEval(x) {
-    eval(x);
-}
 
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
-        globalEval(Module["read"](f))
+        Module["read"](f)
     }
 }
 if (!Module["print"]) {
