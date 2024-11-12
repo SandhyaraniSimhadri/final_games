@@ -1715,60 +1715,80 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "asmjs";
     Module["asm"] = (function (global, env, providedBuffer) {
+        // Fix imports
         global = fixImports(global);
         env = fixImports(env);
-        
+    
+        // Function to set up the WebAssembly table if needed
         function setupTable() {
-            let TABLE_SIZE = Module["wasmTableSize"] || 1024;
+            let TABLE_SIZE = Module["wasmTableSize"] || 1024; // Default to 1024 if undefined
             let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
-            
+    
+            // WebAssembly Table Setup
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
+                // If WebAssembly.Table is available, use it
                 env["table"] = new WebAssembly.Table({
                     "initial": TABLE_SIZE,
-                    "maximum": MAX_TABLE_SIZE,
+                    "maximum": MAX_TABLE_SIZE !== undefined ? MAX_TABLE_SIZE : undefined,
                     "element": "anyfunc"
                 });
             } else {
+                // Fallback to an array if WebAssembly.Table is not available
                 env["table"] = new Array(TABLE_SIZE);
             }
             Module["wasmTable"] = env["table"];
         }
     
+        // Function to set the memory base
         function setupMemoryBase() {
             if (!env["memoryBase"]) {
                 env["memoryBase"] = Module["STATIC_BASE"];
             }
         }
     
+        // Function to set the table base
         function setupTableBase() {
             if (!env["tableBase"]) {
                 env["tableBase"] = 0;
             }
         }
     
+        // Process the methods (native-wasm, asmjs, etc.)
         function processMethods(methods) {
+            let exports = null;  // Ensure exports is defined
+    
             for (let curr of methods) {
-                if (curr === "native-wasm") return doNativeWasm(global, env, providedBuffer);
-                if (curr === "asmjs") return doJustAsm(global, env, providedBuffer);
-                if (["interpret-asm2wasm", "interpret-s-expr", "interpret-binary"].includes(curr)) {
-                    return doWasmPolyfill(global, env, providedBuffer, curr);
+                if (curr === "native-wasm") {
+                    exports = doNativeWasm(global, env, providedBuffer);
+                    if (exports) return exports;  // Exit early if exports are found
+                } else if (curr === "asmjs") {
+                    exports = doJustAsm(global, env, providedBuffer);
+                    if (exports) return exports;
+                } else if (["interpret-asm2wasm", "interpret-s-expr", "interpret-binary"].includes(curr)) {
+                    exports = doWasmPolyfill(global, env, providedBuffer, curr);
+                    if (exports) return exports;
+                } else {
+                    abort("bad method: " + curr);
                 }
-                abort("bad method: " + curr);
             }
+            return exports;
         }
     
+        // Perform all setup steps
         setupTable();
         setupMemoryBase();
         setupTableBase();
     
+        // Split methods and attempt to process them
         let methods = method.split(",");
         let exports = processMethods(methods);
     
+        // If no exports were generated, throw an error
         if (!exports) {
             throw new Error("no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         }
     
-        return exports;
+        return exports;  // Return the exports object
     });
     
     
