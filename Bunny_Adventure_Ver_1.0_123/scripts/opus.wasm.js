@@ -1870,11 +1870,11 @@ Module["_malloc"] = (function() {
 Module["_free"] = function() {
     return Module["asm"]["_free"].apply(null, arguments);
 };
-var _memcpy = Module["_memcpy"] = (function() {
+Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
 
-var _memmove = Module["_memmove"] = (function() {
+Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
 
