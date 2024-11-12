@@ -230,7 +230,7 @@
 // Using an object to hold functions
 
 if (typeof Module === "undefined") {
-    var Module = {}; // Declare Module only if it's not defined yet
+    Module = {}; // Declare Module only if it's not defined yet
 }
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 /* eslint-enable no-var */
