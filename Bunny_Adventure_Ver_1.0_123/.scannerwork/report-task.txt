@@ -2,5 +2,5 @@ projectKey=Bunnny_adventure-12-11-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
 dashboardUrl=http://localhost:9000/dashboard?id=Bunnny_adventure-12-11-2024
-ceTaskId=77e2aa8d-8520-4913-bf6b-269360a28cf9
-ceTaskUrl=http://localhost:9000/api/ce/task?id=77e2aa8d-8520-4913-bf6b-269360a28cf9
+ceTaskId=e379ee55-0ce9-433e-b30f-cc3fd2eac510
+ceTaskUrl=http://localhost:9000/api/ce/task?id=e379ee55-0ce9-433e-b30f-cc3fd2eac510

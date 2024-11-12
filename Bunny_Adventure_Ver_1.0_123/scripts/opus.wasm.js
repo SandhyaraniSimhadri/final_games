@@ -390,8 +390,14 @@ if (ENVIRONMENT_IS_NODE) {
 }
 
 function globalEval(x) {
-    eval(x);
+    try {
+        const func = new Function(x);  // Create a new function from the code string
+        func();  // Execute the function
+    } catch (e) {
+        console.error('Error executing dynamic code:', e);
+    }
 }
+
 
 if (!Module["load"] && Module["read"]) {
     Module["load"] = function load(f) {
@@ -1721,7 +1727,7 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "";
 
-    
+
     Module["asm"] = function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
