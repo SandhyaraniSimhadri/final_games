@@ -390,12 +390,21 @@ if (ENVIRONMENT_IS_NODE) {
 }
 
 function globalEval(x) {
-    try {
-        const func = new Function(x);  // Create a new function from the code string
-        func();  // Execute the function
-    } catch (e) {
-        console.error('Error executing dynamic code:', e);
+    // Only allow code execution if it's a trusted string
+    if (isValidCode(x)) {
+        try {
+            eval(x);  // Executes the dynamic code in the current scope
+        } catch (e) {
+            console.error('Error executing dynamic code:', e);
+        }
+    } else {
+        console.error("Unsafe code detected.");
     }
+}
+
+// A simple example of validation, you can extend this
+function isValidCode(code) {
+    return /^console\.log/.test(code);  // Allow only specific patterns like console.log
 }
 
 
@@ -1727,7 +1736,7 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "";
 
-
+    
     Module["asm"] = function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
