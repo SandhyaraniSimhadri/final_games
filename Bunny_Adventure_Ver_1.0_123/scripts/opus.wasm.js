@@ -1759,7 +1759,9 @@ function integrateWasmJS(Module) {
                 if (exports) break;
                 
             } else if (curr === "asmjs") {
-                if (exports = doJustAsm(global, env, providedBuffer)) break;
+                exports = doJustAsm(global, env, providedBuffer); // Perform the assignment first
+                if (exports) break; // Then check the condition
+                
             } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
                 exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
                 if (exports) {
@@ -1822,8 +1824,7 @@ function _llvm_stacksave() {
     }
     self.LLVM_SAVEDSTACKS.push(Runtime.stackSave());
 
-    // Using let to declare `ret` in block scope, removing the need for `var`
-    let ret = self.LLVM_SAVEDSTACKS[self.LLVM_SAVEDSTACKS.length - 1];
+  
     return self.LLVM_SAVEDSTACKS.length - 1;
 }
 
