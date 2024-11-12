@@ -1807,15 +1807,13 @@ function ___setErrNo(value) {
     if (Module["___errno_location"]) HEAP32[Module["___errno_location"]() >> 2] = value;
     return value
 }
-Module["_sbrk"] = _sbrk;
-Module["_memset"] = _memset;
+
 
 function _emscripten_memcpy_big(dest, src, num) {
     HEAPU8.set(HEAPU8.subarray(src, src + num), dest);
     return dest
 }
-Module["_memcpy"] = _memcpy;
-Module["_memmove"] = _memmove;
+
 
 function _llvm_stacksave() {
     var self = _llvm_stacksave;
@@ -1883,7 +1881,7 @@ var _memmove = Module["_memmove"] = (function() {
 var _memset = Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-Module["_sbrk"] = (function() {
+var _sbrk = Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
