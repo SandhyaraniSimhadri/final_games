@@ -1722,10 +1722,8 @@ function integrateWasmJS(Module) {
     
         // Ensure table is initialized if not present
         if (!env["table"]) {
-            var TABLE_SIZE = Module["wasmTableSize"];
-            if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-    
-            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            const TABLE_SIZE = Module["wasmTableSize"] || 1024;
+            const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
     
             // Check if WebAssembly.Table is supported
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
@@ -1757,15 +1755,16 @@ function integrateWasmJS(Module) {
             env["tableBase"] = 0;
         }
     
-        var exports;
-        var methods = method.split(","); // Using var for compatibility
+        let exports;  // We use `let` here to declare `exports` as a block-scoped variable
+        const methods = method.split(",");  // We use `const` here because `methods` does not need reassignment
     
         // Debugging logs to check the methods being used and the environment
         console.log("Available methods:", methods);
         console.log("Module environment:", env);
-        
-        for (var i = 0; i < methods.length; i++) {
-            var curr = methods[i];
+    
+        // Loop through methods and try each
+        for (let i = 0; i < methods.length; i++) {
+            const curr = methods[i];  // Use `const` for `curr` since it's not reassigned in each iteration
             finalMethod = curr;
     
             // Debugging log for the current method
