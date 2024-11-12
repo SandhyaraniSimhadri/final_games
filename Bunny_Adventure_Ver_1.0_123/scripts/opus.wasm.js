@@ -1798,11 +1798,12 @@ const tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 
 function _llvm_stackrestore(p) {
-    var self = _llvm_stacksave;
-    var ret = self.LLVM_SAVEDSTACKS[p];
+    const self = _llvm_stacksave; // Use const to reference _llvm_stacksave
+    let ret = self.LLVM_SAVEDSTACKS[p]; // Use let for block-scoped variable
     self.LLVM_SAVEDSTACKS.splice(p, 1);
-    Runtime.stackRestore(ret)
+    Runtime.stackRestore(ret);
 }
+
 function ___setErrNo(value) {
     if (Module["___errno_location"]) HEAP32[Module["___errno_location"]() >> 2] = value;
     return value
