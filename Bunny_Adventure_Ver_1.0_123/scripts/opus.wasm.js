@@ -1722,8 +1722,10 @@ function integrateWasmJS(Module) {
     
         // Ensure table is initialized if not present
         if (!env["table"]) {
-            const TABLE_SIZE = Module["wasmTableSize"] || 1024;
-            const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            var TABLE_SIZE = Module["wasmTableSize"];
+            if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
+    
+            var MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
     
             // Check if WebAssembly.Table is supported
             if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
@@ -1755,14 +1757,20 @@ function integrateWasmJS(Module) {
             env["tableBase"] = 0;
         }
     
-        let exports;
-        const methods = method.split(",");  // Use `const` here as `methods` should not be reassigned
+        var exports;
+        var methods = method.split(","); // Using var for compatibility
     
-        for (let i = 0; i < methods.length; i++) {
-            const curr = methods[i];
+        // Debugging logs to check the methods being used and the environment
+        console.log("Available methods:", methods);
+        console.log("Module environment:", env);
+        
+        for (var i = 0; i < methods.length; i++) {
+            var curr = methods[i];
             finalMethod = curr;
     
-            // Attempt different methods for WebAssembly initialization
+            // Debugging log for the current method
+            console.log("Trying method:", curr);
+    
             if (curr === "native-wasm") {
                 exports = doNativeWasm(global, env, providedBuffer);
                 if (exports) break;
@@ -1782,8 +1790,9 @@ function integrateWasmJS(Module) {
             }
         }
     
-        // Throw an error if no valid export method was found
+        // Final debug log before returning the result
         if (!exports) {
+            console.error("No binaryen method succeeded.");
             throw new Error("No binaryen method succeeded. Consider enabling more options like interpreting if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         }
     
