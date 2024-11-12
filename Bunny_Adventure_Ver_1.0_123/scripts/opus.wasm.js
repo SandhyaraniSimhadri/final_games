@@ -228,12 +228,9 @@
     }
 }))();// Using an object to hold functions
 // Using an object to hold functions
-let Module; // Use let instead of var to declare Module
 
-if (!Module) {
-    Module = (typeof Module !== "undefined" ? Module : null) || {};
-}
-
+const Module = {};
+if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 /* eslint-enable no-var */
 let moduleOverrides = {};
 for (let key in Module) {
