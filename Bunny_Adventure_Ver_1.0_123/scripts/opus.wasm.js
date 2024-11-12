@@ -229,12 +229,9 @@
 }))();// Using an object to hold functions
 // Using an object to hold functions
 
-(function() {
-    if (typeof Module === "undefined") {
-        var Module = {}; // Define Module if not already defined
-    }
-    // Your additional initialization logic goes here...
-})();
+if (typeof Module === "undefined") {
+    var Module = {}; // Declare Module only if it's not defined yet
+}
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 /* eslint-enable no-var */
 let moduleOverrides = {};
