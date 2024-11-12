@@ -1716,103 +1716,83 @@ function integrateWasmJS(Module) {
         }
     });
     let finalMethod = "asmjs";
-    Module["asm"] = function(global, env, providedBuffer) {
-        try {
-            console.log("Starting asm initialization...");
-    
-            // Fix imports
-            global = fixImports(global);
-            env = fixImports(env);
-    
-            // Table Initialization
-            if (!env["table"]) {
-                const TABLE_SIZE = Module["wasmTableSize"] || 1024;
-                const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
-    
-                // Check WebAssembly.Table availability
-                if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
-                    if (MAX_TABLE_SIZE !== undefined) {
-                        env["table"] = new WebAssembly.Table({
-                            "initial": TABLE_SIZE,
-                            "maximum": MAX_TABLE_SIZE,
-                            "element": "anyfunc"
-                        });
-                    } else {
-                        env["table"] = new WebAssembly.Table({
-                            "initial": TABLE_SIZE,
-                            "element": "anyfunc"
-                        });
-                    }
-                } else {
-                    // Fallback to array if WebAssembly.Table is not available
-                    env["table"] = new Array(TABLE_SIZE);
+    Module["asm"] = (function (global, env, providedBuffer) {
+        global = fixImports(global);
+        env = fixImports(env);
+
+        if (!env["table"]) {
+            let TABLE_SIZE = Module["wasmTableSize"];
+
+            if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
+            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+
+            if (typeof WebAssembly === "object"
+                && typeof WebAssembly.Table === "function") {
+
+                if (MAX_TABLE_SIZE !== undefined) {
+                    env["table"] = new WebAssembly.Table({
+                        "initial": TABLE_SIZE,
+                        "maximum": MAX_TABLE_SIZE,
+                        "element": "anyfunc"
+                    })
                 }
-                Module["wasmTable"] = env["table"];
-                console.log("Table initialized:", env["table"]);
-            }
-    
-            // Set memory base if not set
-            if (!env["memoryBase"]) {
-                env["memoryBase"] = Module["STATIC_BASE"] || 0; // Fallback if STATIC_BASE is undefined
-            }
-    
-            // Set table base if not set
-            if (!env["tableBase"]) {
-                env["tableBase"] = 0;
-            }
-    
-            // Export variable initialization
-            let exports = null;
-            const methods = method.split(","); // List of methods to try
-    
-            console.log("Available methods to try:", methods);
-    
-            // Iterate over the methods
-            for (let i = 0; i < methods.length; i++) {
-                const curr = methods[i];
-                console.log("Trying method:", curr);
-    
-                // Check for each method
-                if (curr === "native-wasm") {
-                    exports = doNativeWasm(global, env, providedBuffer);
-                    if (exports) {
-                        console.log("WASM Native method succeeded.");
-                        break;
-                    }
-    
-                } else if (curr === "asmjs") {
-                    exports = doJustAsm(global, env, providedBuffer);
-                    if (exports) {
-                        console.log("ASMJS method succeeded.");
-                        break;
-                    }
-    
-                } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                    exports = doWasmPolyfill(global, env, providedBuffer, curr);
-                    if (exports) {
-                        console.log(curr, "method succeeded.");
-                        break;
-                    }
-    
-                } else {
-                    console.error("Bad method: ", curr);
-                    abort("bad method: " + curr);
+                else {
+                    env["table"] = new WebAssembly.Table({
+                        "initial": TABLE_SIZE,
+                        element: "anyfunc"
+                    })
                 }
             }
-    
-            // Check if we successfully got exports
-            if (!exports) {
-                throw new Error("No binaryen method succeeded. Consider enabling more options like interpreting.");
+            else {
+                env["table"] = new Array(TABLE_SIZE)
             }
-    
-            console.log("ASM initialization complete, returning exports.");
-            return exports;
-    
-        } catch (error) {
-            console.error("Error during asm initialization:", error);
-            throw error; // Re-throw after logging
+            Module["wasmTable"] = env["table"]
         }
-    };
+
+        if (!env["memoryBase"]) {
+            env["memoryBase"] = Module["STATIC_BASE"]
+        }
+
+        if (!env["tableBase"]) {
+            env["tableBase"] = 0
+        }
+        let exports;
+        let methods = method.split(",");
+
+        for (let curr of methods) {
+            finalMethod = curr;
+
+            if (curr === "native-wasm") {
+                exports = doNativeWasm(global, env, providedBuffer);
+
+                if (exports) break;
+
+            } else
+                if (curr === "asmjs") {
+                    exports = doJustAsm(global, env, providedBuffer); // Perform the assignment first
+
+                    if (exports) break; // Then check the condition
+
+                } else
+                    if (curr === "interpret-asm2wasm"
+                        || curr === "interpret-s-expr" || curr === "interpret-binary") {
+                        exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
+
+                        if (exports) {
+                            break; // Use the extracted value in the condition
+                        }
+                    }
+                    else {
+                        abort("bad method: " + curr);
+                    }
+        }
+
+
+
+        if (!exports) throw new Error("no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
+        return exports
+    });
+
     
 
 
