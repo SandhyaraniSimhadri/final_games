@@ -1,0 +1,6 @@
+projectKey=Jetpack_heroes-29-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Jetpack_heroes-29-10-2024
+ceTaskId=5fea59bd-652f-47fd-93eb-fe19da5fe477
+ceTaskUrl=http://localhost:9000/api/ce/task?id=5fea59bd-652f-47fd-93eb-fe19da5fe477
