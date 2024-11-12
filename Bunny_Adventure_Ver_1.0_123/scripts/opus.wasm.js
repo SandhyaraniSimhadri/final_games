@@ -1865,7 +1865,7 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 
-var _malloc = Module["_malloc"] = (function() {
+Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
 
