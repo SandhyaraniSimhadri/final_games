@@ -1865,25 +1865,25 @@ Module.asmLibraryArg = {
 let asm = Module["asm"](Module.asmGlobalArg, Module.asmLibraryArg, buffer);
 Module["asm"] = asm;
 
-var _malloc = Module["_malloc"] = (function() {
+Module["_malloc"] = (function() {
     return Module["asm"]["_malloc"].apply(null, arguments)
 });
 
 Module["_free"] = function() {
     return Module["asm"]["_free"].apply(null, arguments);
 };
-var _memcpy = Module["_memcpy"] = (function() {
+Module["_memcpy"] = (function() {
     return Module["asm"]["_memcpy"].apply(null, arguments)
 });
 
-var _memmove = Module["_memmove"] = (function() {
+Module["_memmove"] = (function() {
     return Module["asm"]["_memmove"].apply(null, arguments)
 });
 
-var _memset = Module["_memset"] = (function() {
+Module["_memset"] = (function() {
     return Module["asm"]["_memset"].apply(null, arguments)
 });
-var _sbrk = Module["_sbrk"] = (function() {
+Module["_sbrk"] = (function() {
     return Module["asm"]["_sbrk"].apply(null, arguments)
 });
 
