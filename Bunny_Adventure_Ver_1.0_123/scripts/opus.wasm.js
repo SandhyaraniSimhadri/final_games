@@ -230,9 +230,7 @@ let Module = {};
 }))();// Using an object to hold functions
 // Using an object to hold functions
 
-// if (typeof Module === "undefined") {
-//     Module = {}; // Declare Module only if it's not defined yet
-// }
+
 if (!Module) Module = (typeof Module !== "undefined" ? Module : null) || {};
 /* eslint-enable no-var */
 let moduleOverrides = {};
@@ -1723,24 +1721,26 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "";
     Module["asm"] = (function(global, env, providedBuffer) {
+        // Fix imports for global and environment
         global = fixImports(global);
         env = fixImports(env);
     
-        // Initialize WebAssembly Table
+        // Initialize the WebAssembly table if not already set
         initializeWasmTable(env);
     
-        // Set memory and table base if not already set
+        // Initialize memory and table base if not set
         initializeMemoryAndTableBase(env);
     
         let exports;
         let methods = method.split(",");
-        
-        // Process methods and assign the appropriate exports
+    
+        // Iterate through methods and try to execute each
         for (let curr of methods) {
-            exports = processMethod(curr, global, env, providedBuffer);
-            if (exports) break;
+            exports = handleMethod(curr, global, env, providedBuffer);
+            if (exports) break; // Stop once a valid method is found
         }
     
+        // If no method succeeds, throw an error
         if (!exports) {
             throw new Error("no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         }
@@ -1748,6 +1748,7 @@ function integrateWasmJS(Module) {
         return exports;
     });
     
+    // Function to initialize WebAssembly table
     function initializeWasmTable(env) {
         if (!env["table"]) {
             let TABLE_SIZE = Module["wasmTableSize"] || 1024;
@@ -1763,6 +1764,7 @@ function integrateWasmJS(Module) {
         }
     }
     
+    // Function to create WebAssembly table with options
     function createWebAssemblyTable(TABLE_SIZE, MAX_TABLE_SIZE) {
         const options = {
             "initial": TABLE_SIZE,
@@ -1776,6 +1778,7 @@ function integrateWasmJS(Module) {
         return new WebAssembly.Table(options);
     }
     
+    // Function to initialize memory and table base
     function initializeMemoryAndTableBase(env) {
         if (!env["memoryBase"]) {
             env["memoryBase"] = Module["STATIC_BASE"];
@@ -1785,7 +1788,8 @@ function integrateWasmJS(Module) {
         }
     }
     
-    function processMethod(curr, global, env, providedBuffer) {
+    // Function to handle method types and return corresponding exports
+    function handleMethod(curr, global, env, providedBuffer) {
         if (curr === "native-wasm") {
             return doNativeWasm(global, env, providedBuffer);
         } else if (curr === "asmjs") {
