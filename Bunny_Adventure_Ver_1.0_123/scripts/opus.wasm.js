@@ -1715,75 +1715,76 @@ function integrateWasmJS(Module) {
     });
     let finalMethod = "asmjs";
     Module["asm"] = (function (global, env, providedBuffer) {
-        // Fix imports
         global = fixImports(global);
         env = fixImports(env);
     
-        // Function to set up the WebAssembly table if needed
+        // Set up the WebAssembly table
         function setupTable() {
-            let TABLE_SIZE = Module["wasmTableSize"] || 1024; // Default to 1024 if undefined
-            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            const TABLE_SIZE = Module["wasmTableSize"] || 1024;
+            const MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+            const isWasmTableSupported = typeof WebAssembly === "object" && typeof WebAssembly.Table === "function";
     
-            // WebAssembly Table Setup
-            if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
-                // If WebAssembly.Table is available, use it
+            // Create the table if WebAssembly.Table is supported, otherwise use a simple array
+            if (isWasmTableSupported) {
                 env["table"] = new WebAssembly.Table({
-                    "initial": TABLE_SIZE,
-                    "maximum": MAX_TABLE_SIZE !== undefined ? MAX_TABLE_SIZE : undefined,
-                    "element": "anyfunc"
+                    initial: TABLE_SIZE,
+                    maximum: MAX_TABLE_SIZE !== undefined ? MAX_TABLE_SIZE : undefined,
+                    element: "anyfunc"
                 });
             } else {
-                // Fallback to an array if WebAssembly.Table is not available
                 env["table"] = new Array(TABLE_SIZE);
             }
             Module["wasmTable"] = env["table"];
         }
     
-        // Function to set the memory base
+        // Set up memory base
         function setupMemoryBase() {
             if (!env["memoryBase"]) {
                 env["memoryBase"] = Module["STATIC_BASE"];
             }
         }
     
-        // Function to set the table base
+        // Set up table base
         function setupTableBase() {
             if (!env["tableBase"]) {
                 env["tableBase"] = 0;
             }
         }
     
-        // Process the methods (native-wasm, asmjs, etc.)
-        function processMethods(methods) {
-            let exports = null;  // Ensure exports is defined
+        // Execute the method based on the given list of methods
+        function handleMethods(methods) {
+            let exports = null;
     
-            for (let curr of methods) {
-                if (curr === "native-wasm") {
+            for (const method of methods) {
+                if (method === "native-wasm") {
                     exports = doNativeWasm(global, env, providedBuffer);
-                    if (exports) return exports;  // Exit early if exports are found
-                } else if (curr === "asmjs") {
+                } else if (method === "asmjs") {
                     exports = doJustAsm(global, env, providedBuffer);
-                    if (exports) return exports;
-                } else if (["interpret-asm2wasm", "interpret-s-expr", "interpret-binary"].includes(curr)) {
-                    exports = doWasmPolyfill(global, env, providedBuffer, curr);
-                    if (exports) return exports;
+                } else if (["interpret-asm2wasm", "interpret-s-expr", "interpret-binary"].includes(method)) {
+                    exports = doWasmPolyfill(global, env, providedBuffer, method);
                 } else {
-                    abort("bad method: " + curr);
+                    abort("bad method: " + method);
+                }
+    
+                // If exports are found, return them
+                if (exports) {
+                    return exports;
                 }
             }
-            return exports;
+    
+            return exports;  // Return null if no exports were found
         }
     
-        // Perform all setup steps
+        // Initialize the table, memoryBase, and tableBase
         setupTable();
         setupMemoryBase();
         setupTableBase();
     
-        // Split methods and attempt to process them
+        // Process methods and get the exports
         let methods = method.split(",");
-        let exports = processMethods(methods);
+        let exports = handleMethods(methods);
     
-        // If no exports were generated, throw an error
+        // If no valid method succeeded, throw an error
         if (!exports) {
             throw new Error("no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
         }
