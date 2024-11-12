@@ -1725,61 +1725,78 @@ function integrateWasmJS(Module) {
     Module["asm"] = (function(global, env, providedBuffer) {
         global = fixImports(global);
         env = fixImports(env);
-        if (!env["table"]) {
-            let TABLE_SIZE = Module["wasmTableSize"];
-            if (TABLE_SIZE === undefined) TABLE_SIZE = 1024;
-            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
-            if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
-                if (MAX_TABLE_SIZE !== undefined) {
-                    env["table"] = new WebAssembly.Table({
-                        "initial": TABLE_SIZE,
-                        "maximum": MAX_TABLE_SIZE,
-                        "element": "anyfunc"
-                    })
-                } else {
-                    env["table"] = new WebAssembly.Table({
-                        "initial": TABLE_SIZE,
-                        element: "anyfunc"
-                    })
-                }
-            } else {
-                env["table"] = new Array(TABLE_SIZE)
-            }
-            Module["wasmTable"] = env["table"]
-        }
-        if (!env["memoryBase"]) {
-            env["memoryBase"] = Module["STATIC_BASE"]
-        }
-        if (!env["tableBase"]) {
-            env["tableBase"] = 0
-        }
+    
+        // Initialize WebAssembly Table
+        initializeWasmTable(env);
+    
+        // Set memory and table base if not already set
+        initializeMemoryAndTableBase(env);
+    
         let exports;
         let methods = method.split(",");
+        
+        // Process methods and assign the appropriate exports
         for (let curr of methods) {
-            finalMethod = curr;
-            if (curr === "native-wasm") {
-                exports = doNativeWasm(global, env, providedBuffer);
-                if (exports) break;
-                
-            } else if (curr === "asmjs") {
-                exports = doJustAsm(global, env, providedBuffer); // Perform the assignment first
-                if (exports) break; // Then check the condition
-                
-            } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
-                exports = doWasmPolyfill(global, env, providedBuffer, curr); // Extracted assignment
-                if (exports) {
-                    break; // Use the extracted value in the condition
-                }
-            } else {
-                abort("bad method: " + curr);
-            }
+            exports = processMethod(curr, global, env, providedBuffer);
+            if (exports) break;
         }
-
-        
-        
-        if (!exports)  throw new Error( "no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
-        return exports
+    
+        if (!exports) {
+            throw new Error("no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods");
+        }
+    
+        return exports;
     });
+    
+    function initializeWasmTable(env) {
+        if (!env["table"]) {
+            let TABLE_SIZE = Module["wasmTableSize"] || 1024;
+            let MAX_TABLE_SIZE = Module["wasmMaxTableSize"];
+    
+            if (typeof WebAssembly === "object" && typeof WebAssembly.Table === "function") {
+                env["table"] = createWebAssemblyTable(TABLE_SIZE, MAX_TABLE_SIZE);
+            } else {
+                env["table"] = new Array(TABLE_SIZE);
+            }
+    
+            Module["wasmTable"] = env["table"];
+        }
+    }
+    
+    function createWebAssemblyTable(TABLE_SIZE, MAX_TABLE_SIZE) {
+        const options = {
+            "initial": TABLE_SIZE,
+            "element": "anyfunc"
+        };
+    
+        if (MAX_TABLE_SIZE !== undefined) {
+            options["maximum"] = MAX_TABLE_SIZE;
+        }
+    
+        return new WebAssembly.Table(options);
+    }
+    
+    function initializeMemoryAndTableBase(env) {
+        if (!env["memoryBase"]) {
+            env["memoryBase"] = Module["STATIC_BASE"];
+        }
+        if (!env["tableBase"]) {
+            env["tableBase"] = 0;
+        }
+    }
+    
+    function processMethod(curr, global, env, providedBuffer) {
+        if (curr === "native-wasm") {
+            return doNativeWasm(global, env, providedBuffer);
+        } else if (curr === "asmjs") {
+            return doJustAsm(global, env, providedBuffer);
+        } else if (curr === "interpret-asm2wasm" || curr === "interpret-s-expr" || curr === "interpret-binary") {
+            return doWasmPolyfill(global, env, providedBuffer, curr);
+        } else {
+            abort("bad method: " + curr);
+        }
+    }
+    
     let methodHandler = Module["asm"]
 }
 
