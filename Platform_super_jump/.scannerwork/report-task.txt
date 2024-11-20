@@ -1,0 +1,6 @@
+projectKey=Super_jump-02-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Super_jump-02-11-2024
+ceTaskId=80b09a31-be73-43c6-b0bc-f9441642fa21
+ceTaskUrl=http://localhost:9000/api/ce/task?id=80b09a31-be73-43c6-b0bc-f9441642fa21

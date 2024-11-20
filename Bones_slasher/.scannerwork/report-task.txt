@@ -1,0 +1,6 @@
+projectKey=Bones_slasher-25-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Bones_slasher-25-10-2024
+ceTaskId=c80b8cab-f4bd-4250-9de3-8adf5d9e6848
+ceTaskUrl=http://localhost:9000/api/ce/task?id=c80b8cab-f4bd-4250-9de3-8adf5d9e6848

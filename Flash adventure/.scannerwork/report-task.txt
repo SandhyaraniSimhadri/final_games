@@ -1,0 +1,6 @@
+projectKey=Flash_adventure-25-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Flash_adventure-25-10-2024
+ceTaskId=84bafeaf-10b9-4e7d-8b24-969a2a196bba
+ceTaskUrl=http://localhost:9000/api/ce/task?id=84bafeaf-10b9-4e7d-8b24-969a2a196bba

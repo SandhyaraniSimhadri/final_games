@@ -2,5 +2,5 @@ projectKey=Memory_game-14-10-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
 dashboardUrl=http://localhost:9000/dashboard?id=Memory_game-14-10-2024
-ceTaskId=e3f4561c-fda6-47e5-bf2b-68f43edfde2f
-ceTaskUrl=http://localhost:9000/api/ce/task?id=e3f4561c-fda6-47e5-bf2b-68f43edfde2f
+ceTaskId=9c7cb8eb-d172-4742-a585-9ef4745db0ce
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9c7cb8eb-d172-4742-a585-9ef4745db0ce

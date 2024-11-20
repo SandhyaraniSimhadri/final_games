@@ -1,0 +1,6 @@
+projectKey=Piggybank-25-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Piggybank-25-10-2024
+ceTaskId=7d16a063-a31d-4dba-8cd5-a7063d82c504
+ceTaskUrl=http://localhost:9000/api/ce/task?id=7d16a063-a31d-4dba-8cd5-a7063d82c504

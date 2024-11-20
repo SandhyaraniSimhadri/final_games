@@ -2,5 +2,5 @@ projectKey=Spin_bowling-21-10-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
 dashboardUrl=http://localhost:9000/dashboard?id=Spin_bowling-21-10-2024
-ceTaskId=6adcb208-53f2-4c07-b4b6-d1861964618e
-ceTaskUrl=http://localhost:9000/api/ce/task?id=6adcb208-53f2-4c07-b4b6-d1861964618e
+ceTaskId=528c829c-ed6e-4c38-b3c3-bfdb860e38eb
+ceTaskUrl=http://localhost:9000/api/ce/task?id=528c829c-ed6e-4c38-b3c3-bfdb860e38eb

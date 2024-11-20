@@ -1,6 +1,6 @@
-projectKey=Greedy_rabbit-28-10-2024
+projectKey=Greedy_rabbit-29-10-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Greedy_rabbit-28-10-2024
-ceTaskId=c518d16d-ce23-4f4f-931b-8347fdd6837b
-ceTaskUrl=http://localhost:9000/api/ce/task?id=c518d16d-ce23-4f4f-931b-8347fdd6837b
+dashboardUrl=http://localhost:9000/dashboard?id=Greedy_rabbit-29-10-2024
+ceTaskId=06ffccc1-eb43-484b-8329-534f56f72a30
+ceTaskUrl=http://localhost:9000/api/ce/task?id=06ffccc1-eb43-484b-8329-534f56f72a30

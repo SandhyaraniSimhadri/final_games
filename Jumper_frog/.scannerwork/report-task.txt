@@ -1,0 +1,6 @@
+projectKey=Jumper_frog-05-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Jumper_frog-05-11-2024
+ceTaskId=637412c9-b22f-42de-ae38-4e1bb53bdca5
+ceTaskUrl=http://localhost:9000/api/ce/task?id=637412c9-b22f-42de-ae38-4e1bb53bdca5

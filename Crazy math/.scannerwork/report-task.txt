@@ -1,6 +1,0 @@
-projectKey=Crazy_math-15-10-2024
-serverUrl=http://localhost:9000
-serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Crazy_math-15-10-2024
-ceTaskId=85faec9d-7cb0-4d9a-a0c7-7f64b4863858
-ceTaskUrl=http://localhost:9000/api/ce/task?id=85faec9d-7cb0-4d9a-a0c7-7f64b4863858

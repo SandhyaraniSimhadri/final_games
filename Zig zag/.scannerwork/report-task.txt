@@ -1,6 +1,0 @@
-projectKey=Zig_zag-12-10-2024
-serverUrl=http://localhost:9000
-serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Zig_zag-12-10-2024
-ceTaskId=e68e19c8-d71f-4e32-ba1e-b87fb5f0aa87
-ceTaskUrl=http://localhost:9000/api/ce/task?id=e68e19c8-d71f-4e32-ba1e-b87fb5f0aa87

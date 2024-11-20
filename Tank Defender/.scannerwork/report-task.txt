@@ -1,6 +1,6 @@
-projectKey=Tank_Defender-17-10-2024
+projectKey=Tank_Defender-25-10-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Tank_Defender-17-10-2024
-ceTaskId=7470d988-49f7-4a04-8a3f-cc7e3ff93003
-ceTaskUrl=http://localhost:9000/api/ce/task?id=7470d988-49f7-4a04-8a3f-cc7e3ff93003
+dashboardUrl=http://localhost:9000/dashboard?id=Tank_Defender-25-10-2024
+ceTaskId=84e59c1e-5248-4e87-b0d0-fd30e65a85f7
+ceTaskUrl=http://localhost:9000/api/ce/task?id=84e59c1e-5248-4e87-b0d0-fd30e65a85f7

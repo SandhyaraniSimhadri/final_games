@@ -2,5 +2,5 @@ projectKey=Swipescape-05-11-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
 dashboardUrl=http://localhost:9000/dashboard?id=Swipescape-05-11-2024
-ceTaskId=bff87b9b-e6b7-479a-9caf-d8ef2fbf1108
-ceTaskUrl=http://localhost:9000/api/ce/task?id=bff87b9b-e6b7-479a-9caf-d8ef2fbf1108
+ceTaskId=b1ef63bb-dc8d-4fe3-b8ff-005b3e01f2e6
+ceTaskUrl=http://localhost:9000/api/ce/task?id=b1ef63bb-dc8d-4fe3-b8ff-005b3e01f2e6
