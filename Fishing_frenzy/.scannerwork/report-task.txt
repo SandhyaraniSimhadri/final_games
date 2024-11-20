@@ -1,6 +1,6 @@
-projectKey=Fishing_frenzy-11-11-2024
+projectKey=Fishing_frenzy-10-11-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Fishing_frenzy-11-11-2024
-ceTaskId=393d4111-84bf-4a8a-b90a-8cbdb7a056ce
-ceTaskUrl=http://localhost:9000/api/ce/task?id=393d4111-84bf-4a8a-b90a-8cbdb7a056ce
+dashboardUrl=http://localhost:9000/dashboard?id=Fishing_frenzy-10-11-2024
+ceTaskId=909ccd97-e4ce-4ef2-bb03-c83eabc2f487
+ceTaskUrl=http://localhost:9000/api/ce/task?id=909ccd97-e4ce-4ef2-bb03-c83eabc2f487
