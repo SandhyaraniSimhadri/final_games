@@ -1,0 +1,6 @@
+projectKey=Fruit_slasher-16-10-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Fruit_slasher-16-10-2024
+ceTaskId=b61667a7-cc0f-40c2-a4ad-309de52945c8
+ceTaskUrl=http://localhost:9000/api/ce/task?id=b61667a7-cc0f-40c2-a4ad-309de52945c8
