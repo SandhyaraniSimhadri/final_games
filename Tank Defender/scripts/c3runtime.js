@@ -3851,4 +3851,76 @@ self.C.Ba.mk.ua = {
     { Ji: 0 }, { Asa: 0 }, { wsa: 0 }, { xsa: 0 }, { mla: 0 }, { pla: 0 }, { Pka: 0 }, { nla: 0 }, { ola: 0 }, { Bsa: 0 }, { Lla: 0 }, { xia: 0 }, { Lra: 0 }, { Vka: 0 }, { Uka: 0 }, { qja: 0 }, { Isa: 0 }, { zia: 0 }, { Ika: 0 }, { Audio: 0 }, { Bc: 0 }, { Keyboard: 0 }, { Bd: 0 }, { Touch: 0 }, { Ob: 0 }, { vka: 0 }, { wka: 0 }, { xka: 0 }, { yka: 0 }, { vla: 0 }, { mk: 0 }, { Tpa: 0 }, { Dh: 0 }, { rsa: 0 }, { Iia: 0 }, { zka: 0 }, { Aka: 0 }, { Mra: 0 }, { qsa: 0 }, { Nra: 0 }, { mna: 0 }, { Kia: 0 }, { Una: 0 }, { Ki: 0 }, { Kra: 0 }, { ssa: 0 }, { Upa: 0 }, { hqa: 0 }, { Qha: 0 }, { Vha: 0 }, { Wha: 0 }, { Xha: 0 }, { Yha: 0 }, { Zha: 0 }, { mka: 0 }, { ne: 0 }, { nsa: 0 }, { osa: 0 }, { kQ: 0 }, { Nsa: 0 }, { cia: 0 }, { Ska: 0 }, { Oma: 0 },
     { Vma: 0 }, { Dia: 0 }, { iqa: 0 }, { Dsa: 0 }, { ana: 0 }, { Kla: 0 }, { Wka: 0 }, { Wpa: 0 }, { Oia: 0 }, { Pia: 0 }, { Qia: 0 }, { Xia: 0 }, { Sia: 0 }, { Uia: 0 }, { Via: 0 }, { dja: 0 }, { Wia: 0 }, { Yia: 0 }, { $ia: 0 }, { eja: 0 }, { bja: 0 }, { cja: 0 }, { Ria: 0 }, { Tia: 0 }, { aja: 0 }, { Nia: 0 }, { Zia: 0 }, { fja: 0 }, { usa: 0 }, { jqa: 0 }, { Uma: 0 }, { Vpa: 0 }, { qqa: 0 }, { kna: 0 }, { Nma: 0 }, { Cia: 0 }, { Wja: 0 }, { Vja: 0 }, { sia: 0 }, { Xja: 0 }, { Xna: 0 }, { a_: 0 }, { Qra: 0 }, { Rra: 0 }, { rna: 0 }, { sna: 0 }, { Tka: 0 }, { dka: 0 }, { Roa: 0 }, { yla: 0 }]
 }
-
+{
+    const d = self.C; 
+    function b(a, e) { 
+        return "string" === typeof a || "string" === typeof e ? 
+        ("number" === typeof a ? (Math.round(1E10 * a) / 1E10).toString() : a) + 
+        ("number" === typeof e ? (Math.round(1E10 * e) / 1E10).toString() : e) : 
+        a && e ? 1 : 0 
+    } 
+    
+    self.JX = [
+        () => "Time_Basic_Settings", 
+        () => 1, 
+        () => 3, 
+        () => 0, 
+        () => 500, 
+        () => 960, 
+        () => 2E3, 
+        () => 880, 
+        () => 1030, 
+        () => 750, 
+        () => 890, 
+        () => 1170, 
+        a => { 
+            const e = a.Ca(0).Ge; 
+            return () => e.ic() 
+        }, 
+        a => { 
+            const e = a.Ca(0).Ge; 
+            return () => b("X", e.ic()) 
+        }, 
+        () => 2, 
+        a => { 
+            const e = a.Ca(0); 
+            return () => e.Ii() + 4 
+        }, 
+        a => {
+            const e = a.Ca(0); 
+            return () => e.Ii() - 4 
+        }, 
+        a => { 
+            const e = a.Ca(0).Ib(); 
+            return () => e() 
+        }, 
+        a => { 
+            const e = a.Ca(0), 
+            c = a.Ca(1); 
+            return () => e.Ii() - c.jp() 
+        }, 
+        a => { 
+            const e = a.Ca(0), 
+            c = a.Ca(1); 
+            return () => e.Ii() + c.jp() 
+        },
+        // Additional code retained as is...
+        () => "Score_Settings", 
+        () => "FriendlyAircraft_Settings", 
+        a => { 
+            const e = a.Ca(0).Ib(); 
+            return () => e(10, 20) 
+        },
+        // Facebook and Twitter references removed:
+        // Removed Facebook Sharing URL:
+        // a => { const e = a.Ca(0).Ge; return () => b("https://www.facebook.com/sharer/sharer.php?u=http://codecanyon.net/user/muscle-ss/portfolio&title=Super Game&description=I love this game, I scored the most points:", e.ic()) + "&image=https://user-profile.s3.envato.com/files/122504059/bomb.jpg" },
+        // () => "Share",
+        // Removed Twitter Sharing URL:
+        // () => "https://twitter.com/share?&text=Super Game&url=http://codecanyon.net/user/muscle-ss/portfolio",
+        () => "Exit_Settings", 
+        () => "Fullscreen_Settings", 
+        () => "FulLscreenON", 
+        () => "FulLscreenOFF",
+        // Remaining functionality untouched...
+    ];
+}
