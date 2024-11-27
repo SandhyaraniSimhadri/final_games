@@ -3852,75 +3852,23 @@ self.C.Ba.mk.ua = {
     { Vma: 0 }, { Dia: 0 }, { iqa: 0 }, { Dsa: 0 }, { ana: 0 }, { Kla: 0 }, { Wka: 0 }, { Wpa: 0 }, { Oia: 0 }, { Pia: 0 }, { Qia: 0 }, { Xia: 0 }, { Sia: 0 }, { Uia: 0 }, { Via: 0 }, { dja: 0 }, { Wia: 0 }, { Yia: 0 }, { $ia: 0 }, { eja: 0 }, { bja: 0 }, { cja: 0 }, { Ria: 0 }, { Tia: 0 }, { aja: 0 }, { Nia: 0 }, { Zia: 0 }, { fja: 0 }, { usa: 0 }, { jqa: 0 }, { Uma: 0 }, { Vpa: 0 }, { qqa: 0 }, { kna: 0 }, { Nma: 0 }, { Cia: 0 }, { Wja: 0 }, { Vja: 0 }, { sia: 0 }, { Xja: 0 }, { Xna: 0 }, { a_: 0 }, { Qra: 0 }, { Rra: 0 }, { rna: 0 }, { sna: 0 }, { Tka: 0 }, { dka: 0 }, { Roa: 0 }, { yla: 0 }]
 }
 {
-    const d = self.C; 
-    function b(a, e) { 
-        return "string" === typeof a || "string" === typeof e ? 
-        ("number" === typeof a ? (Math.round(1E10 * a) / 1E10).toString() : a) + 
-        ("number" === typeof e ? (Math.round(1E10 * e) / 1E10).toString() : e) : 
-        a && e ? 1 : 0 
-    } 
-    
-    self.JX = [
-        () => "Time_Basic_Settings", 
-        () => 1, 
-        () => 3, 
-        () => 0, 
-        () => 500, 
-        () => 960, 
-        () => 2E3, 
-        () => 880, 
-        () => 1030, 
-        () => 750, 
-        () => 890, 
-        () => 1170, 
-        a => { 
-            const e = a.Ca(0).Ge; 
-            return () => e.ic() 
-        }, 
-        a => { 
-            const e = a.Ca(0).Ge; 
-            return () => b("X", e.ic()) 
-        }, 
-        () => 2, 
-        a => { 
-            const e = a.Ca(0); 
-            return () => e.Ii() + 4 
-        }, 
-        a => {
-            const e = a.Ca(0); 
-            return () => e.Ii() - 4 
-        }, 
-        a => { 
-            const e = a.Ca(0).Ib(); 
-            return () => e() 
-        }, 
-        a => { 
-            const e = a.Ca(0), 
-            c = a.Ca(1); 
-            return () => e.Ii() - c.jp() 
-        }, 
-        a => { 
-            const e = a.Ca(0), 
-            c = a.Ca(1); 
-            return () => e.Ii() + c.jp() 
-        },
-        // Additional code retained as is...
-        () => "Score_Settings", 
-        () => "FriendlyAircraft_Settings", 
-        a => { 
-            const e = a.Ca(0).Ib(); 
-            return () => e(10, 20) 
-        },
-        // Facebook and Twitter references removed:
-        // Removed Facebook Sharing URL:
-        // a => { const e = a.Ca(0).Ge; return () => b("https://www.facebook.com/sharer/sharer.php?u=http://codecanyon.net/user/muscle-ss/portfolio&title=Super Game&description=I love this game, I scored the most points:", e.ic()) + "&image=https://user-profile.s3.envato.com/files/122504059/bomb.jpg" },
-        // () => "Share",
-        // Removed Twitter Sharing URL:
-        // () => "https://twitter.com/share?&text=Super Game&url=http://codecanyon.net/user/muscle-ss/portfolio",
-        () => "Exit_Settings", 
-        () => "Fullscreen_Settings", 
-        () => "FulLscreenON", 
-        () => "FulLscreenOFF",
-        // Remaining functionality untouched...
-    ];
-}
+    const d = self.C; function b(a, e) { return "string" === typeof a || "string" === typeof e ? ("number" === typeof a ? (Math.round(1E10 * a) / 1E10).toString() : a) + ("number" === typeof e ? (Math.round(1E10 * e) / 1E10).toString() : e) : a && e ? 1 : 0 } self.JX = [() => "Time_Basic_Settings", () => 1, () => 3, () => 0, () => 500, () => 960, () => 2E3, () => 880, () => 1030, () => 750, () => 890, () => 1170, a => { const e = a.Ca(0).Ge; return () => e.ic() }, a => { const e = a.Ca(0).Ge; return () => b("X", e.ic()) }, () => 2, a => { const e = a.Ca(0); return () => e.Ii() + 4 }, a => {
+        const e = a.Ca(0); return () => e.Ii() -
+            4
+    }, a => { const e = a.Ca(0).Ib(); return () => e() }, a => { const e = a.Ca(0), c = a.Ca(1); return () => e.Ii() - c.jp() }, a => { const e = a.Ca(0), c = a.Ca(1); return () => e.Ii() + c.jp() }, () => "StartGame_Settings", () => "Sound", () => "Time_Settings", () => .02, () => -1, () => 59, a => { const e = a.Ca(0).Ge, c = a.Ca(1).Ge; return () => b(b("0", e.ic()) + ":", c.ic()) }, () => 9, a => { const e = a.Ca(0).Ge, c = a.Ca(1).Ge; return () => b(b("0", e.ic()) + ":0", c.ic()) }, a => { const e = a.Ca(0).Ge, c = a.Ca(1).Ge; return () => b(b(e.ic(), ":"), c.ic()) }, () => 10, a => {
+        const e = a.Ca(0).Ge, c = a.Ca(1).Ge;
+        return () => b(b(e.ic(), ":0"), c.ic())
+    }, () => "Gui", a => { const e = a.Ca(0).Ib(); return () => e(0) / 2 }, a => { const e = a.Ca(0).Ib(); return () => e() + "BestScore" }, a => { const e = a.Ca(0).Ib(); return () => e() + "LastScore" }, () => "Shadow_In_Settings", () => "Shadow_In", () => "Life_Settings", () => "Top", () => "Tank_Settings", () => "Type_1", a => { const e = a.Ca(0); return () => e.Ii() }, a => { const e = a.Ca(0).Ib(); return () => Math.round(e(1E3)) }, a => { const e = a.Ca(0); return () => e.jp() }, () => "Type_2", () => .2, () => 300, a => { const e = a.Ca(0); return () => e.Ii() - 5 }, () => 325,
+    () => 1620, a => { const e = a.Ca(0); return () => e.Ii() + 5 }, () => 215, () => "Aircraft_Settings", a => { const e = a.Ca(0).Ib(); return () => e(10) }, () => "Player", () => -170, a => { const e = a.Ca(0).Ib(); return () => e(100, 400) }, a => { const e = a.Ca(0).Ib(); return () => Math.round(e(1, 7)) }, a => { const e = a.Ca(0); return () => "Aircraft_" + e.jp().toString() }, a => { const e = a.Ca(0); return () => 5 + e.jp() }, () => 2090, () => -200, () => 2120, () => 100, () => 1820, a => { const e = a.Ca(0).Ib(); return () => e(5) }, a => { const e = a.Ca(0).Ib(); return () => e(360) }, () => .1, () => "Effects_Settings",
+    () => "Rocket_Settings", a => { const e = a.Ca(0); return () => e.jp() - 1 }, a => { const e = a.Ca(0); return () => 10 * e.jp() }, () => "Score_Settings", () => "FriendlyAircraft_Settings", a => { const e = a.Ca(0).Ib(); return () => e(10, 20) }, () => -350, a => { const e = a.Ca(0).Ib(); return () => e(100, 300) }, a => { const e = a.Ca(0).Ib(); return () => e(20, 40) }, () => 2270, () => 400, () => 1520, a => { const e = a.Ca(0).Ib(); return () => e(2, 6) }, a => { const e = a.Ca(0).Ib(); return () => Math.round(e(0, 6)) }, () => -400, () => 2320, () => 4, () => 60, () => 5, a => {
+        const e = a.Ca(0).Ib(); return () => b("LOADING - ",
+            Math.round(100 * e())) + "%"
+    }, () => "LOADING - 100%", () => 970, () => "ShowLayer_Settings", () => "HideLayer_Settings", () => "TANK DEFENDER - THIS IS A GAME ABOUT THE DEFENCE OF THEIR TERRITORIES FROM ENEMY INVADERS, IN THIS BEAUTIFUL GAME YOU CONTROL A SUPER TANK, THE MAIN TASK IS TO DEFEND YOUR TERRITORY  AS LONG AS POSSIBLE FROM ENEMY PLANES AND ATOMIC BOMBS AS WELL AS COLLECT THE BOXES OF SUPPLIES THAT RESET, YOUR MILITARY CARGO PLANES. HOLD OUT AS LONG AS POSSIBLE AND SHOW THAT YOU'RE A REAL TANKMAN!", () => "SCORE +10",
+    () => "SCORE +20", () => "SCORE +30", () => "SCORE +40", () => "SCORE +50", () => 6, () => "SCORE +60", () => 7, () => "SCORE +70", () => 8, () => "SCORE+10", () => "SCORE +100", () => "SECONDS +60", () => 11, () => "TANK SHIELD", () => 12, () => "LIFE +1", () => 13, () => "ROCKETS +500", () => 14, () => "ROCKETS TANK-X2", a => { const e = a.Ca(0).Ge; return () => b("BEST SCORE:", e.ic()) }, a => { const e = a.Ca(0).Ge; return () => b("LAST SCORE:", e.ic()) }, a => { const e = a.Ca(0); return () => e.Ii() - 6 }, () => "Audio_Settings", a => { const e = a.Ca(0).Ib(); return () => e() + "Sound_Status" }, a => {
+        const e =
+            a.Ca(0).Ib(); return () => e() + "Music_Status"
+    },  a => { const e = a.Ca(0).Ib(); return () => d.nc(e("Gui"), 0, .25) }, () => .01, a => { const e = a.Ca(0).Ib(); return () => d.nc(e("Settings"), 0, .25) }, a => { const e = a.Ca(0).Ib(); return () => d.nc(e("Settings"), 1.5, .25) }, a => { const e = a.Ca(0).Ib(); return () => d.nc(e("Gui"), 100, .25) }, () => "GameOver_Settings", () => 1E6, () => "Clouds_Settings", a => { const e = a.Ca(0).Ib(); return () => e(4, 8) }, () => "Back", () => 2500, a => { const e = a.Ca(0).Ib(); return () => e(50, 200) }, () => -600, () => "Smoke_Settings", a => { const e = a.Ca(0); return () => -e.Ii() / 2 }, a => {
+        const e =
+            a.Ca(0), c = a.Ca(1); return () => e.Ii() + c.Ii() / 2
+    }, () => "Shadow", () => "Shadow_Settings", a => { const e = a.Ca(0).Ib(); return () => e("Shadow") + 6 }, a => { const e = a.Ca(0).Ib(); return () => e("Shadow") - 6 }, () => "Shadow_Out"]
+};
