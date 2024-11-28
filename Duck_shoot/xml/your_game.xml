@@ -1,12 +1,4 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <your_game>
 
-<!--Facebook-->
-<message_facebook>https://www.facebook.com/dialog/share?app_id=637119926359209&amp;href=https://codecanyon.net/item/duck-shoot/17853412
-</message_facebook>
-
-<!--Twitter-->
-<message_twitter>https://www.twitter.com/intent/tweet?text=Duck Shoot https://codecanyon.net/item/duck-shoot/17853412
-</message_twitter>
-
 </your_game>

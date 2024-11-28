@@ -3539,11 +3539,11 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		() => "xml/your_game.xml",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("/your_game/message_facebook/text()");
+			return () => null;
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("/your_game/message_twitter/text()");
+			return () => null;
 		},
 		() => -10000,
 		() => "Facebook",
