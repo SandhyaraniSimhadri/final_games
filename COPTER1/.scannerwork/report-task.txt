@@ -1,0 +1,6 @@
+projectKey=Copter1-29-11-2024
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=Copter1-29-11-2024
+ceTaskId=fcdd748f-7bb9-4ae9-8b67-cd29e373d926
+ceTaskUrl=http://localhost:9000/api/ce/task?id=fcdd748f-7bb9-4ae9-8b67-cd29e373d926
