@@ -23940,15 +23940,15 @@ function easeFunc(easing, t, b, c, d, flip, param)
     return ret_ease;
 };
 (function preCalculateArray() {
-  var d = 1.0;
-  var b = 0.0;
-  var c = 1.0;
-  var result = 0.0;
-  var a = 0.0;
-  var p = 0.0;
-  var t = 0.0;
-  var s = 0.0;
-  for (var ti = 0; ti <= litetween_precision; ti++) {
+  let d = 1.0;
+  let b = 0.0;
+  let c = 1.0;
+  let result = 0.0;
+  let a = 0.0;
+  let p = 0.0;
+  let t = 0.0;
+  let s = 0.0;
+  for (let ti = 0; ti <= litetween_precision; ti++) {
     t = ti/litetween_precision;
   	if ((t/=d) < (1/2.75)) {
   		result = c*(7.5625*t*t) + b;
@@ -23962,22 +23962,22 @@ function easeFunc(easing, t, b, c, d, flip, param)
     easeOutBounceArray[ti] = result;
     t = ti/litetween_precision; a = 0; p = 0;
     if (t==0) result = b; if ((t/=d)==1) result = b+c;
-    if (p==0) p=d*.3;	if (a==0 || a < Math.abs(c)) { a=c; var s=p/4; }
-    else var s = p/(2*Math.PI) * Math.asin (c/a);
+    if (p==0) p=d*.3;	if (a==0 || a < Math.abs(c)) { a=c; s=p/4; }
+    else s = p/(2*Math.PI) * Math.asin (c/a);
 		result = -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
     easeInElasticArray[ti] = result;
     t = ti/litetween_precision; a = 0; p = 0;
 		if (t==0) result= b;  if ((t/=d)==1) result= b+c;  if (p == 0) p=d*.3;
-		if (a==0 || a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
+		if (a==0 || a < Math.abs(c)) { a=c; let s=p/4; }
+		else s = p/(2*Math.PI) * Math.asin (c/a);
 		result= (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b);
     easeOutElasticArray[ti] = result;
     t = ti/litetween_precision; a = 0; p = 0;
 		if (t==0) result = b;
 		if ((t/=d/2)==2) result = b+c;
 		if (p==0) p=d*(.3*1.5);
-		if (a==0 || a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
+		if (a==0 || a < Math.abs(c)) { a=c; let s=p/4; }
+		else s = p/(2*Math.PI) * Math.asin (c/a);
 		if (t < 1)
       result = -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b
     else
@@ -24005,9 +24005,9 @@ function easeFunc(easing, t, b, c, d, flip, param)
     easeInOutBack[ti] = result;
 	}
 }());
-var TweenObject = function()
+let TweenObject = function()
 {
-	var constructor = function (tname, tweened, easefunc, initial, target, duration, enforce)
+	let constructor = function (tname, tweened, easefunc, initial, target, duration, enforce)
 	{
     this.name = tname;
     this.value = 0;
@@ -24029,7 +24029,7 @@ var TweenObject = function()
     this.flipEase = false;
     this.easingparam = [];
     this.lastState = 1;
-    for (var i=0; i<28; i++) {
+    for (let i=0; i<28; i++) {
       this.easingparam[i] = {};
       this.easingparam[i].a = 0.0;
       this.easingparam[i].p = 0.0;
@@ -24045,8 +24045,8 @@ var TweenObject = function()
 	};
   TweenObject.prototype.flipTarget = function ()
   {
-    var x1 = this.initialparam1;
-    var x2 = this.initialparam2;
+    let x1 = this.initialparam1;
+    let x2 = this.initialparam2;
     this.initialparam1 = this.targetparam1;
     this.initialparam2 = this.targetparam2;
     this.targetparam1 = x1;
@@ -24111,9 +24111,9 @@ var TweenObject = function()
       return 1.0;
     } else {
       if (this.flipEase) {
-        var factor = easeFunc(this.easefunc, this.duration - this.progress, 0, 1, this.duration, this.flipEase, this.easingparam[this.easefunc]);
+        let factor = easeFunc(this.easefunc, this.duration - this.progress, 0, 1, this.duration, this.flipEase, this.easingparam[this.easefunc]);
       } else {
-        var factor = easeFunc(this.easefunc, this.progress, 0, 1, this.duration, this.flipEase, this.easingparam[this.easefunc]);
+        let factor = easeFunc(this.easefunc, this.progress, 0, 1, this.duration, this.flipEase, this.easingparam[this.easefunc]);
       }
       return factor;
     }
@@ -24130,14 +24130,14 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.lunarray_LiteTween.prototype;
+	let behaviorProto = cr.behaviors.lunarray_LiteTween.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -24149,7 +24149,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 		this.runtime = type.runtime;
 		this.i = 0;		// progress
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
     this.playmode = this.properties[0];
@@ -24173,9 +24173,9 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	behinstProto.parseCurrent = function(tweened, parseText)
   {
     if (parseText === undefined) parseText = "current";
-    var parsed = trim(parseText);
+    let parsed = trim(parseText);
     parseText = trim(parseText);
-    var value = this.value;
+    let value = this.value;
     if (parseText === "current") {
       switch (tweened) {
         case 0: parsed = this.inst.x + "," + this.inst.y; break;
@@ -24197,10 +24197,10 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
       }
     }
     if (parseText.substring(0,8) === "relative") {
-      var param1 = parseText.match(/\((.*?)\)/);
+      let param1 = parseText.match(/\((.*?)\)/);
       if (param1) {
-        var relativex = parseFloat(param1[1].split(",")[0]);
-        var relativey = parseFloat(param1[1].split(",")[1]);
+        let relativex = parseFloat(param1[1].split(",")[0]);
+        let relativey = parseFloat(param1[1].split(",")[1]);
       }
       if (isNaN(relativex)) relativex = 0;
       if (isNaN(relativey)) relativey = 0;
@@ -24232,7 +24232,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
   };
 	behinstProto.saveToJSON = function ()
 	{
-    var v = JSON.stringify(this.tween_list["default"]);
+    let v = JSON.stringify(this.tween_list["default"]);
 		return {
 			"playmode": this.playmode,
 			"active": this.active,
@@ -24249,15 +24249,15 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
   TweenObject.Load = function(rawObj, tname, tweened, easing, init, targ, duration, enforce)
   {
-    var obj = new TweenObject(tname, tweened, easing, init, targ, duration, enforce);
-    for(var i in rawObj)
+    let obj = new TweenObject(tname, tweened, easing, init, targ, duration, enforce);
+    for(let i in rawObj)
         obj[i] = rawObj[i];
     return obj;
   };
 	behinstProto.loadFromJSON = function (o)
 	{
-    var x = JSON.parse(o["tweenlist"]);
-    var tempObj = TweenObject.Load(x, x.name, x.tweened, x.easefunc, x.initialparam1+","+x.initialparam2, x.targetparam1+","+x.targetparam2, x.duration, x.enforce);
+    let x = JSON.parse(o["tweenlist"]);
+    let tempObj = TweenObject.Load(x, x.name, x.tweened, x.easefunc, x.initialparam1+","+x.initialparam2, x.targetparam1+","+x.targetparam2, x.duration, x.enforce);
 		this.tween_list["default"] = tempObj;
 	  this.playmode = o["playmode"];
 		this.active = o["active"];
@@ -24274,23 +24274,23 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	{
     if (mark > 1.0) mark = 1.0;
     if (mark < 0.0) mark = 0.0;
-    for (var i in this.tween_list) {
-      var inst = this.tween_list[i];
+    for (let i in this.tween_list) {
+      let inst = this.tween_list[i];
       inst.lastKnownValue = 0;
       inst.lastKnownValue2 = 0;
       inst.state = 3;
       inst.progress = mark * inst.duration;
-      var factor = inst.OnTick(0);
+      let factor = inst.OnTick(0);
       this.updateTween(inst, factor);
     }
   }
 	behinstProto.startTween = function (startMode)
 	{
-    for (var i in this.tween_list) {
-      var inst = this.tween_list[i];
+    for (let i in this.tween_list) {
+      let inst = this.tween_list[i];
       if (this.useCurrent) {
-        var init = this.parseCurrent(inst.tweened, "current");
-        var target = this.parseCurrent(inst.tweened, this.target);
+        let init = this.parseCurrent(inst.tweened, "current");
+        let target = this.parseCurrent(inst.tweened, this.target);
         inst.setInitial(init);
         inst.setTarget(target);
       }
@@ -24323,21 +24323,21 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
   }
 	behinstProto.stopTween = function (stopMode)
 	{
-    for (var i in this.tween_list) {
-      var inst = this.tween_list[i];
+    for (let i in this.tween_list) {
+      let inst = this.tween_list[i];
       if ((inst.state != 3) && (inst.state != 0)) //don't save paused/seek state
         inst.lastState = inst.state;
       if (stopMode === 1) inst.progress = 0.0;
       if (stopMode === 2) inst.progress = inst.duration;
       inst.state = 3;
-      var factor = inst.OnTick(0);
+      let factor = inst.OnTick(0);
       this.updateTween(inst, factor);
     }
   }
 	behinstProto.reverseTween = function(reverseMode)
 	{
-    for (var i in this.tween_list) {
-      var inst = this.tween_list[i];
+    for (let i in this.tween_list) {
+      let inst = this.tween_list[i];
       if (reverseMode === 1) {
         inst.progress = inst.duration;
         inst.lastKnownValue = 0;
@@ -24385,10 +24385,10 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
       }
     } else if (inst.tweened === 4) {
       if (inst.enforce) {
-  		  var tangle = inst.initialparam1 + (inst.targetparam1 - inst.initialparam1) * factor;
+  		  let tangle = inst.initialparam1 + (inst.targetparam1 - inst.initialparam1) * factor;
   		  this.inst.angle = cr.clamp_angle(cr.to_radians(tangle));
       } else {
-  		  var tangle = ((inst.targetparam1 - inst.initialparam1) * factor) - inst.lastKnownValue;
+  		  let tangle = ((inst.targetparam1 - inst.initialparam1) * factor) - inst.lastKnownValue;
   		  this.inst.angle = cr.clamp_angle(this.inst.angle + cr.to_radians(tangle));
         inst.lastKnownValue = (inst.targetparam1 - inst.initialparam1) * factor;
       }
@@ -24421,8 +24421,8 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
         inst.lastKnownValue2 = ((inst.targetparam2 - inst.initialparam2) * factor);
       }
     } else if (inst.tweened === 9) {
-      var scalex = inst.initialparam1 + (inst.targetparam1 - inst.initialparam1) * factor;
-      var scaley = inst.initialparam2 + (inst.targetparam2 - inst.initialparam2) * factor;
+      let scalex = inst.initialparam1 + (inst.targetparam1 - inst.initialparam1) * factor;
+      let scaley = inst.initialparam2 + (inst.targetparam2 - inst.initialparam2) * factor;
       if (this.inst.width < 0) scalex = inst.initialparam1 + (inst.targetparam1 + inst.initialparam1) * -factor;
       if (this.inst.height < 0)  scaley = inst.initialparam2 + (inst.targetparam2 + inst.initialparam2) * -factor;
       if (inst.enforce) {
@@ -24449,8 +24449,8 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
   }
 	behinstProto.tick = function ()
 	{
-		var dt = this.runtime.getDt(this.inst);
-    var inst = this.tween_list["default"];
+		let dt = this.runtime.getDt(this.inst);
+    let inst = this.tween_list["default"];
     if (inst.state !== 0) {
       if (inst.onStart) {
   			this.runtime.trigger(cr.behaviors.lunarray_LiteTween.prototype.cnds.OnStart, this.inst);
@@ -24461,7 +24461,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
         inst.onReverseStart = false;
       }
       this.active = (inst.state == 1) || (inst.state == 2) || (inst.state == 4) || (inst.state == 5) || (inst.state == 6);
-      var factor = inst.OnTick(dt);
+      let factor = inst.OnTick(dt);
       this.updateTween(inst, factor);
       if (inst.onEnd) {
   		  this.runtime.trigger(cr.behaviors.lunarray_LiteTween.prototype.cnds.OnEnd, this.inst);
@@ -24474,7 +24474,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
     }
 	};
 	behaviorProto.cnds = {};
-	var cnds = behaviorProto.cnds;
+	let cnds = behaviorProto.cnds;
 	cnds.IsActive = function ()
 	{
 		return (this.tween_list["default"].state !== 0);
@@ -24485,14 +24485,14 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
 	cnds.CompareProgress = function (cmp, v)
 	{
-    var inst = this.tween_list["default"];
+    let inst = this.tween_list["default"];
 		return cr.do_cmp((inst.progress / inst.duration), cmp, v);
 	};
 	cnds.OnThreshold = function (cmp, v)
 	{
-    var inst = this.tween_list["default"];
+    let inst = this.tween_list["default"];
     this.threshold = (cr.do_cmp((inst.progress / inst.duration), cmp, v));
-    var ret = (this.oldthreshold != this.threshold) && (this.threshold);
+    let ret = (this.oldthreshold != this.threshold) && (this.threshold);
     if (ret) {
       this.oldthreshold = this.threshold;
     }
@@ -24523,7 +24523,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
     return this.tween_list["default"].onReverseEnd;
 	};
 	behaviorProto.acts = {};
-	var acts = behaviorProto.acts;
+	let acts = behaviorProto.acts;
 	acts.Start = function (startmode, current)
 	{
     this.threshold = false;
@@ -24560,18 +24560,18 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	acts.SetInitial = function (x)
 	{
     if (this.tween_list["default"] === undefined) return;
-    var init = this.parseCurrent(this.tween_list["default"].tweened, x);
+    let init = this.parseCurrent(this.tween_list["default"].tweened, x);
 		this.tween_list["default"].setInitial(init);
 	};
 	acts.SetTarget = function (targettype, absrel, x)
 	{
     if (this.tween_list["default"] === undefined) return;
     if (isNaN(x)) return;
-    var inst = this.tween_list["default"];
-    var parsed = x + "";
+    let inst = this.tween_list["default"];
+    let parsed = x + "";
     this.targetmode = absrel;
-    var x1 = "";
-    var x2 = "";
+    let x1 = "";
+    let x2 = "";
     if (absrel === 1) {
       this.target = "relative(" + parsed + ")";
       switch (targettype) {
@@ -24599,8 +24599,8 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
       parsed = x1 + "," + x2;
       this.target = parsed;
     }
-    var init = this.parseCurrent(this.tween_list["default"].tweened, "current");
-    var targ = this.parseCurrent(this.tween_list["default"].tweened, parsed);
+    let init = this.parseCurrent(this.tween_list["default"].tweened, "current");
+    let targ = this.parseCurrent(this.tween_list["default"].tweened, parsed);
  		inst.setInitial(init);
  		inst.setTarget(targ);
 	};
@@ -24630,7 +24630,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
  	acts.SetValue = function (x)
 	{
-    var inst = this.tween_list["default"];
+    let inst = this.tween_list["default"];
 		this.value = x;
     if (inst.tweened === 6)
       inst.setInitial( this.parseCurrent(inst.tweened, "current") );
@@ -24640,7 +24640,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
     if (this.tween_list["default"] === undefined) {
       this.addToTweenList("default", tweened, easefunction, initial, target, duration, enforce, 0);
     } else {
-      var inst = this.tween_list["default"];
+      let inst = this.tween_list["default"];
       inst.tweened = tweened;
   		inst.easefunc = easefunction;
       inst.setInitial( this.parseCurrent(tweened, "current") );
@@ -24650,10 +24650,10 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
     }
 	};
 	behaviorProto.exps = {};
-	var exps = behaviorProto.exps;
+	let exps = behaviorProto.exps;
 	exps.State = function (ret)
 	{
-    var parsed = "N/A";
+    let parsed = "N/A";
     switch (this.tween_list["default"].state) {
       case 0: parsed = "paused"; break;
       case 1: parsed = "playing"; break;
@@ -24665,7 +24665,7 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
 	exps.Progress = function (ret)
 	{
-    var progress = this.tween_list["default"].progress/this.tween_list["default"].duration;
+    let progress = this.tween_list["default"].progress/this.tween_list["default"].duration;
     ret.set_float(progress);
 	};
 	exps.Duration = function (ret)
@@ -24674,8 +24674,8 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
 	exps.Target = function (ret)
 	{
-    var inst = this.tween_list["default"];
-    var parsed = "N/A";
+    let inst = this.tween_list["default"];
+    let parsed = "N/A";
     switch (inst.tweened) {
       case 0: parsed = inst.targetparam1; break;
       case 1: parsed = inst.targetparam2; break;
@@ -24690,13 +24690,13 @@ cr.behaviors.lunarray_LiteTween = function(runtime)
 	};
 	exps.Value = function (ret)
 	{
-    var tval = this.value;
+    let tval = this.value;
     ret.set_float(tval);
 	};
 	exps.Tween = function (ret, a_, b_, x_, easefunc_)
 	{
-    var currX = (x_>1.0?1.0:x_);
-    var factor = easeFunc(easefunc_, currX<0.0?0.0:currX, 0.0, 1.0, 1.0, false, false);
+    let currX = (x_>1.0?1.0:x_);
+    let factor = easeFunc(easefunc_, currX<0.0?0.0:currX, 0.0, 1.0, 1.0, false, false);
     ret.set_float(a_ + factor * (b_-a_));
 	};
 }());
@@ -24712,14 +24712,14 @@ cr.behaviors.scrollto = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.scrollto.prototype;
+	let behaviorProto = cr.behaviors.scrollto.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -24730,7 +24730,7 @@ cr.behaviors.scrollto = function(runtime)
 		this.inst = inst;				// associated object instance to modify
 		this.runtime = type.runtime;
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
 		this.enabled = (this.properties[0] !== 0);
@@ -24756,7 +24756,7 @@ cr.behaviors.scrollto = function(runtime)
 	};
 	function getScrollToBehavior(inst)
 	{
-		var i, len, binst;
+		let i, len, binst;
 		for (i = 0, len = inst.behavior_insts.length; i < len; ++i)
 		{
 			binst = inst.behavior_insts[i];
@@ -24769,9 +24769,9 @@ cr.behaviors.scrollto = function(runtime)
 	{
 		if (!this.enabled)
 			return;
-		var all = this.behavior.my_instances.valuesRef();
-		var sumx = 0, sumy = 0;
-		var i, len, binst, count = 0;
+		let all = this.behavior.my_instances.valuesRef();
+		let sumx = 0, sumy = 0;
+		let i, len, binst, count = 0;
 		for (i = 0, len = all.length; i < len; i++)
 		{
 			binst = getScrollToBehavior(all[i]);
@@ -24781,16 +24781,16 @@ cr.behaviors.scrollto = function(runtime)
 			sumy += all[i].y;
 			++count;
 		}
-		var layout = this.inst.layer.layout;
-		var now = this.runtime.kahanTime.sum;
-		var offx = 0, offy = 0;
+		let layout = this.inst.layer.layout;
+		let now = this.runtime.kahanTime.sum;
+		let offx = 0, offy = 0;
 		if (now >= this.behavior.shakeStart && now < this.behavior.shakeEnd)
 		{
-			var mag = this.behavior.shakeMag * Math.min(this.runtime.timescale, 1);
+			let mag = this.behavior.shakeMag * Math.min(this.runtime.timescale, 1);
 			if (this.behavior.shakeMode === 0)
 				mag *= 1 - (now - this.behavior.shakeStart) / (this.behavior.shakeEnd - this.behavior.shakeStart);
-			var a = Math.random() * Math.PI * 2;
-			var d = Math.random() * mag;
+			let a = Math.random() * Math.PI * 2;
+			let d = Math.random() * mag;
 			offx = Math.cos(a) * d;
 			offy = Math.sin(a) * d;
 		}

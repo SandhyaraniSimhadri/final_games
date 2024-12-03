@@ -1,6 +1,6 @@
-projectKey=Cube_dash-28-10-2024
+projectKey=Cube_dash-03-12-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
-dashboardUrl=http://localhost:9000/dashboard?id=Cube_dash-28-10-2024
-ceTaskId=a772de8d-32bc-4e26-9a05-67777273e4e7
-ceTaskUrl=http://localhost:9000/api/ce/task?id=a772de8d-32bc-4e26-9a05-67777273e4e7
+dashboardUrl=http://localhost:9000/dashboard?id=Cube_dash-03-12-2024
+ceTaskId=ac1e2b25-8313-4ebd-a874-042d830f3254
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ac1e2b25-8313-4ebd-a874-042d830f3254
