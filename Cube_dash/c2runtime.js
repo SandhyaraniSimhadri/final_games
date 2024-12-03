@@ -10997,7 +10997,7 @@ window["cr_setSuspended"] = function(s)
 		this.subparams = null;
 		this.variadicret = null;
 		this.variesPerInstance = false;
-		var i, len, param;
+		let i, len, param;
 		switch (m[0])
 		{
 			case 0:		// number
@@ -12373,8 +12373,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
 	function foreach_sortinstances(a, b)
 	{
-		var va = a.extra["c2_feo_val"];
-		var vb = b.extra["c2_feo_val"];
+		let va = a.extra["c2_feo_val"];
+		let vb = b.extra["c2_feo_val"];
 		if (cr.is_number(va) && cr.is_number(vb))
 			return va - vb;
 		else
@@ -12391,18 +12391,18 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.ForEachOrdered = function (obj, exp, order)
     {
-        var sol = obj.getCurrentSol();
+        let sol = obj.getCurrentSol();
 		foreach_instanceptr++;
 		if (foreach_instancestack.length === foreach_instanceptr)
 			foreach_instancestack.push([]);
-		var instances = foreach_instancestack[foreach_instanceptr];
+		let instances = foreach_instancestack[foreach_instanceptr];
 		cr.shallowAssignArray(instances, sol.getObjects());
-        var current_frame = this.runtime.getCurrentEventStack();
-        var current_event = current_frame.current_event;
-		var current_condition = this.runtime.getCurrentCondition();
-		var solModifierAfterCnds = current_frame.isModifierAfterCnds();
-        var current_loop = this.runtime.pushLoopStack();
-		var i, len, j, lenj, inst, s, sol2;
+        let current_frame = this.runtime.getCurrentEventStack();
+        let current_event = current_frame.current_event;
+		let current_condition = this.runtime.getCurrentCondition();
+		let solModifierAfterCnds = current_frame.isModifierAfterCnds();
+        let current_loop = this.runtime.pushLoopStack();
+		let i, len, j, lenj, inst, s, sol2;
 		for (i = 0, len = instances.length; i < len; i++)
 		{
 			instances[i].extra["c2_feo_val"] = current_condition.parameters[1].get(i);
@@ -12410,7 +12410,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		instances.sort(foreach_sortinstances);
 		if (order === 1)
 			instances.reverse();
-		var is_contained = obj.is_contained;
+		let is_contained = obj.is_contained;
 		if (solModifierAfterCnds)
 		{
 			for (i = 0, len = instances.length; i < len && !current_loop.stopped; i++)
@@ -12467,18 +12467,18 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
 	SysCnds.prototype.PickByComparison = function (obj_, exp_, cmp_, val_)
 	{
-		var i, len, k, inst;
+		let i, len, k, inst;
 		if (!obj_)
 			return;
 		foreach_instanceptr++;
 		if (foreach_instancestack.length === foreach_instanceptr)
 			foreach_instancestack.push([]);
-		var tmp_instances = foreach_instancestack[foreach_instanceptr];
-		var sol = obj_.getCurrentSol();
+		let tmp_instances = foreach_instancestack[foreach_instanceptr];
+		let sol = obj_.getCurrentSol();
 		cr.shallowAssignArray(tmp_instances, sol.getObjects());
 		if (sol.select_all)
 			cr.clearArray(sol.else_instances);
-		var current_condition = this.runtime.getCurrentCondition();
+		let current_condition = this.runtime.getCurrentCondition();
 		for (i = 0, k = 0, len = tmp_instances.length; i < len; i++)
 		{
 			inst = tmp_instances[i];
@@ -12504,18 +12504,18 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.PickByEvaluate = function (obj_, exp_)
 	{
-		var i, len, k, inst;
+		let i, len, k, inst;
 		if (!obj_)
 			return;
 		foreach_instanceptr++;
 		if (foreach_instancestack.length === foreach_instanceptr)
 			foreach_instancestack.push([]);
-		var tmp_instances = foreach_instancestack[foreach_instanceptr];
-		var sol = obj_.getCurrentSol();
+		let tmp_instances = foreach_instancestack[foreach_instanceptr];
+		let sol = obj_.getCurrentSol();
 		cr.shallowAssignArray(tmp_instances, sol.getObjects());
 		if (sol.select_all)
 			cr.clearArray(sol.else_instances);
-		var current_condition = this.runtime.getCurrentCondition();
+		let current_condition = this.runtime.getCurrentCondition();
 		for (i = 0, k = 0, len = tmp_instances.length; i < len; i++)
 		{
 			inst = tmp_instances[i];
@@ -12540,22 +12540,22 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
     SysCnds.prototype.TriggerOnce = function ()
     {
-        var cndextra = this.runtime.getCurrentCondition().extra;
+        let cndextra = this.runtime.getCurrentCondition().extra;
 		if (typeof cndextra["TriggerOnce_lastTick"] === "undefined")
 			cndextra["TriggerOnce_lastTick"] = -1;
-        var last_tick = cndextra["TriggerOnce_lastTick"];
-        var cur_tick = this.runtime.tickcount;
+        let last_tick = cndextra["TriggerOnce_lastTick"];
+        let cur_tick = this.runtime.tickcount;
         cndextra["TriggerOnce_lastTick"] = cur_tick;
         return this.runtime.layout_first_tick || last_tick !== cur_tick - 1;
     };
     SysCnds.prototype.Every = function (seconds)
     {
-        var cnd = this.runtime.getCurrentCondition();
-        var last_time = cnd.extra["Every_lastTime"] || 0;
-        var cur_time = this.runtime.kahanTime.sum;
+        let cnd = this.runtime.getCurrentCondition();
+        let last_time = cnd.extra["Every_lastTime"] || 0;
+        let cur_time = this.runtime.kahanTime.sum;
 		if (typeof cnd.extra["Every_seconds"] === "undefined")
 			cnd.extra["Every_seconds"] = seconds;
-		var this_seconds = cnd.extra["Every_seconds"];
+		let this_seconds = cnd.extra["Every_seconds"];
         if (cur_time >= last_time + this_seconds)
         {
             cnd.extra["Every_lastTime"] = last_time + this_seconds;
@@ -12576,12 +12576,12 @@ cr.system_object.prototype.loadFromJSON = function (o)
     {
         if (!obj)
             return false;
-        var sol = obj.getCurrentSol();
-        var instances = sol.getObjects();
+        let sol = obj.getCurrentSol();
+        let instances = sol.getObjects();
 		index = cr.floor(index);
         if (index < 0 || index >= instances.length)
             return false;
-		var inst = instances[index];
+		let inst = instances[index];
         sol.pick_one(inst);
 		obj.applySolToContainer();
         return true;
@@ -12590,12 +12590,12 @@ cr.system_object.prototype.loadFromJSON = function (o)
     {
         if (!obj)
             return false;
-        var sol = obj.getCurrentSol();
-        var instances = sol.getObjects();
-		var index = cr.floor(Math.random() * instances.length);
+        let sol = obj.getCurrentSol();
+        let instances = sol.getObjects();
+		let index = cr.floor(Math.random() * instances.length);
         if (index >= instances.length)
             return false;
-		var inst = instances[index];
+		let inst = instances[index];
         sol.pick_one(inst);
 		obj.applySolToContainer();
         return true;
@@ -12606,7 +12606,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysCnds.prototype.IsGroupActive = function (group)
     {
-		var g = this.runtime.groups_by_name[group.toLowerCase()];
+		let g = this.runtime.groups_by_name[group.toLowerCase()];
         return g && g.group_active;
     };
 	SysCnds.prototype.IsPreview = function ()
@@ -12619,7 +12619,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
             return false;
 		if (!obj.instances.length)
 			return false;
-        var sol = obj.getCurrentSol();
+        let sol = obj.getCurrentSol();
         sol.select_all = true;
 		obj.applySolToContainer();
         return true;
@@ -12634,7 +12634,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.Else = function ()
 	{
-		var current_frame = this.runtime.getCurrentEventStack();
+		let current_frame = this.runtime.getCurrentEventStack();
 		if (current_frame.else_branch_ran)
 			return false;		// another event in this else-if chain has run
 		else
@@ -12716,7 +12716,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.IsOnPlatform = function (p)
 	{
-		var rt = this.runtime;
+		let rt = this.runtime;
 		switch (p) {
 		case 0:		// HTML5 website
 			return !rt.isDomFree && !rt.isNodeWebkit && !rt.isCordova && !rt.isWinJS && !rt.isWindowsPhone8 && !rt.isBlackberry10 && !rt.isAmazonWebApp;
@@ -12750,9 +12750,9 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			return false;
 		}
 	};
-	var cacheRegex = null;
-	var lastRegex = "";
-	var lastFlags = "";
+	let cacheRegex = null;
+	let lastRegex = "";
+	let lastFlags = "";
 	function getRegex(regex_, flags_)
 	{
 		if (!cacheRegex || regex_ !== lastRegex || flags_ !== lastFlags)
@@ -12766,20 +12766,20 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.RegexTest = function (str_, regex_, flags_)
 	{
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		return regex.test(str_);
 	};
-	var tmp_arr = [];
+	let tmp_arr = [];
 	SysCnds.prototype.PickOverlappingPoint = function (obj_, x_, y_)
 	{
 		if (!obj_)
             return false;
-        var sol = obj_.getCurrentSol();
-        var instances = sol.getObjects();
-		var current_event = this.runtime.getCurrentEventStack().current_event;
-		var orblock = current_event.orblock;
-		var cnd = this.runtime.getCurrentCondition();
-		var i, len, inst, pick;
+        let sol = obj_.getCurrentSol();
+        let instances = sol.getObjects();
+		let current_event = this.runtime.getCurrentEventStack().current_event;
+		let orblock = current_event.orblock;
+		let cnd = this.runtime.getCurrentCondition();
+		let i, len, inst, pick;
 		if (sol.select_all)
 		{
 			cr.shallowAssignArray(tmp_arr, instances);
@@ -12827,10 +12827,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysCnds.prototype.IsBetweenAngles = function (a, la, ua)
 	{
-		var angle = cr.to_clamped_radians(a);
-		var lower = cr.to_clamped_radians(la);
-		var upper = cr.to_clamped_radians(ua);
-		var obtuse = (!cr.angleClockwise(upper, lower));
+		let angle = cr.to_clamped_radians(a);
+		let lower = cr.to_clamped_radians(la);
+		let upper = cr.to_clamped_radians(ua);
+		let obtuse = (!cr.angleClockwise(upper, lower));
 		if (obtuse)
 			return !(!cr.angleClockwise(angle, lower) && cr.angleClockwise(angle, upper));
 		else
@@ -12860,12 +12860,12 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			return;		// cannot change layout while loading on loader layout
 		if (this.runtime.changelayout)
 			return;		// already changing to a different layout
-		var index = this.runtime.layouts_by_index.indexOf(this.runtime.running_layout);
+		let index = this.runtime.layouts_by_index.indexOf(this.runtime.running_layout);
 		if (prev && index === 0)
 			return;		// cannot go to previous layout from first layout
 		if (!prev && index === this.runtime.layouts_by_index.length - 1)
 			return;		// cannot go to next layout from last layout
-		var to = this.runtime.layouts_by_index[index + (prev ? -1 : 1)];
+		let to = this.runtime.layouts_by_index[index + (prev ? -1 : 1)];
 ;
         this.runtime.changelayout = to;
     };
@@ -12873,11 +12873,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
     {
         if (!layer || !obj)
             return;
-        var inst = this.runtime.createInstance(obj, layer, x, y);
+        let inst = this.runtime.createInstance(obj, layer, x, y);
 		if (!inst)
 			return;
 		this.runtime.isInOnDestroy++;
-		var i, len, s;
+		let i, len, s;
 		this.runtime.trigger(Object.getPrototypeOf(obj.plugin).cnds.OnCreated, inst);
 		if (inst.is_contained)
 		{
@@ -12888,7 +12888,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			}
 		}
 		this.runtime.isInOnDestroy--;
-        var sol = obj.getCurrentSol();
+        let sol = obj.getCurrentSol();
         sol.select_all = false;
 		cr.clearArray(sol.instances);
 		sol.instances[0] = inst;
@@ -12972,7 +12972,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysActs.prototype.ScrollToObject = function(obj)
     {
-        var inst = obj.getFirstPicked();
+        let inst = obj.getFirstPicked();
         if (inst)
         {
             this.runtime.running_layout.scrollToX(inst.x);
@@ -13018,7 +13018,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
     SysActs.prototype.SetGroupActive = function (group, active)
     {
-		var g = this.runtime.groups_by_name[group.toLowerCase()];
+		let g = this.runtime.groups_by_name[group.toLowerCase()];
 		if (!g)
 			return;
 		switch (active) {
@@ -13035,21 +13035,21 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysActs.prototype.SetTimescale = function (ts_)
     {
-        var ts = ts_;
+        let ts = ts_;
         if (ts < 0)
             ts = 0;
         this.runtime.timescale = ts;
     };
     SysActs.prototype.SetObjectTimescale = function (obj, ts_)
     {
-        var ts = ts_;
+        let ts = ts_;
         if (ts < 0)
             ts = 0;
         if (!obj)
             return;
-        var sol = obj.getCurrentSol();
-        var instances = sol.getObjects();
-        var i, len;
+        let sol = obj.getCurrentSol();
+        let instances = sol.getObjects();
+        let i, len;
         for (i = 0, len = instances.length; i < len; i++)
         {
             instances[i].my_timescale = ts;
@@ -13059,18 +13059,18 @@ cr.system_object.prototype.loadFromJSON = function (o)
     {
         if (!obj)
             return false;
-        var sol = obj.getCurrentSol();
-        var instances = sol.getObjects();
-        var i, len;
+        let sol = obj.getCurrentSol();
+        let instances = sol.getObjects();
+        let i, len;
         for (i = 0, len = instances.length; i < len; i++)
         {
             instances[i].my_timescale = -1.0;
         }
     };
-	var waitobjrecycle = [];
+	let waitobjrecycle = [];
 	function allocWaitObject()
 	{
-		var w;
+		let w;
 		if (waitobjrecycle.length)
 			w = waitobjrecycle.pop();
 		else
@@ -13088,10 +13088,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		cr.clearArray(w.solModifiers);
 		waitobjrecycle.push(w);
 	};
-	var solstateobjects = [];
+	let solstateobjects = [];
 	function allocSolStateObject()
 	{
-		var s;
+		let s;
 		if (solstateobjects.length)
 			s = solstateobjects.pop();
 		else
@@ -13111,9 +13111,9 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (seconds < 0)
 			return;
-		var i, len, s, t, ss;
-		var evinfo = this.runtime.getCurrentEventStack();
-		var waitobj = allocWaitObject();
+		let i, len, s, t, ss;
+		let evinfo = this.runtime.getCurrentEventStack();
+		let waitobj = allocWaitObject();
 		waitobj.time = this.runtime.kahanTime.sum + seconds;
 		waitobj.signaltag = "";
 		waitobj.signalled = false;
@@ -13136,9 +13136,9 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysActs.prototype.WaitForSignal = function (tag)
 	{
-		var i, len, s, t, ss;
-		var evinfo = this.runtime.getCurrentEventStack();
-		var waitobj = allocWaitObject();
+		let i, len, s, t, ss;
+		let evinfo = this.runtime.getCurrentEventStack();
+		let waitobj = allocWaitObject();
 		waitobj.time = -1;
 		waitobj.signaltag = tag.toLowerCase();
 		waitobj.signalled = false;
@@ -13161,8 +13161,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysActs.prototype.Signal = function (tag)
 	{
-		var lowertag = tag.toLowerCase();
-		var i, len, w;
+		let lowertag = tag.toLowerCase();
+		let i, len, w;
 		for (i = 0, len = this.waits.length; i < len; ++i)
 		{
 			w = this.waits[i];
@@ -13183,7 +13183,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
 	SysActs.prototype.ResetGlobals = function ()
 	{
-		var i, len, g;
+		let i, len, g;
 		for (i = 0, len = this.runtime.all_global_vars.length; i < len; i++)
 		{
 			g = this.runtime.all_global_vars[i];
@@ -13224,7 +13224,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		layer.parallaxY = py / 100;
 		if (layer.parallaxX !== 1 || layer.parallaxY !== 1)
 		{
-			var i, len, instances = layer.instances;
+			let i, len, instances = layer.instances;
 			for (i = 0, len = instances.length; i < len; ++i)
 			{
 				instances[i].type.any_instance_parallaxed = true;
@@ -13236,9 +13236,9 @@ cr.system_object.prototype.loadFromJSON = function (o)
     {
         if (!layer)
             return;
-		var r = cr.GetRValue(c);
-		var g = cr.GetGValue(c);
-		var b = cr.GetBValue(c);
+		let r = cr.GetRValue(c);
+		let g = cr.GetGValue(c);
+		let b = cr.GetBValue(c);
 		if (layer.background_color[0] === r && layer.background_color[1] === g && layer.background_color[2] === b)
 			return;
         layer.background_color[0] = r;
@@ -13280,7 +13280,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		if (this.runtime.changelayout)
 			return;		// already changing to different layout
 ;
-		var l;
+		let l;
 		for (l in this.runtime.layouts)
 		{
 			if (this.runtime.layouts.hasOwnProperty(l) && cr.equals_nocase(l, layoutname))
@@ -13300,7 +13300,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		if (!this.runtime.running_layout)
 			return;
 		this.runtime.changelayout = this.runtime.running_layout;
-		var i, len, g;
+		let i, len, g;
 		for (i = 0, len = this.runtime.allGroups.length; i < len; i++)
 		{
 			g = this.runtime.allGroups[i];
@@ -13315,8 +13315,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (w <= 0 || h <= 0)
 			return;
-		var mode = this.runtime.fullscreen_mode;
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.runtime.isNodeFullscreen);
+		let mode = this.runtime.fullscreen_mode;
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.runtime.isNodeFullscreen);
 		if (isfullscreen && this.runtime.fullscreen_scaling > 0)
 			mode = this.runtime.fullscreen_scaling;
 		if (mode === 0)
@@ -13334,10 +13334,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!this.runtime.running_layout || !this.runtime.glwrap)
 			return;
-		var et = this.runtime.running_layout.getEffectByName(effectname_);
+		let et = this.runtime.running_layout.getEffectByName(effectname_);
 		if (!et)
 			return;		// effect name not found
-		var enable = (enable_ === 1);
+		let enable = (enable_ === 1);
 		if (et.active == enable)
 			return;		// no change
 		et.active = enable;
@@ -13348,10 +13348,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!layer || !this.runtime.glwrap)
 			return;
-		var et = layer.getEffectByName(effectname_);
+		let et = layer.getEffectByName(effectname_);
 		if (!et)
 			return;		// effect name not found
-		var enable = (enable_ === 1);
+		let enable = (enable_ === 1);
 		if (et.active == enable)
 			return;		// no change
 		et.active = enable;
@@ -13362,10 +13362,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!this.runtime.running_layout || !this.runtime.glwrap)
 			return;
-		var et = this.runtime.running_layout.getEffectByName(effectname_);
+		let et = this.runtime.running_layout.getEffectByName(effectname_);
 		if (!et)
 			return;		// effect name not found
-		var params = this.runtime.running_layout.effect_params[et.index];
+		let params = this.runtime.running_layout.effect_params[et.index];
 		index_ = Math.floor(index_);
 		if (index_ < 0 || index_ >= params.length)
 			return;		// effect index out of bounds
@@ -13381,10 +13381,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!layer || !this.runtime.glwrap)
 			return;
-		var et = layer.getEffectByName(effectname_);
+		let et = layer.getEffectByName(effectname_);
 		if (!et)
 			return;		// effect name not found
-		var params = layer.effect_params[et.index];
+		let params = layer.effect_params[et.index];
 		index_ = Math.floor(index_);
 		if (index_ < 0 || index_ >= params.length)
 			return;		// effect index out of bounds
@@ -13414,7 +13414,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysActs.prototype.SetFullscreenQuality = function (q)
 	{
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen);
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen);
 		if (!isfullscreen && this.runtime.fullscreen_mode === 0)
 			return;
 		this.runtime.wantFullscreenScalingQuality = (q !== 0);
@@ -13422,7 +13422,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysActs.prototype.ResetPersisted = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.runtime.layouts_by_index.length; i < len; ++i)
 		{
 			this.runtime.layouts_by_index[i].persist_data = {};
@@ -13450,13 +13450,13 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	function SortZOrderList(a, b)
 	{
-		var layerA = a[0];
-		var layerB = b[0];
-		var diff = layerA - layerB;
+		let layerA = a[0];
+		let layerB = b[0];
+		let diff = layerA - layerB;
 		if (diff !== 0)
 			return diff;
-		var indexA = a[1];
-		var indexB = b[1];
+		let indexA = a[1];
+		let indexB = b[1];
 		return indexA - indexB;
 	};
 	function SortInstancesByValue(a, b)
@@ -13467,14 +13467,14 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!obj)
 			return;
-		var i, len, inst, value, r, layer, toZ;
-		var sol = obj.getCurrentSol();
-		var pickedInstances = sol.getObjects();
-		var zOrderList = [];
-		var instValues = [];
-		var layout = this.runtime.running_layout;
-		var isFamily = obj.is_family;
-		var familyIndex = obj.family_index;
+		let i, len, inst, value, r, layer, toZ;
+		let sol = obj.getCurrentSol();
+		let pickedInstances = sol.getObjects();
+		let zOrderList = [];
+		let instValues = [];
+		let layout = this.runtime.running_layout;
+		let isFamily = obj.is_family;
+		let familyIndex = obj.family_index;
 		for (i = 0, len = pickedInstances.length; i < len; ++i)
 		{
 			inst = pickedInstances[i];
@@ -13614,10 +13614,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysExps.prototype.max = function(ret)
     {
-		var max_ = arguments[1];
+		let max_ = arguments[1];
 		if (typeof max_ !== "number")
 			max_ = 0;
-		var i, len, a;
+		let i, len, a;
 		for (i = 2, len = arguments.length; i < len; i++)
 		{
 			a = arguments[i];
@@ -13630,10 +13630,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysExps.prototype.min = function(ret)
     {
-        var min_ = arguments[1];
+        let min_ = arguments[1];
 		if (typeof min_ !== "number")
 			min_ = 0;
-		var i, len, a;
+		let i, len, a;
 		for (i = 2, len = arguments.length; i < len; i++)
 		{
 			a = arguments[i];
@@ -13674,7 +13674,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysExps.prototype.loopindex = function(ret, name_)
     {
-		var loop, i, len;
+		let loop, i, len;
         if (!this.runtime.loop_stack.length)
         {
             ret.set_int(0);
@@ -13762,7 +13762,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerscale = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13770,7 +13770,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layeropacity = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13778,7 +13778,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerscalerate = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13786,7 +13786,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerparallaxx = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13794,7 +13794,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerparallaxy = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13802,7 +13802,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerindex = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_int(-1);
 		else
@@ -13821,7 +13821,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.layerangle = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		if (!layer)
 			ret.set_float(0);
 		else
@@ -13865,8 +13865,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (cr.is_string(text) && cr.is_string(sep))
 		{
-			var arr = text.split(sep);
-			var i = cr.floor(index_);
+			let arr = text.split(sep);
+			let i = cr.floor(index_);
 			if (i < 0 || i >= arr.length)
 				ret.set_string("");
 			else
@@ -13918,7 +13918,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.choose = function (ret)
 	{
-		var index = cr.floor(Math.random() * (arguments.length - 1));
+		let index = cr.floor(Math.random() * (arguments.length - 1));
 		ret.set_any(arguments[index + 1]);
 	};
 	SysExps.prototype.rgb = function (ret, r, g, b)
@@ -13937,7 +13937,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		a = cr.to_radians(a);
 		b = cr.to_radians(b);
-		var diff = cr.angleDiff(a, b);
+		let diff = cr.angleDiff(a, b);
 		if (cr.angleClockwise(b, a))
 		{
 			ret.set_float(cr.to_clamped_degrees(a + diff * x));
@@ -13956,10 +13956,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.zeropad = function (ret, n, d)
 	{
-		var s = (n < 0 ? "-" : "");
+		let s = (n < 0 ? "-" : "");
 		if (n < 0) n = -n;
-		var zeroes = d - n.toString().length;
-		for (var i = 0; i < zeroes; i++)
+		let zeroes = d - n.toString().length;
+		for (let i = 0; i < zeroes; i++)
 			s += "0";
 		ret.set_string(s + n.toString());
 	};
@@ -13969,22 +13969,22 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.viewportleft = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.viewLeft : 0);
 	};
 	SysExps.prototype.viewporttop = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.viewTop : 0);
 	};
 	SysExps.prototype.viewportright = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.viewRight : 0);
 	};
 	SysExps.prototype.viewportbottom = function (ret, layerparam)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.viewBottom : 0);
 	};
 	SysExps.prototype.loadingprogress = function (ret)
@@ -14009,22 +14009,22 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.canvastolayerx = function (ret, layerparam, x, y)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.canvasToLayer(x, y, true) : 0);
 	};
 	SysExps.prototype.canvastolayery = function (ret, layerparam, x, y)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.canvasToLayer(x, y, false) : 0);
 	};
 	SysExps.prototype.layertocanvasx = function (ret, layerparam, x, y)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.layerToCanvas(x, y, true) : 0);
 	};
 	SysExps.prototype.layertocanvasy = function (ret, layerparam, x, y)
 	{
-		var layer = this.runtime.getLayer(layerparam);
+		let layer = this.runtime.getLayer(layerparam);
 		ret.set_float(layer ? layer.layerToCanvas(x, y, false) : 0);
 	};
 	SysExps.prototype.savestatejson = function (ret)
@@ -14040,23 +14040,23 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.regexsearch = function (ret, str_, regex_, flags_)
 	{
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		ret.set_int(str_ ? str_.search(regex) : -1);
 	};
 	SysExps.prototype.regexreplace = function (ret, str_, regex_, flags_, replace_)
 	{
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		ret.set_string(str_ ? str_.replace(regex, replace_) : "");
 	};
-	var regexMatches = [];
-	var lastMatchesStr = "";
-	var lastMatchesRegex = "";
-	var lastMatchesFlags = "";
+	let regexMatches = [];
+	let lastMatchesStr = "";
+	let lastMatchesRegex = "";
+	let lastMatchesFlags = "";
 	function updateRegexMatches(str_, regex_, flags_)
 	{
 		if (str_ === lastMatchesStr && regex_ === lastMatchesRegex && flags_ === lastMatchesFlags)
 			return;
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		regexMatches = str_.match(regex);
 		lastMatchesStr = str_;
 		lastMatchesRegex = regex_;
@@ -14064,14 +14064,14 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	SysExps.prototype.regexmatchcount = function (ret, str_, regex_, flags_)
 	{
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		updateRegexMatches(str_.toString(), regex_, flags_);
 		ret.set_int(regexMatches ? regexMatches.length : 0);
 	};
 	SysExps.prototype.regexmatchat = function (ret, str_, regex_, flags_, index_)
 	{
 		index_ = Math.floor(index_);
-		var regex = getRegex(regex_, flags_);
+		let regex = getRegex(regex_, flags_);
 		updateRegexMatches(str_.toString(), regex_, flags_);
 		if (!regexMatches || index_ < 0 || index_ >= regexMatches.length)
 			ret.set_string("");
@@ -14112,8 +14112,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	sysProto.exps = new SysExps();
 	sysProto.runWaits = function ()
 	{
-		var i, j, len, w, k, s, ss;
-		var evinfo = this.runtime.getCurrentEventStack();
+		let i, j, len, w, k, s, ss;
+		let evinfo = this.runtime.getCurrentEventStack();
 		for (i = 0, len = this.waits.length; i < len; i++)
 		{
 			w = this.waits[i];
@@ -14161,22 +14161,22 @@ cr.system_object.prototype.loadFromJSON = function (o)
 (function () {
 	cr.add_common_aces = function (m, pluginProto)
 	{
-		var singleglobal_ = m[1];
-		var position_aces = m[3];
-		var size_aces = m[4];
-		var angle_aces = m[5];
-		var appearance_aces = m[6];
-		var zorder_aces = m[7];
-		var effects_aces = m[8];
+		let singleglobal_ = m[1];
+		let position_aces = m[3];
+		let size_aces = m[4];
+		let angle_aces = m[5];
+		let appearance_aces = m[6];
+		let zorder_aces = m[7];
+		let effects_aces = m[8];
 		if (!pluginProto.cnds)
 			pluginProto.cnds = {};
 		if (!pluginProto.acts)
 			pluginProto.acts = {};
 		if (!pluginProto.exps)
 			pluginProto.exps = {};
-		var cnds = pluginProto.cnds;
-		var acts = pluginProto.acts;
-		var exps = pluginProto.exps;
+		let cnds = pluginProto.cnds;
+		let acts = pluginProto.acts;
+		let exps = pluginProto.exps;
 		if (position_aces)
 		{
 			cnds.CompareX = function (cmp, x)
@@ -14189,28 +14189,28 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			cnds.IsOnScreen = function ()
 			{
-				var layer = this.layer;
+				let layer = this.layer;
 				this.update_bbox();
-				var bbox = this.bbox;
+				let bbox = this.bbox;
 				return !(bbox.right < layer.viewLeft || bbox.bottom < layer.viewTop || bbox.left > layer.viewRight || bbox.top > layer.viewBottom);
 			};
 			cnds.IsOutsideLayout = function ()
 			{
 				this.update_bbox();
-				var bbox = this.bbox;
-				var layout = this.runtime.running_layout;
+				let bbox = this.bbox;
+				let layout = this.runtime.running_layout;
 				return (bbox.right < 0 || bbox.bottom < 0 || bbox.left > layout.width || bbox.top > layout.height);
 			};
 			cnds.PickDistance = function (which, x, y)
 			{
-				var sol = this.getCurrentSol();
-				var instances = sol.getObjects();
+				let sol = this.getCurrentSol();
+				let instances = sol.getObjects();
 				if (!instances.length)
 					return false;
-				var inst = instances[0];
-				var pickme = inst;
-				var dist = cr.distanceTo(inst.x, inst.y, x, y);
-				var i, len, d;
+				let inst = instances[0];
+				let pickme = inst;
+				let dist = cr.distanceTo(inst.x, inst.y, x, y);
+				let i, len, d;
 				for (i = 1, len = instances.length; i < len; i++)
 				{
 					inst = instances[i];
@@ -14251,10 +14251,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.SetPosToObject = function (obj, imgpt)
 			{
-				var inst = obj.getPairedInstance(this);
+				let inst = obj.getPairedInstance(this);
 				if (!inst)
 					return;
-				var newx, newy;
+				let newx, newy;
 				if (inst.getImagePoint)
 				{
 					newx = inst.getImagePoint(imgpt, true);
@@ -14379,10 +14379,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			cnds.IsBetweenAngles = function (a, b)
 			{
-				var lower = cr.to_clamped_radians(a);
-				var upper = cr.to_clamped_radians(b);
-				var angle = cr.clamp_angle(this.angle);
-				var obtuse = (!cr.angleClockwise(upper, lower));
+				let lower = cr.to_clamped_radians(a);
+				let upper = cr.to_clamped_radians(b);
+				let angle = cr.clamp_angle(this.angle);
+				let obtuse = (!cr.angleClockwise(upper, lower));
 				if (obtuse)
 					return !(!cr.angleClockwise(angle, lower) && cr.angleClockwise(angle, upper));
 				else
@@ -14390,7 +14390,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.SetAngle = function (a)
 			{
-				var newangle = cr.to_radians(cr.clamp_angle_degrees(a));
+				let newangle = cr.to_radians(cr.clamp_angle_degrees(a));
 				if (isNaN(newangle))
 					return;
 				if (this.angle !== newangle)
@@ -14419,7 +14419,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.RotateTowardAngle = function (amt, target)
 			{
-				var newangle = cr.angleRotate(this.angle, cr.to_radians(target), cr.to_radians(amt));
+				let newangle = cr.angleRotate(this.angle, cr.to_radians(target), cr.to_radians(amt));
 				if (isNaN(newangle))
 					return;
 				if (this.angle !== newangle)
@@ -14430,10 +14430,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.RotateTowardPosition = function (amt, x, y)
 			{
-				var dx = x - this.x;
-				var dy = y - this.y;
-				var target = Math.atan2(dy, dx);
-				var newangle = cr.angleRotate(this.angle, target, cr.to_radians(amt));
+				let dx = x - this.x;
+				let dy = y - this.y;
+				let target = Math.atan2(dy, dx);
+				let newangle = cr.angleRotate(this.angle, target, cr.to_radians(amt));
 				if (isNaN(newangle))
 					return;
 				if (this.angle !== newangle)
@@ -14444,9 +14444,9 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.SetTowardPosition = function (x, y)
 			{
-				var dx = x - this.x;
-				var dy = y - this.y;
-				var newangle = Math.atan2(dy, dx);
+				let dx = x - this.x;
+				let dy = y - this.y;
+				let newangle = Math.atan2(dy, dx);
 				if (isNaN(newangle))
 					return;
 				if (this.angle !== newangle)
@@ -14472,14 +14472,14 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			cnds.PickInstVarHiLow = function (which, iv)
 			{
-				var sol = this.getCurrentSol();
-				var instances = sol.getObjects();
+				let sol = this.getCurrentSol();
+				let instances = sol.getObjects();
 				if (!instances.length)
 					return false;
-				var inst = instances[0];
-				var pickme = inst;
-				var val = inst.instance_vars[iv];
-				var i, len, v;
+				let inst = instances[0];
+				let pickme = inst;
+				let val = inst.instance_vars[iv];
+				let i, len, v;
 				for (i = 1, len = instances.length; i < len; i++)
 				{
 					inst = instances[i];
@@ -14495,8 +14495,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			cnds.PickByUID = function (u)
 			{
-				var i, len, j, inst, families, instances, sol;
-				var cnd = this.runtime.getCurrentCondition();
+				let i, len, j, inst, families, instances, sol;
+				let cnd = this.runtime.getCurrentCondition();
 				if (cnd.inverted)
 				{
 					sol = this.getCurrentSol();
@@ -14575,7 +14575,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.SetInstanceVar = function (iv, val)
 			{
-				var myinstvars = this.instance_vars;
+				let myinstvars = this.instance_vars;
 				if (cr.is_number(myinstvars[iv]))
 				{
 					if (cr.is_number(val))
@@ -14665,8 +14665,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			}
 			exps.Count = function (ret)
 			{
-				var count = ret.object_class.instances.length;
-				var i, len, inst;
+				let count = ret.object_class.instances.length;
+				let i, len, inst;
 				for (i = 0, len = this.runtime.createRow.length; i < len; i++)
 				{
 					inst = this.runtime.createRow[i];
@@ -14723,7 +14723,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.SetOpacity = function (x)
 			{
-				var new_opacity = x / 100.0;
+				let new_opacity = x / 100.0;
 				if (new_opacity < 0)
 					new_opacity = 0;
 				else if (new_opacity > 1)
@@ -14749,13 +14749,13 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			cnds.PickTopBottom = function (which_)
 			{
-				var sol = this.getCurrentSol();
-				var instances = sol.getObjects();
+				let sol = this.getCurrentSol();
+				let instances = sol.getObjects();
 				if (!instances.length)
 					return false;
-				var inst = instances[0];
-				var pickme = inst;
-				var i, len;
+				let inst = instances[0];
+				let pickme = inst;
+				let i, len;
 				for (i = 1, len = instances.length; i < len; i++)
 				{
 					inst = instances[i];
@@ -14779,8 +14779,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.MoveToTop = function ()
 			{
-				var layer = this.layer;
-				var layer_instances = layer.instances;
+				let layer = this.layer;
+				let layer_instances = layer.instances;
 				if (layer_instances.length && layer_instances[layer_instances.length - 1] === this)
 					return;		// is already at top
 				layer.removeFromInstanceList(this, false);
@@ -14789,8 +14789,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.MoveToBottom = function ()
 			{
-				var layer = this.layer;
-				var layer_instances = layer.instances;
+				let layer = this.layer;
+				let layer_instances = layer.instances;
 				if (layer_instances.length && layer_instances[0] === this)
 					return;		// is already at bottom
 				layer.removeFromInstanceList(this, false);
@@ -14808,10 +14808,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			};
 			acts.ZMoveToObject = function (where_, obj_)
 			{
-				var isafter = (where_ === 0);
+				let isafter = (where_ === 0);
 				if (!obj_)
 					return;
-				var other = obj_.getFirstPicked(this);
+				let other = obj_.getFirstPicked(this);
 				if (!other || other.uid === this.uid)
 					return;
 				if (this.layer.index !== other.layer.index)
@@ -14842,10 +14842,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			{
 				if (!this.runtime.glwrap)
 					return;
-				var i = this.type.getEffectIndexByName(effectname_);
+				let i = this.type.getEffectIndexByName(effectname_);
 				if (i < 0)
 					return;		// effect name not found
-				var enable = (enable_ === 1);
+				let enable = (enable_ === 1);
 				if (this.active_effect_flags[i] === enable)
 					return;		// no change
 				this.active_effect_flags[i] = enable;
@@ -14856,11 +14856,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
 			{
 				if (!this.runtime.glwrap)
 					return;
-				var i = this.type.getEffectIndexByName(effectname_);
+				let i = this.type.getEffectIndexByName(effectname_);
 				if (i < 0)
 					return;		// effect name not found
-				var et = this.type.effect_types[i];
-				var params = this.effect_params[i];
+				let et = this.type.effect_types[i];
+				let params = this.effect_params[i];
 				index_ = Math.floor(index_);
 				if (index_ < 0 || index_ >= params.length)
 					return;		// effect index out of bounds
@@ -14880,7 +14880,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		this.cell_changed = true;
 		this.type.any_cell_changed = true;	// avoid unnecessary updateAllBBox() calls
 		this.runtime.redraw = true;     	// assume runtime needs to redraw
-		var i, len, callbacks = this.bbox_changed_callbacks;
+		let i, len, callbacks = this.bbox_changed_callbacks;
 		for (i = 0, len = callbacks.length; i < len; ++i)
 		{
 			callbacks[i](this);
@@ -14899,8 +14899,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!this.bbox_changed)
 			return;                 // bounding box not changed
-		var bbox = this.bbox;
-		var bquad = this.bquad;
+		let bbox = this.bbox;
+		let bquad = this.bquad;
 		bbox.set(this.x, this.y, this.x + this.width, this.y + this.height);
 		bbox.offset(-this.hotspotX * this.width, -this.hotspotY * this.height);
 		if (!this.angle)
@@ -14918,13 +14918,13 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		this.bbox_changed = false;  // bounding box up to date
 		this.update_render_cell();
 	};
-	var tmprc = new cr.rect(0, 0, 0, 0);
+	let tmprc = new cr.rect(0, 0, 0, 0);
 	cr.update_render_cell = function ()
 	{
 		if (!this.layer.useRenderCells)
 			return;
-		var mygrid = this.layer.render_grid;
-		var bbox = this.bbox;
+		let mygrid = this.layer.render_grid;
+		let bbox = this.bbox;
 		tmprc.set(mygrid.XToCell(bbox.left), mygrid.YToCell(bbox.top), mygrid.XToCell(bbox.right), mygrid.YToCell(bbox.bottom));
 		if (this.rendercells.equals(tmprc))
 			return;
@@ -14940,8 +14940,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		if (!this.cell_changed || !this.collisionsEnabled)
 			return;
 		this.update_bbox();
-		var mygrid = this.type.collision_grid;
-		var bbox = this.bbox;
+		let mygrid = this.type.collision_grid;
+		let bbox = this.bbox;
 		tmprc.set(mygrid.XToCell(bbox.left), mygrid.YToCell(bbox.top), mygrid.XToCell(bbox.right), mygrid.YToCell(bbox.bottom));
 		if (this.collcells.equals(tmprc))
 			return;
@@ -14981,8 +14981,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	cr.inst_updateActiveEffects = function ()
 	{
 		cr.clearArray(this.active_effect_types);
-		var i, len, et;
-		var preserves_opaqueness = true;
+		let i, len, et;
+		let preserves_opaqueness = true;
 		for (i = 0, len = this.active_effect_flags.length; i < len; i++)
 		{
 			if (this.active_effect_flags[i])
@@ -15004,7 +15004,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (frominst && frominst.is_contained && frominst.type != this)
 		{
-			var i, len, s;
+			let i, len, s;
 			for (i = 0, len = frominst.siblings.length; i < len; i++)
 			{
 				s = frominst.siblings[i];
@@ -15012,7 +15012,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 					return s;
 			}
 		}
-		var instances = this.getCurrentSol().getObjects();
+		let instances = this.getCurrentSol().getObjects();
 		if (instances.length)
 			return instances[0];
 		else
@@ -15020,7 +15020,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	cr.type_getPairedInstance = function (inst)
 	{
-		var instances = this.getCurrentSol().getObjects();
+		let instances = this.getCurrentSol().getObjects();
 		if (instances.length)
 			return instances[inst.get_iid() % instances.length];
 		else
@@ -15030,11 +15030,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!this.stale_iids || this.is_family)
 			return;		// up to date or is family - don't want family to overwrite IIDs
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.instances.length; i < len; i++)
 			this.instances[i].iid = i;
-		var next_iid = i;
-		var createRow = this.runtime.createRow;
+		let next_iid = i;
+		let createRow = this.runtime.createRow;
 		for (i = 0, len = createRow.length; i < len; ++i)
 		{
 			if (createRow[i].type === this)
@@ -15047,8 +15047,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		if (i < this.instances.length)
 			return this.instances[i];
 		i -= this.instances.length;
-		var createRow = this.runtime.createRow;
-		var j, lenj;
+		let createRow = this.runtime.createRow;
+		let j, lenj;
 		for (j = 0, lenj = createRow.length; j < lenj; ++j)
 		{
 			if (createRow[j].type === this)
@@ -15083,8 +15083,8 @@ cr.system_object.prototype.loadFromJSON = function (o)
 		this.cur_sol++;
 		if (this.cur_sol === this.solstack.length)
 			this.solstack.push(new cr.selection(this));
-		var clonesol = this.solstack[this.cur_sol];
-		var prevsol = this.solstack[this.cur_sol - 1];
+		let clonesol = this.solstack[this.cur_sol];
+		let prevsol = this.solstack[this.cur_sol - 1];
 		if (prevsol.select_all)
 		{
 			clonesol.select_all = true;
@@ -15103,7 +15103,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	cr.type_getBehaviorByName = function (behname)
 	{
-		var i, len, j, lenj, f, index = 0;
+		let i, len, j, lenj, f, index = 0;
 		if (!this.is_family)
 		{
 			for (i = 0, len = this.families.length; i < len; i++)
@@ -15132,7 +15132,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	cr.type_getBehaviorIndexByName = function (behname)
 	{
-		var b = this.getBehaviorByName(behname);
+		let b = this.getBehaviorByName(behname);
 		if (b)
 			return this.extra["lastBehIndex"];
 		else
@@ -15140,7 +15140,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
 	cr.type_getEffectIndexByName = function (name_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.effect_types.length; i < len; i++)
 		{
 			if (this.effect_types[i].name === name_)
@@ -15152,12 +15152,12 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	{
 		if (!this.is_contained || this.is_family)
 			return;
-		var i, len, j, lenj, t, sol, sol2;
+		let i, len, j, lenj, t, sol, sol2;
 		this.updateIIDs();
 		sol = this.getCurrentSol();
-		var select_all = sol.select_all;
-		var es = this.runtime.getCurrentEventStack();
-		var orblock = es && es.current_event && es.current_event.orblock;
+		let select_all = sol.select_all;
+		let es = this.runtime.getCurrentEventStack();
+		let orblock = es && es.current_event && es.current_event.orblock;
 		for (i = 0, len = this.container.length; i < len; i++)
 		{
 			t = this.container[i];
@@ -15217,57 +15217,57 @@ cr.plugins_.Audio = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Audio.prototype;
+	let pluginProto = cr.plugins_.Audio.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 	};
-	var audRuntime = null;
-	var audInst = null;
-	var audTag = "";
-	var appPath = "";			// for Cordova only
-	var API_HTML5 = 0;
-	var API_WEBAUDIO = 1;
-	var API_CORDOVA = 2;
-	var API_APPMOBI = 3;
-	var api = API_HTML5;
-	var context = null;
-	var audioBuffers = [];		// cache of buffers
-	var audioInstances = [];	// cache of instances
-	var lastAudio = null;
-	var useOgg = false;			// determined at create time
-	var timescale_mode = 0;
-	var silent = false;
-	var masterVolume = 1;
-	var listenerX = 0;
-	var listenerY = 0;
-	var isContextSuspended = false;
-	var panningModel = 1;		// HRTF
-	var distanceModel = 1;		// Inverse
-	var refDistance = 10;
-	var maxDistance = 10000;
-	var rolloffFactor = 1;
-	var micSource = null;
-	var micTag = "";
-	var useNextTouchWorkaround = false;			// heuristic in case play() does not return a promise and we have to guess if the play was blocked
-	var playOnNextInput = [];					// C2AudioInstances with HTMLAudioElements to play on next input event
-	var playMusicAsSoundWorkaround = false;		// play music tracks with Web Audio API
-	var hasPlayedDummyBuffer = false;			// dummy buffer played to unblock AudioContext on some platforms
+	let audRuntime = null;
+	let audInst = null;
+	let audTag = "";
+	let appPath = "";			// for Cordova only
+	let API_HTML5 = 0;
+	let API_WEBAUDIO = 1;
+	let API_CORDOVA = 2;
+	let API_APPMOBI = 3;
+	let api = API_HTML5;
+	let context = null;
+	let audioBuffers = [];		// cache of buffers
+	let audioInstances = [];	// cache of instances
+	let lastAudio = null;
+	let useOgg = false;			// determined at create time
+	let timescale_mode = 0;
+	let silent = false;
+	let masterVolume = 1;
+	let listenerX = 0;
+	let listenerY = 0;
+	let isContextSuspended = false;
+	let panningModel = 1;		// HRTF
+	let distanceModel = 1;		// Inverse
+	let refDistance = 10;
+	let maxDistance = 10000;
+	let rolloffFactor = 1;
+	let micSource = null;
+	let micTag = "";
+	let useNextTouchWorkaround = false;			// heuristic in case play() does not return a promise and we have to guess if the play was blocked
+	let playOnNextInput = [];					// C2AudioInstances with HTMLAudioElements to play on next input event
+	let playMusicAsSoundWorkaround = false;		// play music tracks with Web Audio API
+	let hasPlayedDummyBuffer = false;			// dummy buffer played to unblock AudioContext on some platforms
 	function addAudioToPlayOnNextInput(a)
 	{
-		var i = playOnNextInput.indexOf(a);
+		let i = playOnNextInput.indexOf(a);
 		if (i === -1)
 			playOnNextInput.push(a);
 	};
 	function tryPlayAudioElement(a)
 	{
-		var audioElem = a.instanceObject;
-		var playRet;
+		let audioElem = a.instanceObject;
+		let playRet;
 		try {
 			playRet = audioElem.play();
 		}
@@ -15289,14 +15289,14 @@ cr.plugins_.Audio = function(runtime)
 	};
 	function playQueuedAudio()
 	{
-		var i, len, m, playRet;
+		let i, len, m, playRet;
 		if (!hasPlayedDummyBuffer && !isContextSuspended && context)
 		{
 			playDummyBuffer();
 			if (context["state"] === "running")
 				hasPlayedDummyBuffer = true;
 		}
-		var tryPlay = playOnNextInput.slice(0);
+		let tryPlay = playOnNextInput.slice(0);
 		cr.clearArray(playOnNextInput);
 		if (!silent)
 		{
@@ -15323,8 +15323,8 @@ cr.plugins_.Audio = function(runtime)
 			context["resume"]();
 		if (!context["createBuffer"])
 			return;
-		var buffer = context["createBuffer"](1, 220, 22050);
-		var source = context["createBufferSource"]();
+		let buffer = context["createBuffer"](1, 220, 22050);
+		let source = context["createBufferSource"]();
 		source["buffer"] = buffer;
 		source["connect"](context["destination"]);
 		startSource(source);
@@ -15336,7 +15336,7 @@ cr.plugins_.Audio = function(runtime)
 	document.addEventListener("gamepadconnected", playQueuedAudio, true);
 	function dbToLinear(x)
 	{
-		var v = dbToLinear_nocap(x);
+		let v = dbToLinear_nocap(x);
 		if (!isFinite(v))	// accidentally passing a string can result in NaN; set volume to 0 if so
 			v = 0;
 		if (v < 0)
@@ -15361,7 +15361,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		return (Math.log(x) / Math.log(10)) * 20;
 	};
-	var effects = {};
+	let effects = {};
 	function getDestinationForTag(tag)
 	{
 		tag = tag.toLowerCase();
@@ -15420,7 +15420,7 @@ cr.plugins_.Audio = function(runtime)
 			ap["value"] = value;
 			return;
 		}
-		var curTime = context["currentTime"];
+		let curTime = context["currentTime"];
 		time += curTime;
 		switch (ramp) {
 		case 0:		// step
@@ -15436,7 +15436,7 @@ cr.plugins_.Audio = function(runtime)
 			break;
 		}
 	};
-	var filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "peaking", "notch", "allpass"];
+	let filterTypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "peaking", "notch", "allpass"];
 	function FilterEffect(type, freq, detune, q, gain, mix)
 	{
 		this.type = "filter";
@@ -15938,22 +15938,22 @@ cr.plugins_.Audio = function(runtime)
 	}
 	DistortionEffect.prototype.shape = function (x, linearThreshold, linearHeadroom)
 	{
-		var maximum = 1.05 * linearHeadroom * linearThreshold;
-		var kk = (maximum - linearThreshold);
-		var sign = x < 0 ? -1 : +1;
-		var absx = x < 0 ? -x : x;
-		var shapedInput = absx < linearThreshold ? absx : linearThreshold + kk * e4(absx - linearThreshold, 1.0 / kk);
+		let maximum = 1.05 * linearHeadroom * linearThreshold;
+		let kk = (maximum - linearThreshold);
+		let sign = x < 0 ? -1 : +1;
+		let absx = x < 0 ? -x : x;
+		let shapedInput = absx < linearThreshold ? absx : linearThreshold + kk * e4(absx - linearThreshold, 1.0 / kk);
 		shapedInput *= sign;
 		return shapedInput;
 	};
 	DistortionEffect.prototype.generateColortouchCurve = function (threshold, headroom)
 	{
-		var linearThreshold = dbToLinear_nocap(threshold);
-		var linearHeadroom = dbToLinear_nocap(headroom);
-		var n = 65536;
-		var n2 = n / 2;
-		var x = 0;
-		for (var i = 0; i < n2; ++i) {
+		let linearThreshold = dbToLinear_nocap(threshold);
+		let linearHeadroom = dbToLinear_nocap(headroom);
+		let n = 65536;
+		let n2 = n / 2;
+		let x = 0;
+		for (let i = 0; i < n2; ++i) {
 			x = i / n2;
 			x = this.shape(x, linearThreshold, linearHeadroom);
 			this.curve[n2 + i] = x;
@@ -16039,11 +16039,11 @@ cr.plugins_.Audio = function(runtime)
 	{
 		this.node["getFloatFrequencyData"](this.freqBins);
 		this.node["getByteTimeDomainData"](this.signal);
-		var fftSize = this.node["fftSize"];
-		var i = 0;
+		let fftSize = this.node["fftSize"];
+		let i = 0;
 		this.peak = 0;
-		var rmsSquaredSum = 0;
-		var s = 0;
+		let rmsSquaredSum = 0;
+		let s = 0;
 		for ( ; i < fftSize; i++)
 		{
 			s = (this.signal[i] - 128) / 128;
@@ -16094,7 +16094,7 @@ cr.plugins_.Audio = function(runtime)
 		this.myapi = api;
 		this.is_music = is_music;
 		this.added_end_listener = false;
-		var self = this;
+		let self = this;
 		this.outNode = null;
 		this.mediaSourceNode = null;
 		this.panWhenReady = [];		// for web audio API positioned sounds
@@ -16110,7 +16110,7 @@ cr.plugins_.Audio = function(runtime)
 		}
 		this.bufferObject = null;			// actual audio object
 		this.audioData = null;				// web audio api: ajax request result (compressed audio that needs decoding)
-		var request;
+		let request;
 		switch (this.myapi) {
 		case API_HTML5:
 			this.bufferObject = new Audio();
@@ -16171,7 +16171,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioBuffer.prototype.release = function ()
 	{
-		var i, len, j, a;
+		let i, len, j, a;
 		for (i = 0, j = 0, len = audioInstances.length; i < len; ++i)
 		{
 			a = audioInstances[i];
@@ -16199,13 +16199,13 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (this.bufferObject || !this.audioData)
 			return;		// audio already decoded or AJAX request not yet complete
-		var self = this;
+		let self = this;
 		if (context["decodeAudioData"])
 		{
 			context["decodeAudioData"](this.audioData, function (buffer) {
 					self.bufferObject = buffer;
 					self.audioData = null;		// clear AJAX response to allow GC and save memory, only need the bufferObject now
-					var p, i, len, a;
+					let p, i, len, a;
 					if (!cr.is_undefined(self.playTagWhenReady) && !silent)
 					{
 						if (self.panWhenReady.length)
@@ -16223,8 +16223,8 @@ cr.plugins_.Audio = function(runtime)
 								}
 								if (p.obj)
 								{
-									var px = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, true);
-									var py = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, false);
+									let px = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, true);
+									let py = cr.rotatePtAround(p.obj.x, p.obj.y, -p.obj.layer.getAngle(), listenerX, listenerY, false);
 									a.setPan(px, py, cr.to_degrees(p.obj.angle - p.obj.layer.getAngle()), p.ia, p.oa, p.og);
 									a.setObject(p.obj);
 								}
@@ -16250,7 +16250,7 @@ cr.plugins_.Audio = function(runtime)
 					}
 					else if (!cr.is_undefined(self.convolveWhenReady))
 					{
-						var convolveNode = self.convolveWhenReady.convolveNode;
+						let convolveNode = self.convolveWhenReady.convolveNode;
 						convolveNode["normalize"] = self.normalizeWhenReady;
 						convolveNode["buffer"] = buffer;
 					}
@@ -16264,7 +16264,7 @@ cr.plugins_.Audio = function(runtime)
 			this.audioData = null;		// clear AJAX response to allow GC and save memory, only need the bufferObject now
 			if (!cr.is_undefined(this.playTagWhenReady) && !silent)
 			{
-				var a = new C2AudioInstance(this, this.playTagWhenReady);
+				let a = new C2AudioInstance(this, this.playTagWhenReady);
 				a.play(this.loopWhenReady, this.volumeWhenReady, this.seekWhenReady);
 				if (this.pauseWhenReady)
 					a.pause();
@@ -16272,7 +16272,7 @@ cr.plugins_.Audio = function(runtime)
 			}
 			else if (!cr.is_undefined(this.convolveWhenReady))
 			{
-				var convolveNode = this.convolveWhenReady.convolveNode;
+				let convolveNode = this.convolveWhenReady.convolveNode;
 				convolveNode["normalize"] = this.normalizeWhenReady;
 				convolveNode["buffer"] = this.bufferObject;
 			}
@@ -16282,7 +16282,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		switch (this.myapi) {
 		case API_HTML5:
-			var ret = this.bufferObject["readyState"] >= 4;	// HAVE_ENOUGH_DATA
+			let ret = this.bufferObject["readyState"] >= 4;	// HAVE_ENOUGH_DATA
 			if (ret)
 				this.wasEverReady = true;
 			return ret || this.wasEverReady;
@@ -16321,7 +16321,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	function C2AudioInstance(buffer_, tag_)
 	{
-		var self = this;
+		let self = this;
 		this.tag = tag_;
 		this.fresh = true;
 		this.stopped = true;
@@ -16342,7 +16342,7 @@ cr.plugins_.Audio = function(runtime)
 		{
 			if (self.is_paused || self.resume_me)
 				return;
-			var bufferThatEnded = this;
+			let bufferThatEnded = this;
 			if (!bufferThatEnded)
 				bufferThatEnded = e.target;
 			if (bufferThatEnded !== self.active_buffer)
@@ -16367,7 +16367,7 @@ cr.plugins_.Audio = function(runtime)
 		this.panConeOuter = 0;
 		this.panConeOuterGain = 0;
 		this.instanceObject = null;
-		var add_end_listener = false;
+		let add_end_listener = false;
 		if (this.myapi === API_WEBAUDIO && this.buffer.myapi === API_HTML5 && !this.buffer.supportWebAudioAPI)
 			this.myapi = API_HTML5;
 		switch (this.myapi) {
@@ -16440,7 +16440,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.hasEnded = function ()
 	{
-		var time;
+		let time;
 		switch (this.myapi) {
 		case API_HTML5:
 			return this.instanceObject.ended;
@@ -16537,11 +16537,11 @@ cr.plugins_.Audio = function(runtime)
 			return;
 		}
 		this.objectTracker.tick(dt);
-		var inst = this.objectTracker.obj;
-		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
-		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		let inst = this.objectTracker.obj;
+		let px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		let py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
 		this.pannerNode["setPosition"](px, py, 0);
-		var a = 0;
+		let a = 0;
 		if (typeof this.objectTracker.obj.angle !== "undefined")
 		{
 			a = inst.angle - inst.layer.getAngle();
@@ -16550,10 +16550,10 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.play = function (looping, vol, fromPosition, scheduledTime)
 	{
-		var instobj = this.instanceObject;
+		let instobj = this.instanceObject;
 		this.looping = looping;
 		this.volume = vol;
-		var seekPos = fromPosition || 0;
+		let seekPos = fromPosition || 0;
 		scheduledTime = scheduledTime || 0;
 		switch (this.myapi) {
 		case API_HTML5:
@@ -16791,7 +16791,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.getDuration = function (applyPlaybackRate)
 	{
-		var ret = 0;
+		let ret = 0;
 		switch (this.myapi) {
 		case API_HTML5:
 			if (typeof this.instanceObject.duration !== "undefined")
@@ -16814,8 +16814,8 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.getPlaybackTime = function (applyPlaybackRate)
 	{
-		var duration = this.getDuration();
-		var ret = 0;
+		let duration = this.getDuration();
+		let ret = 0;
 		switch (this.myapi) {
 		case API_HTML5:
 			if (typeof this.instanceObject.currentTime !== "undefined")
@@ -16860,7 +16860,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.updateVolume = function ()
 	{
-		var volToSet = this.volume * masterVolume;
+		let volToSet = this.volume * masterVolume;
 		if (!isFinite(volToSet))
 			volToSet = 0;		// HTMLMediaElement throws if setting non-finite volume
 		switch (this.myapi) {
@@ -16951,7 +16951,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	C2AudioInstance.prototype.updatePlaybackRate = function ()
 	{
-		var r = this.playbackRate;
+		let r = this.playbackRate;
 		if (this.isTimescaled)
 			r *= audRuntime.timescale;
 		switch (this.myapi) {
@@ -17112,7 +17112,7 @@ cr.plugins_.Audio = function(runtime)
 		if (api === API_CORDOVA)
 		{
 			appPath = location.href;
-			var i = appPath.lastIndexOf("/");
+			let i = appPath.lastIndexOf("/");
 			if (i > -1)
 				appPath = appPath.substr(0, i + 1);
 			appPath = appPath.replace("file://", "");
@@ -17156,7 +17156,7 @@ cr.plugins_.Audio = function(runtime)
 		this.runtime.tickMe(this);
 		}
 	};
-	var instanceProto = pluginProto.Instance.prototype;
+	let instanceProto = pluginProto.Instance.prototype;
 	instanceProto.onCreate = function ()
 	{
 		this.runtime.audioInstance = this;
@@ -17171,8 +17171,8 @@ cr.plugins_.Audio = function(runtime)
 		maxDistance = this.properties[7];
 		rolloffFactor = this.properties[8];
 		this.listenerTracker = new ObjectTracker();
-		var draw_width = (this.runtime.draw_width || this.runtime.width);
-		var draw_height = (this.runtime.draw_height || this.runtime.height);
+		let draw_width = (this.runtime.draw_width || this.runtime.width);
+		let draw_height = (this.runtime.draw_height || this.runtime.height);
 		if (api === API_WEBAUDIO)
 		{
 			context["listener"]["setPosition"](draw_width / 2, draw_height / 2, this.listenerZ);
@@ -17190,7 +17190,7 @@ cr.plugins_.Audio = function(runtime)
 		{
 			audInst.onSuspend(s);
 		});
-		var self = this;
+		let self = this;
 		this.runtime.addDestroyCallback(function (inst)
 		{
 			self.onInstanceDestroyed(inst);
@@ -17198,7 +17198,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.onInstanceDestroyed = function (inst)
 	{
-		var i, len, a;
+		let i, len, a;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			a = audioInstances[i];
@@ -17217,7 +17217,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.saveToJSON = function ()
 	{
-		var o = {
+		let o = {
 			"silent": silent,
 			"masterVolume": masterVolume,
 			"listenerZ": this.listenerZ,
@@ -17225,8 +17225,8 @@ cr.plugins_.Audio = function(runtime)
 			"playing": [],
 			"effects": {}
 		};
-		var playingarr = o["playing"];
-		var i, len, a, d, p, panobj, playbackTime;
+		let playingarr = o["playing"];
+		let i, len, a, d, p, panobj, playbackTime;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			a = audioInstances[i];
@@ -17273,8 +17273,8 @@ cr.plugins_.Audio = function(runtime)
 			}
 			playingarr.push(d);
 		}
-		var fxobj = o["effects"];
-		var fxarr;
+		let fxobj = o["effects"];
+		let fxarr;
 		for (p in effects)
 		{
 			if (effects.hasOwnProperty(p))
@@ -17289,21 +17289,21 @@ cr.plugins_.Audio = function(runtime)
 		}
 		return o;
 	};
-	var objectTrackerUidsToLoad = [];
+	let objectTrackerUidsToLoad = [];
 	instanceProto.loadFromJSON = function (o)
 	{
-		var setSilent = o["silent"];
+		let setSilent = o["silent"];
 		masterVolume = o["masterVolume"];
 		this.listenerZ = o["listenerZ"];
 		this.listenerTracker.setObject(null);
-		var listenerUid = o["listenerUid"];
+		let listenerUid = o["listenerUid"];
 		if (listenerUid !== -1)
 		{
 			this.listenerTracker.loadUid = listenerUid;
 			objectTrackerUidsToLoad.push(this.listenerTracker);
 		}
-		var playingarr = o["playing"];
-		var i, len, d, src, is_music, tag, playbackTime, looping, vol, b, a, p, pan, panObjUid;
+		let playingarr = o["playing"];
+		let i, len, d, src, is_music, tag, playbackTime, looping, vol, b, a, p, pan, panObjUid;
 		if (this.saveload !== 3)
 		{
 			for (i = 0, len = audioInstances.length; i < len; i++)
@@ -17316,7 +17316,7 @@ cr.plugins_.Audio = function(runtime)
 				a.stop();
 			}
 		}
-		var fxarr, fxtype, fxparams, fx;
+		let fxarr, fxtype, fxparams, fx;
 		for (p in effects)
 		{
 			if (effects.hasOwnProperty(p))
@@ -17461,7 +17461,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.afterLoad = function ()
 	{
-		var i, len, ot, inst;
+		let i, len, ot, inst;
 		for (i = 0, len = objectTrackerUidsToLoad.length; i < len; i++)
 		{
 			ot = objectTrackerUidsToLoad[i];
@@ -17485,7 +17485,7 @@ cr.plugins_.Audio = function(runtime)
 			context["resume"]();
 			isContextSuspended = false;
 		}
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 			audioInstances[i].setSuspended(s);
 		if (s && context && context["suspend"])
@@ -17496,8 +17496,8 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.tick = function ()
 	{
-		var dt = this.runtime.dt;
-		var i, len, a;
+		let dt = this.runtime.dt;
+		let i, len, a;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			a = audioInstances[i];
@@ -17505,7 +17505,7 @@ cr.plugins_.Audio = function(runtime)
 			if (timescale_mode !== 0)
 				a.updatePlaybackRate();
 		}
-		var p, arr, f;
+		let p, arr, f;
 		for (p in effects)
 		{
 			if (effects.hasOwnProperty(p))
@@ -17527,11 +17527,11 @@ cr.plugins_.Audio = function(runtime)
 			context["listener"]["setPosition"](this.listenerTracker.obj.x, this.listenerTracker.obj.y, this.listenerZ);
 		}
 	};
-	var preload_list = [];
+	let preload_list = [];
 	instanceProto.setPreloadList = function (arr)
 	{
-		var i, len, p, filename, size, isOgg;
-		var total_size = 0;
+		let i, len, p, filename, size, isOgg;
+		let total_size = 0;
 		for (i = 0, len = arr.length; i < len; ++i)
 		{
 			p = arr[i];
@@ -17552,7 +17552,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.startPreloads = function ()
 	{
-		var i, len, p, src;
+		let i, len, p, src;
 		for (i = 0, len = preload_list.length; i < len; ++i)
 		{
 			p = preload_list[i];
@@ -17562,8 +17562,8 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.getPreloadedSize = function ()
 	{
-		var completed = 0;
-		var i, len, p;
+		let completed = 0;
+		let i, len, p;
 		for (i = 0, len = preload_list.length; i < len; ++i)
 		{
 			p = preload_list[i];
@@ -17580,7 +17580,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.releaseAllMusicBuffers = function ()
 	{
-		var i, len, j, b;
+		let i, len, j, b;
 		for (i = 0, j = 0, len = audioBuffers.length; i < len; ++i)
 		{
 			b = audioBuffers[i];
@@ -17594,7 +17594,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.getAudioBuffer = function (src_, is_music, dont_create)
 	{
-		var i, len, a, ret = null, j, k, lenj, ai;
+		let i, len, a, ret = null, j, k, lenj, ai;
 		for (i = 0, len = audioBuffers.length; i < len; i++)
 		{
 			a = audioBuffers[i];
@@ -17615,7 +17615,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	instanceProto.getAudioInstance = function (src_, tag, is_music, looping, vol)
 	{
-		var i, len, a;
+		let i, len, a;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			a = audioInstances[i];
@@ -17625,7 +17625,7 @@ cr.plugins_.Audio = function(runtime)
 				return a;
 			}
 		}
-		var b = this.getAudioBuffer(src_, is_music);
+		let b = this.getAudioBuffer(src_, is_music);
 		if (!b.bufferObject)
 		{
 			if (tag !== "<preload>")
@@ -17640,11 +17640,11 @@ cr.plugins_.Audio = function(runtime)
 		audioInstances.push(a);
 		return a;
 	};
-	var taggedAudio = [];
+	let taggedAudio = [];
 	function SortByIsPlaying(a, b)
 	{
-		var an = a.isPlaying() ? 1 : 0;
-		var bn = b.isPlaying() ? 1 : 0;
+		let an = a.isPlaying() ? 1 : 0;
+		let bn = b.isPlaying() ? 1 : 0;
 		if (an === bn)
 			return 0;
 		else if (an < bn)
@@ -17666,7 +17666,7 @@ cr.plugins_.Audio = function(runtime)
 				return;
 			}
 		}
-		var i, len, a;
+		let i, len, a;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			a = audioInstances[i];
@@ -17678,7 +17678,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	function reconnectEffects(tag)
 	{
-		var i, len, arr, n, toNode = context["destination"];
+		let i, len, arr, n, toNode = context["destination"];
 		if (effects.hasOwnProperty(tag))
 		{
 			arr = effects[tag];
@@ -17719,7 +17719,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Cnds.prototype.PreloadsComplete = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioBuffers.length; i < len; i++)
 		{
 			if (!audioBuffers[i].isLoadedAndDecoded() && !audioBuffers[i].hasFailedToLoad())
@@ -17737,7 +17737,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Cnds.prototype.IsAnyPlaying = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 		{
 			if (audioInstances[i].isPlaying())
@@ -17748,7 +17748,7 @@ cr.plugins_.Audio = function(runtime)
 	Cnds.prototype.IsTagPlaying = function (tag)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 		{
 			if (taggedAudio[i].isPlaying())
@@ -17762,9 +17762,9 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = file[1];
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = file[1];
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 			return;
@@ -17776,13 +17776,13 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = file[1];
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = file[1];
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 		{
-			var b = this.getAudioBuffer(src, is_music);
+			let b = this.getAudioBuffer(src, is_music);
 			b.panWhenReady.push({ x: x_, y: y_, a: angle_, ia: innerangle_, oa: outerangle_, og: dbToLinear(outergain_), thistag: tag });
 			return;
 		}
@@ -17795,22 +17795,22 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent || !obj)
 			return;
-		var inst = obj.getFirstPicked();
+		let inst = obj.getFirstPicked();
 		if (!inst)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = file[1];
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = file[1];
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 		{
-			var b = this.getAudioBuffer(src, is_music);
+			let b = this.getAudioBuffer(src, is_music);
 			b.panWhenReady.push({ obj: inst, ia: innerangle, oa: outerangle, og: dbToLinear(outergain), thistag: tag });
 			return;
 		}
 		lastAudio.setPannerEnabled(true);
-		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
-		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		let px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		let py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
 		lastAudio.setPan(px, py, cr.to_degrees(inst.angle - inst.layer.getAngle()), innerangle, outerangle, dbToLinear(outergain));
 		lastAudio.setObject(inst);
 		lastAudio.play(looping!==0, v, 0, this.nextPlayTime);
@@ -17820,9 +17820,9 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = (folder === 1);
-		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = (folder === 1);
+		let src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 			return;
@@ -17834,13 +17834,13 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = (folder === 1);
-		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = (folder === 1);
+		let src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 		{
-			var b = this.getAudioBuffer(src, is_music);
+			let b = this.getAudioBuffer(src, is_music);
 			b.panWhenReady.push({ x: x_, y: y_, a: angle_, ia: innerangle_, oa: outerangle_, og: dbToLinear(outergain_), thistag: tag });
 			return;
 		}
@@ -17853,22 +17853,22 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent || !obj)
 			return;
-		var inst = obj.getFirstPicked();
+		let inst = obj.getFirstPicked();
 		if (!inst)
 			return;
-		var v = dbToLinear(vol);
-		var is_music = (folder === 1);
-		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		let v = dbToLinear(vol);
+		let is_music = (folder === 1);
+		let src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
 		lastAudio = this.getAudioInstance(src, tag, is_music, looping!==0, v);
 		if (!lastAudio)
 		{
-			var b = this.getAudioBuffer(src, is_music);
+			let b = this.getAudioBuffer(src, is_music);
 			b.panWhenReady.push({ obj: inst, ia: innerangle, oa: outerangle, og: dbToLinear(outergain), thistag: tag });
 			return;
 		}
 		lastAudio.setPannerEnabled(true);
-		var px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
-		var py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
+		let px = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, true);
+		let py = cr.rotatePtAround(inst.x, inst.y, -inst.layer.getAngle(), listenerX, listenerY, false);
 		lastAudio.setPan(px, py, cr.to_degrees(inst.angle - inst.layer.getAngle()), innerangle, outerangle, dbToLinear(outergain));
 		lastAudio.setObject(inst);
 		lastAudio.play(looping!==0, v, 0, this.nextPlayTime);
@@ -17877,22 +17877,22 @@ cr.plugins_.Audio = function(runtime)
 	Acts.prototype.SetLooping = function (tag, looping)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 			taggedAudio[i].setLooping(looping === 0);
 	};
 	Acts.prototype.SetMuted = function (tag, muted)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 			taggedAudio[i].setMuted(muted === 0);
 	};
 	Acts.prototype.SetVolume = function (tag, vol)
 	{
 		getAudioByTag(tag);
-		var v = dbToLinear(vol);
-		var i, len;
+		let v = dbToLinear(vol);
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 			taggedAudio[i].setVolume(v);
 	};
@@ -17900,8 +17900,8 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var is_music = file[1];
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let is_music = file[1];
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
 		if (api === API_APPMOBI)
 		{
 			if (this.runtime.isDirectCanvas)
@@ -17920,8 +17920,8 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (silent)
 			return;
-		var is_music = (folder === 1);
-		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		let is_music = (folder === 1);
+		let src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
 		if (api === API_APPMOBI)
 		{
 			if (this.runtime.isDirectCanvas)
@@ -17941,27 +17941,27 @@ cr.plugins_.Audio = function(runtime)
 		getAudioByTag(tag);
 		if (rate < 0.0)
 			rate = 0;
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 			taggedAudio[i].setPlaybackRate(rate);
 	};
 	Acts.prototype.Stop = function (tag)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 			taggedAudio[i].stop();
 	};
 	Acts.prototype.StopAll = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 			audioInstances[i].stop();
 	};
 	Acts.prototype.SetPaused = function (tag, state)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 		{
 			if (state === 0)
@@ -17973,7 +17973,7 @@ cr.plugins_.Audio = function(runtime)
 	Acts.prototype.Seek = function (tag, pos)
 	{
 		getAudioByTag(tag);
-		var i, len;
+		let i, len;
 		for (i = 0, len = taggedAudio.length; i < len; i++)
 		{
 			taggedAudio[i].seek(pos);
@@ -17981,7 +17981,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Acts.prototype.SetSilent = function (s)
 	{
-		var i, len;
+		let i, len;
 		if (s === 2)					// toggling
 			s = (silent ? 1 : 0);		// choose opposite state
 		if (s === 0 && !silent)			// setting silent
@@ -18000,7 +18000,7 @@ cr.plugins_.Audio = function(runtime)
 	Acts.prototype.SetMasterVolume = function (vol)
 	{
 		masterVolume = dbToLinear(vol);
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioInstances.length; i < len; i++)
 			audioInstances[i].updateVolume();
 	};
@@ -18048,14 +18048,14 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (api !== API_WEBAUDIO || !context["createConvolver"])
 			return;
-		var doNormalize = (norm === 0);
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
-		var b = this.getAudioBuffer(src, false);
+		let doNormalize = (norm === 0);
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let b = this.getAudioBuffer(src, false);
 		tag = tag.toLowerCase();
 		mix = mix / 100;
 		if (mix < 0) mix = 0;
 		if (mix > 1) mix = 1;
-		var fx;
+		let fx;
 		if (b.bufferObject)
 		{
 			fx = new ConvolveEffect(b.bufferObject, doNormalize, mix, src);
@@ -18131,7 +18131,7 @@ cr.plugins_.Audio = function(runtime)
 		if (api !== API_WEBAUDIO)
 			return;
 		tag = tag.toLowerCase();
-		var i, len, arr;
+		let i, len, arr;
 		if (effects.hasOwnProperty(tag))
 		{
 			arr = effects[tag];
@@ -18150,7 +18150,7 @@ cr.plugins_.Audio = function(runtime)
 			return;
 		tag = tag.toLowerCase();
 		index = Math.floor(index);
-		var arr;
+		let arr;
 		if (!effects.hasOwnProperty(tag))
 			return;
 		arr = effects[tag];
@@ -18162,7 +18162,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		if (!obj_ || api !== API_WEBAUDIO)
 			return;
-		var inst = obj_.getFirstPicked();
+		let inst = obj_.getFirstPicked();
 		if (!inst)
 			return;
 		this.listenerTracker.setObject(inst);
@@ -18181,9 +18181,9 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Acts.prototype.UnloadAudio = function (file)
 	{
-		var is_music = file[1];
-		var src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
-		var b = this.getAudioBuffer(src, is_music, true /* don't create if missing */);
+		let is_music = file[1];
+		let src = this.runtime.files_subfolder + file[0] + (useOgg ? ".ogg" : ".m4a");
+		let b = this.getAudioBuffer(src, is_music, true /* don't create if missing */);
 		if (!b)
 			return;		// not loaded
 		b.release();
@@ -18191,9 +18191,9 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Acts.prototype.UnloadAudioByName = function (folder, filename)
 	{
-		var is_music = (folder === 1);
-		var src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
-		var b = this.getAudioBuffer(src, is_music, true /* don't create if missing */);
+		let is_music = (folder === 1);
+		let src = this.runtime.files_subfolder + filename.toLowerCase() + (useOgg ? ".ogg" : ".m4a");
+		let b = this.getAudioBuffer(src, is_music, true /* don't create if missing */);
 		if (!b)
 			return;		// not loaded
 		b.release();
@@ -18201,7 +18201,7 @@ cr.plugins_.Audio = function(runtime)
 	};
 	Acts.prototype.UnloadAll = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = audioBuffers.length; i < len; ++i)
 		{
 			audioBuffers[i].release();
@@ -18231,7 +18231,7 @@ cr.plugins_.Audio = function(runtime)
 		getAudioByTag(tag, true);
 		if (taggedAudio.length)
 		{
-			var v = taggedAudio[0].getVolume();
+			let v = taggedAudio[0].getVolume();
 			ret.set_float(linearToDb(v));
 		}
 		else
@@ -18244,14 +18244,14 @@ cr.plugins_.Audio = function(runtime)
 	Exps.prototype.EffectCount = function (ret, tag)
 	{
 		tag = tag.toLowerCase();
-		var arr = null;
+		let arr = null;
 		if (effects.hasOwnProperty(tag))
 			arr = effects[tag];
 		ret.set_int(arr ? arr.length : 0);
 	};
 	function getAnalyser(tag, index)
 	{
-		var arr = null;
+		let arr = null;
 		if (effects.hasOwnProperty(tag))
 			arr = effects[tag];
 		if (arr && index >= 0 && index < arr.length && arr[index].freqBins)
@@ -18263,7 +18263,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		tag = tag.toLowerCase();
 		index = Math.floor(index);
-		var analyser = getAnalyser(tag, index);
+		let analyser = getAnalyser(tag, index);
 		ret.set_int(analyser ? analyser.node["frequencyBinCount"] : 0);
 	};
 	Exps.prototype.AnalyserFreqBinAt = function (ret, tag, index, bin)
@@ -18271,7 +18271,7 @@ cr.plugins_.Audio = function(runtime)
 		tag = tag.toLowerCase();
 		index = Math.floor(index);
 		bin = Math.floor(bin);
-		var analyser = getAnalyser(tag, index);
+		let analyser = getAnalyser(tag, index);
 		if (!analyser)
 			ret.set_float(0);
 		else if (bin < 0 || bin >= analyser.node["frequencyBinCount"])
@@ -18283,7 +18283,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		tag = tag.toLowerCase();
 		index = Math.floor(index);
-		var analyser = getAnalyser(tag, index);
+		let analyser = getAnalyser(tag, index);
 		if (analyser)
 			ret.set_float(analyser.peak);
 		else
@@ -18293,7 +18293,7 @@ cr.plugins_.Audio = function(runtime)
 	{
 		tag = tag.toLowerCase();
 		index = Math.floor(index);
-		var analyser = getAnalyser(tag, index);
+		let analyser = getAnalyser(tag, index);
 		if (analyser)
 			ret.set_float(analyser.rms);
 		else
@@ -18317,13 +18317,13 @@ cr.plugins_.Function = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Function.prototype;
+	let pluginProto = cr.plugins_.Function.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 	};
@@ -18332,10 +18332,10 @@ cr.plugins_.Function = function(runtime)
 		this.type = type;
 		this.runtime = type.runtime;
 	};
-	var instanceProto = pluginProto.Instance.prototype;
-	var funcStack = [];
-	var funcStackPtr = -1;
-	var isInPreview = false;	// set in onCreate
+	let instanceProto = pluginProto.Instance.prototype;
+	let funcStack = [];
+	let funcStackPtr = -1;
+	let isInPreview = false;	// set in onCreate
 	function FuncStackEntry()
 	{
 		this.name = "";
@@ -18359,7 +18359,7 @@ cr.plugins_.Function = function(runtime)
 	{
 		if (!funcStack.length)
 			return null;
-		var i = funcStackPtr + 1;
+		let i = funcStackPtr + 1;
 		if (i >= funcStack.length)
 			i = funcStack.length - 1;
 		return funcStack[i];
@@ -18372,11 +18372,11 @@ cr.plugins_.Function = function(runtime)
 	instanceProto.onCreate = function()
 	{
 		isInPreview = (typeof cr_is_preview !== "undefined");
-		var self = this;
+		let self = this;
 		window["c2_callFunction"] = function (name_, params_)
 		{
-			var i, len, v;
-			var fs = pushFuncStack();
+			let i, len, v;
+			let fs = pushFuncStack();
 			fs.name = name_.toLowerCase();
 			fs.retVal = 0;
 			if (params_)
@@ -18405,14 +18405,14 @@ cr.plugins_.Function = function(runtime)
 	function Cnds() {};
 	Cnds.prototype.OnFunction = function (name_)
 	{
-		var fs = getCurrentFuncStack();
+		let fs = getCurrentFuncStack();
 		if (!fs)
 			return false;
 		return cr.equals_nocase(name_, fs.name);
 	};
 	Cnds.prototype.CompareParam = function (index_, cmp_, value_)
 	{
-		var fs = getCurrentFuncStack();
+		let fs = getCurrentFuncStack();
 		if (!fs)
 			return false;
 		index_ = cr.floor(index_);
@@ -18424,11 +18424,11 @@ cr.plugins_.Function = function(runtime)
 	function Acts() {};
 	Acts.prototype.CallFunction = function (name_, params_)
 	{
-		var fs = pushFuncStack();
+		let fs = pushFuncStack();
 		fs.name = name_.toLowerCase();
 		fs.retVal = 0;
 		cr.shallowAssignArray(fs.params, params_);
-		var ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
+		let ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
 		if (isInPreview && !ran)
 		{
 ;
@@ -18437,7 +18437,7 @@ cr.plugins_.Function = function(runtime)
 	};
 	Acts.prototype.SetReturnValue = function (value_)
 	{
-		var fs = getCurrentFuncStack();
+		let fs = getCurrentFuncStack();
 		if (fs)
 			fs.retVal = value_;
 		else
@@ -18450,7 +18450,7 @@ cr.plugins_.Function = function(runtime)
 	function Exps() {};
 	Exps.prototype.ReturnValue = function (ret)
 	{
-		var fs = getOneAboveFuncStack();
+		let fs = getOneAboveFuncStack();
 		if (fs)
 			ret.set_any(fs.retVal);
 		else
@@ -18458,7 +18458,7 @@ cr.plugins_.Function = function(runtime)
 	};
 	Exps.prototype.ParamCount = function (ret)
 	{
-		var fs = getCurrentFuncStack();
+		let fs = getCurrentFuncStack();
 		if (fs)
 			ret.set_int(fs.params.length);
 		else
@@ -18470,7 +18470,7 @@ cr.plugins_.Function = function(runtime)
 	Exps.prototype.Param = function (ret, index_)
 	{
 		index_ = cr.floor(index_);
-		var fs = getCurrentFuncStack();
+		let fs = getCurrentFuncStack();
 		if (fs)
 		{
 			if (index_ >= 0 && index_ < fs.params.length)
@@ -18491,14 +18491,14 @@ cr.plugins_.Function = function(runtime)
 	};
 	Exps.prototype.Call = function (ret, name_)
 	{
-		var fs = pushFuncStack();
+		let fs = pushFuncStack();
 		fs.name = name_.toLowerCase();
 		fs.retVal = 0;
 		cr.clearArray(fs.params);
-		var i, len;
+		let i, len;
 		for (i = 2, len = arguments.length; i < len; i++)
 			fs.params.push(arguments[i]);
-		var ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
+		let ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
 		if (isInPreview && !ran)
 		{
 ;
@@ -18510,7 +18510,7 @@ cr.plugins_.Function = function(runtime)
 }());
 ;
 ;
-var localForageInitFailed = false;
+let localForageInitFailed = false;
 try {
 /*!
     localForage -- Offline Storage, Improved
@@ -18518,7 +18518,7 @@ try {
     https://mozilla.github.io/localForage
     (c) 2013-2015 Mozilla, Apache License 2.0
 */
-!function(){var a,b,c,d;!function(){var e={},f={};a=function(a,b,c){e[a]={deps:b,callback:c}},d=c=b=function(a){function c(b){if("."!==b.charAt(0))return b;for(var c=b.split("/"),d=a.split("/").slice(0,-1),e=0,f=c.length;f>e;e++){var g=c[e];if(".."===g)d.pop();else{if("."===g)continue;d.push(g)}}return d.join("/")}if(d._eak_seen=e,f[a])return f[a];if(f[a]={},!e[a])throw new Error("Could not find module "+a);for(var g,h=e[a],i=h.deps,j=h.callback,k=[],l=0,m=i.length;m>l;l++)"exports"===i[l]?k.push(g={}):k.push(b(c(i[l])));var n=j.apply(this,k);return f[a]=g||n}}(),a("promise/all",["./utils","exports"],function(a,b){"use strict";function c(a){var b=this;if(!d(a))throw new TypeError("You must pass an array to all.");return new b(function(b,c){function d(a){return function(b){f(a,b)}}function f(a,c){h[a]=c,0===--i&&b(h)}var g,h=[],i=a.length;0===i&&b([]);for(var j=0;j<a.length;j++)g=a[j],g&&e(g.then)?g.then(d(j),c):f(j,g)})}var d=a.isArray,e=a.isFunction;b.all=c}),a("promise/asap",["exports"],function(a){"use strict";function b(){return function(){process.nextTick(e)}}function c(){var a=0,b=new i(e),c=document.createTextNode("");return b.observe(c,{characterData:!0}),function(){c.data=a=++a%2}}function d(){return function(){j.setTimeout(e,1)}}function e(){for(var a=0;a<k.length;a++){var b=k[a],c=b[0],d=b[1];c(d)}k=[]}function f(a,b){var c=k.push([a,b]);1===c&&g()}var g,h="undefined"!=typeof window?window:{},i=h.MutationObserver||h.WebKitMutationObserver,j="undefined"!=typeof global?global:void 0===this?window:this,k=[];g="undefined"!=typeof process&&"[object process]"==={}.toString.call(process)?b():i?c():d(),a.asap=f}),a("promise/config",["exports"],function(a){"use strict";function b(a,b){return 2!==arguments.length?c[a]:void(c[a]=b)}var c={instrument:!1};a.config=c,a.configure=b}),a("promise/polyfill",["./promise","./utils","exports"],function(a,b,c){"use strict";function d(){var a;a="undefined"!=typeof global?global:"undefined"!=typeof window&&window.document?window:self;var b="Promise"in a&&"resolve"in a.Promise&&"reject"in a.Promise&&"all"in a.Promise&&"race"in a.Promise&&function(){var b;return new a.Promise(function(a){b=a}),f(b)}();b||(a.Promise=e)}var e=a.Promise,f=b.isFunction;c.polyfill=d}),a("promise/promise",["./config","./utils","./all","./race","./resolve","./reject","./asap","exports"],function(a,b,c,d,e,f,g,h){"use strict";function i(a){if(!v(a))throw new TypeError("You must pass a resolver function as the first argument to the promise constructor");if(!(this instanceof i))throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");this._subscribers=[],j(a,this)}function j(a,b){function c(a){o(b,a)}function d(a){q(b,a)}try{a(c,d)}catch(e){d(e)}}function k(a,b,c,d){var e,f,g,h,i=v(c);if(i)try{e=c(d),g=!0}catch(j){h=!0,f=j}else e=d,g=!0;n(b,e)||(i&&g?o(b,e):h?q(b,f):a===D?o(b,e):a===E&&q(b,e))}function l(a,b,c,d){var e=a._subscribers,f=e.length;e[f]=b,e[f+D]=c,e[f+E]=d}function m(a,b){for(var c,d,e=a._subscribers,f=a._detail,g=0;g<e.length;g+=3)c=e[g],d=e[g+b],k(b,c,d,f);a._subscribers=null}function n(a,b){var c,d=null;try{if(a===b)throw new TypeError("A promises callback cannot return that same promise.");if(u(b)&&(d=b.then,v(d)))return d.call(b,function(d){return c?!0:(c=!0,void(b!==d?o(a,d):p(a,d)))},function(b){return c?!0:(c=!0,void q(a,b))}),!0}catch(e){return c?!0:(q(a,e),!0)}return!1}function o(a,b){a===b?p(a,b):n(a,b)||p(a,b)}function p(a,b){a._state===B&&(a._state=C,a._detail=b,t.async(r,a))}function q(a,b){a._state===B&&(a._state=C,a._detail=b,t.async(s,a))}function r(a){m(a,a._state=D)}function s(a){m(a,a._state=E)}var t=a.config,u=(a.configure,b.objectOrFunction),v=b.isFunction,w=(b.now,c.all),x=d.race,y=e.resolve,z=f.reject,A=g.asap;t.async=A;var B=void 0,C=0,D=1,E=2;i.prototype={constructor:i,_state:void 0,_detail:void 0,_subscribers:void 0,then:function(a,b){var c=this,d=new this.constructor(function(){});if(this._state){var e=arguments;t.async(function(){k(c._state,d,e[c._state-1],c._detail)})}else l(this,d,a,b);return d},"catch":function(a){return this.then(null,a)}},i.all=w,i.race=x,i.resolve=y,i.reject=z,h.Promise=i}),a("promise/race",["./utils","exports"],function(a,b){"use strict";function c(a){var b=this;if(!d(a))throw new TypeError("You must pass an array to race.");return new b(function(b,c){for(var d,e=0;e<a.length;e++)d=a[e],d&&"function"==typeof d.then?d.then(b,c):b(d)})}var d=a.isArray;b.race=c}),a("promise/reject",["exports"],function(a){"use strict";function b(a){var b=this;return new b(function(b,c){c(a)})}a.reject=b}),a("promise/resolve",["exports"],function(a){"use strict";function b(a){if(a&&"object"==typeof a&&a.constructor===this)return a;var b=this;return new b(function(b){b(a)})}a.resolve=b}),a("promise/utils",["exports"],function(a){"use strict";function b(a){return c(a)||"object"==typeof a&&null!==a}function c(a){return"function"==typeof a}function d(a){return"[object Array]"===Object.prototype.toString.call(a)}var e=Date.now||function(){return(new Date).getTime()};a.objectOrFunction=b,a.isFunction=c,a.isArray=d,a.now=e}),b("promise/polyfill").polyfill()}(),function(a,b){"object"==typeof exports&&"object"==typeof module?module.exports=b():"function"==typeof define&&define.amd?define([],b):"object"==typeof exports?exports.localforage=b():a.localforage=b()}(this,function(){return function(a){function b(d){if(c[d])return c[d].exports;var e=c[d]={exports:{},id:d,loaded:!1};return a[d].call(e.exports,e,e.exports,b),e.loaded=!0,e.exports}var c={};return b.m=a,b.c=c,b.p="",b(0)}([function(a,b,c){"use strict";function d(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}b.__esModule=!0;var e=function(a){function b(a,b){a[b]=function(){var c=arguments;return a.ready().then(function(){return a[b].apply(a,c)})}}function e(){for(var a=1;a<arguments.length;a++){var b=arguments[a];if(b)for(var c in b)b.hasOwnProperty(c)&&(m(b[c])?arguments[0][c]=b[c].slice():arguments[0][c]=b[c])}return arguments[0]}function f(a){for(var b in h)if(h.hasOwnProperty(b)&&h[b]===a)return!0;return!1}var g={},h={INDEXEDDB:"asyncStorage",LOCALSTORAGE:"localStorageWrapper",WEBSQL:"webSQLStorage"},i=[h.INDEXEDDB,h.WEBSQL,h.LOCALSTORAGE],j=["clear","getItem","iterate","key","keys","length","removeItem","setItem"],k={description:"",driver:i.slice(),name:"localforage",size:4980736,storeName:"keyvaluepairs",version:1},l=function(a){var b={};return b[h.INDEXEDDB]=!!function(){try{var b=b||a.indexedDB||a.webkitIndexedDB||a.mozIndexedDB||a.OIndexedDB||a.msIndexedDB;return"undefined"!=typeof a.openDatabase&&a.navigator&&a.navigator.userAgent&&/Safari/.test(a.navigator.userAgent)&&!/Chrome/.test(a.navigator.userAgent)?!1:b&&"function"==typeof b.open&&"undefined"!=typeof a.IDBKeyRange}catch(c){return!1}}(),b[h.WEBSQL]=!!function(){try{return a.openDatabase}catch(b){return!1}}(),b[h.LOCALSTORAGE]=!!function(){try{return a.localStorage&&"setItem"in a.localStorage&&a.localStorage.setItem}catch(b){return!1}}(),b}(a),m=Array.isArray||function(a){return"[object Array]"===Object.prototype.toString.call(a)},n=function(){function a(b){d(this,a),this.INDEXEDDB=h.INDEXEDDB,this.LOCALSTORAGE=h.LOCALSTORAGE,this.WEBSQL=h.WEBSQL,this._defaultConfig=e({},k),this._config=e({},this._defaultConfig,b),this._driverSet=null,this._initDriver=null,this._ready=!1,this._dbInfo=null,this._wrapLibraryMethodsWithReady(),this.setDriver(this._config.driver)}return a.prototype.config=function(a){if("object"==typeof a){if(this._ready)return new Error("Can't call config() after localforage has been used.");for(var b in a)"storeName"===b&&(a[b]=a[b].replace(/\W/g,"_")),this._config[b]=a[b];return"driver"in a&&a.driver&&this.setDriver(this._config.driver),!0}return"string"==typeof a?this._config[a]:this._config},a.prototype.defineDriver=function(a,b,c){var d=new Promise(function(b,c){try{var d=a._driver,e=new Error("Custom driver not compliant; see https://mozilla.github.io/localForage/#definedriver"),h=new Error("Custom driver name already in use: "+a._driver);if(!a._driver)return void c(e);if(f(a._driver))return void c(h);for(var i=j.concat("_initStorage"),k=0;k<i.length;k++){var m=i[k];if(!m||!a[m]||"function"!=typeof a[m])return void c(e)}var n=Promise.resolve(!0);"_support"in a&&(n=a._support&&"function"==typeof a._support?a._support():Promise.resolve(!!a._support)),n.then(function(c){l[d]=c,g[d]=a,b()},c)}catch(o){c(o)}});return d.then(b,c),d},a.prototype.driver=function(){return this._driver||null},a.prototype.getDriver=function(a,b,d){var e=this,h=function(){if(f(a))switch(a){case e.INDEXEDDB:return new Promise(function(a,b){a(c(1))});case e.LOCALSTORAGE:return new Promise(function(a,b){a(c(2))});case e.WEBSQL:return new Promise(function(a,b){a(c(4))})}else if(g[a])return Promise.resolve(g[a]);return Promise.reject(new Error("Driver not found."))}();return h.then(b,d),h},a.prototype.getSerializer=function(a){var b=new Promise(function(a,b){a(c(3))});return a&&"function"==typeof a&&b.then(function(b){a(b)}),b},a.prototype.ready=function(a){var b=this,c=b._driverSet.then(function(){return null===b._ready&&(b._ready=b._initDriver()),b._ready});return c.then(a,a),c},a.prototype.setDriver=function(a,b,c){function d(){f._config.driver=f.driver()}function e(a){return function(){function b(){for(;c<a.length;){var e=a[c];return c++,f._dbInfo=null,f._ready=null,f.getDriver(e).then(function(a){return f._extend(a),d(),f._ready=f._initStorage(f._config),f._ready})["catch"](b)}d();var g=new Error("No available storage method found.");return f._driverSet=Promise.reject(g),f._driverSet}var c=0;return b()}}var f=this;m(a)||(a=[a]);var g=this._getSupportedDrivers(a),h=null!==this._driverSet?this._driverSet["catch"](function(){return Promise.resolve()}):Promise.resolve();return this._driverSet=h.then(function(){var a=g[0];return f._dbInfo=null,f._ready=null,f.getDriver(a).then(function(a){f._driver=a._driver,d(),f._wrapLibraryMethodsWithReady(),f._initDriver=e(g)})})["catch"](function(){d();var a=new Error("No available storage method found.");return f._driverSet=Promise.reject(a),f._driverSet}),this._driverSet.then(b,c),this._driverSet},a.prototype.supports=function(a){return!!l[a]},a.prototype._extend=function(a){e(this,a)},a.prototype._getSupportedDrivers=function(a){for(var b=[],c=0,d=a.length;d>c;c++){var e=a[c];this.supports(e)&&b.push(e)}return b},a.prototype._wrapLibraryMethodsWithReady=function(){for(var a=0;a<j.length;a++)b(this,j[a])},a.prototype.createInstance=function(b){return new a(b)},a}();return new n}("undefined"!=typeof window?window:self);b["default"]=e,a.exports=b["default"]},function(a,b){"use strict";b.__esModule=!0;var c=function(a){function b(b,c){b=b||[],c=c||{};try{return new Blob(b,c)}catch(d){if("TypeError"!==d.name)throw d;for(var e=a.BlobBuilder||a.MSBlobBuilder||a.MozBlobBuilder||a.WebKitBlobBuilder,f=new e,g=0;g<b.length;g+=1)f.append(b[g]);return f.getBlob(c.type)}}function c(a){for(var b=a.length,c=new ArrayBuffer(b),d=new Uint8Array(c),e=0;b>e;e++)d[e]=a.charCodeAt(e);return c}function d(a){return new Promise(function(b,c){var d=new XMLHttpRequest;d.open("GET",a),d.withCredentials=!0,d.responseType="arraybuffer",d.onreadystatechange=function(){return 4===d.readyState?200===d.status?b({response:d.response,type:d.getResponseHeader("Content-Type")}):void c({status:d.status,response:d.response}):void 0},d.send()})}function e(a){return new Promise(function(c,e){var f=b([""],{type:"image/png"}),g=a.transaction([D],"readwrite");g.objectStore(D).put(f,"key"),g.oncomplete=function(){var b=a.transaction([D],"readwrite"),f=b.objectStore(D).get("key");f.onerror=e,f.onsuccess=function(a){var b=a.target.result,e=URL.createObjectURL(b);d(e).then(function(a){c(!(!a||"image/png"!==a.type))},function(){c(!1)}).then(function(){URL.revokeObjectURL(e)})}},g.onerror=g.onabort=e})["catch"](function(){return!1})}function f(a){return"boolean"==typeof B?Promise.resolve(B):e(a).then(function(a){return B=a})}function g(a){return new Promise(function(b,c){var d=new FileReader;d.onerror=c,d.onloadend=function(c){var d=btoa(c.target.result||"");b({__local_forage_encoded_blob:!0,data:d,type:a.type})},d.readAsBinaryString(a)})}function h(a){var d=c(atob(a.data));return b([d],{type:a.type})}function i(a){return a&&a.__local_forage_encoded_blob}function j(a){var b=this,c=b._initReady().then(function(){var a=C[b._dbInfo.name];return a&&a.dbReady?a.dbReady:void 0});return c.then(a,a),c}function k(a){var b=C[a.name],c={};c.promise=new Promise(function(a){c.resolve=a}),b.deferredOperations.push(c),b.dbReady?b.dbReady=b.dbReady.then(function(){return c.promise}):b.dbReady=c.promise}function l(a){var b=C[a.name],c=b.deferredOperations.pop();c&&c.resolve()}function m(a){function b(){return Promise.resolve()}var c=this,d={db:null};if(a)for(var e in a)d[e]=a[e];C||(C={});var f=C[d.name];f||(f={forages:[],db:null,dbReady:null,deferredOperations:[]},C[d.name]=f),f.forages.push(c),c._initReady||(c._initReady=c.ready,c.ready=j);for(var g=[],h=0;h<f.forages.length;h++){var i=f.forages[h];i!==c&&g.push(i._initReady()["catch"](b))}var k=f.forages.slice(0);return Promise.all(g).then(function(){return d.db=f.db,n(d)}).then(function(a){return d.db=a,q(d,c._defaultConfig.version)?o(d):a}).then(function(a){d.db=f.db=a,c._dbInfo=d;for(var b=0;b<k.length;b++){var e=k[b];e!==c&&(e._dbInfo.db=d.db,e._dbInfo.version=d.version)}})}function n(a){return p(a,!1)}function o(a){return p(a,!0)}function p(b,c){return new Promise(function(d,e){if(b.db){if(!c)return d(b.db);k(b),b.db.close()}var f=[b.name];c&&f.push(b.version);var g=A.open.apply(A,f);c&&(g.onupgradeneeded=function(c){var d=g.result;try{d.createObjectStore(b.storeName),c.oldVersion<=1&&d.createObjectStore(D)}catch(e){if("ConstraintError"!==e.name)throw e;a.console.warn('The database "'+b.name+'" has been upgraded from version '+c.oldVersion+" to version "+c.newVersion+', but the storage "'+b.storeName+'" already exists.')}}),g.onerror=function(){e(g.error)},g.onsuccess=function(){d(g.result),l(b)}})}function q(b,c){if(!b.db)return!0;var d=!b.db.objectStoreNames.contains(b.storeName),e=b.version<b.db.version,f=b.version>b.db.version;if(e&&(b.version!==c&&a.console.warn('The database "'+b.name+"\" can't be downgraded from version "+b.db.version+" to version "+b.version+"."),b.version=b.db.version),f||d){if(d){var g=b.db.version+1;g>b.version&&(b.version=g)}return!0}return!1}function r(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=new Promise(function(a,c){d.ready().then(function(){var e=d._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=f.get(b);g.onsuccess=function(){var b=g.result;void 0===b&&(b=null),i(b)&&(b=h(b)),a(b)},g.onerror=function(){c(g.error)}})["catch"](c)});return z(e,c),e}function s(a,b){var c=this,d=new Promise(function(b,d){c.ready().then(function(){var e=c._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=f.openCursor(),j=1;g.onsuccess=function(){var c=g.result;if(c){var d=c.value;i(d)&&(d=h(d));var e=a(d,c.key,j++);void 0!==e?b(e):c["continue"]()}else b()},g.onerror=function(){d(g.error)}})["catch"](d)});return z(d,b),d}function t(b,c,d){var e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var h=new Promise(function(a,d){var h;e.ready().then(function(){return h=e._dbInfo,c instanceof Blob?f(h.db).then(function(a){return a?c:g(c)}):c}).then(function(c){var e=h.db.transaction(h.storeName,"readwrite"),f=e.objectStore(h.storeName);null===c&&(c=void 0),e.oncomplete=function(){void 0===c&&(c=null),a(c)},e.onabort=e.onerror=function(){var a=g.error?g.error:g.transaction.error;d(a)};var g=f.put(c,b)})["catch"](d)});return z(h,d),h}function u(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=new Promise(function(a,c){d.ready().then(function(){var e=d._dbInfo,f=e.db.transaction(e.storeName,"readwrite"),g=f.objectStore(e.storeName),h=g["delete"](b);f.oncomplete=function(){a()},f.onerror=function(){c(h.error)},f.onabort=function(){var a=h.error?h.error:h.transaction.error;c(a)}})["catch"](c)});return z(e,c),e}function v(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo,e=d.db.transaction(d.storeName,"readwrite"),f=e.objectStore(d.storeName),g=f.clear();e.oncomplete=function(){a()},e.onabort=e.onerror=function(){var a=g.error?g.error:g.transaction.error;c(a)}})["catch"](c)});return z(c,a),c}function w(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo,e=d.db.transaction(d.storeName,"readonly").objectStore(d.storeName),f=e.count();f.onsuccess=function(){a(f.result)},f.onerror=function(){c(f.error)}})["catch"](c)});return z(c,a),c}function x(a,b){var c=this,d=new Promise(function(b,d){return 0>a?void b(null):void c.ready().then(function(){var e=c._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=!1,h=f.openCursor();h.onsuccess=function(){var c=h.result;return c?void(0===a?b(c.key):g?b(c.key):(g=!0,c.advance(a))):void b(null)},h.onerror=function(){d(h.error)}})["catch"](d)});return z(d,b),d}function y(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo,e=d.db.transaction(d.storeName,"readonly").objectStore(d.storeName),f=e.openCursor(),g=[];f.onsuccess=function(){var b=f.result;return b?(g.push(b.key),void b["continue"]()):void a(g)},f.onerror=function(){c(f.error)}})["catch"](c)});return z(c,a),c}function z(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}var A=A||a.indexedDB||a.webkitIndexedDB||a.mozIndexedDB||a.OIndexedDB||a.msIndexedDB;if(A){var B,C,D="local-forage-detect-blob-support",E={_driver:"asyncStorage",_initStorage:m,iterate:s,getItem:r,setItem:t,removeItem:u,clear:v,length:w,key:x,keys:y};return E}}("undefined"!=typeof window?window:self);b["default"]=c,a.exports=b["default"]},function(a,b,c){"use strict";b.__esModule=!0;var d=function(a){function b(a){var b=this,d={};if(a)for(var e in a)d[e]=a[e];return d.keyPrefix=d.name+"/",d.storeName!==b._defaultConfig.storeName&&(d.keyPrefix+=d.storeName+"/"),b._dbInfo=d,new Promise(function(a,b){a(c(3))}).then(function(a){return d.serializer=a,Promise.resolve()})}function d(a){var b=this,c=b.ready().then(function(){for(var a=b._dbInfo.keyPrefix,c=m.length-1;c>=0;c--){var d=m.key(c);0===d.indexOf(a)&&m.removeItem(d)}});return l(c,a),c}function e(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=d.ready().then(function(){var a=d._dbInfo,c=m.getItem(a.keyPrefix+b);return c&&(c=a.serializer.deserialize(c)),c});return l(e,c),e}function f(a,b){var c=this,d=c.ready().then(function(){for(var b=c._dbInfo,d=b.keyPrefix,e=d.length,f=m.length,g=1,h=0;f>h;h++){var i=m.key(h);if(0===i.indexOf(d)){var j=m.getItem(i);if(j&&(j=b.serializer.deserialize(j)),j=a(j,i.substring(e),g++),void 0!==j)return j}}});return l(d,b),d}function g(a,b){var c=this,d=c.ready().then(function(){var b,d=c._dbInfo;try{b=m.key(a)}catch(e){b=null}return b&&(b=b.substring(d.keyPrefix.length)),b});return l(d,b),d}function h(a){var b=this,c=b.ready().then(function(){for(var a=b._dbInfo,c=m.length,d=[],e=0;c>e;e++)0===m.key(e).indexOf(a.keyPrefix)&&d.push(m.key(e).substring(a.keyPrefix.length));return d});return l(c,a),c}function i(a){var b=this,c=b.keys().then(function(a){return a.length});return l(c,a),c}function j(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=d.ready().then(function(){var a=d._dbInfo;m.removeItem(a.keyPrefix+b)});return l(e,c),e}function k(b,c,d){var e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var f=e.ready().then(function(){void 0===c&&(c=null);var a=c;return new Promise(function(d,f){var g=e._dbInfo;g.serializer.serialize(c,function(c,e){if(e)f(e);else try{m.setItem(g.keyPrefix+b,c),d(a)}catch(h){("QuotaExceededError"===h.name||"NS_ERROR_DOM_QUOTA_REACHED"===h.name)&&f(h),f(h)}})})});return l(f,d),f}function l(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}var m=null;try{if(!(a.localStorage&&"setItem"in a.localStorage))return;m=a.localStorage}catch(n){return}var o={_driver:"localStorageWrapper",_initStorage:b,iterate:f,getItem:e,setItem:k,removeItem:j,clear:d,length:i,key:g,keys:h};return o}("undefined"!=typeof window?window:self);b["default"]=d,a.exports=b["default"]},function(a,b){"use strict";b.__esModule=!0;var c=function(a){function b(b,c){b=b||[],c=c||{};try{return new Blob(b,c)}catch(d){if("TypeError"!==d.name)throw d;for(var e=a.BlobBuilder||a.MSBlobBuilder||a.MozBlobBuilder||a.WebKitBlobBuilder,f=new e,g=0;g<b.length;g+=1)f.append(b[g]);return f.getBlob(c.type)}}function c(a,b){var c="";if(a&&(c=a.toString()),a&&("[object ArrayBuffer]"===a.toString()||a.buffer&&"[object ArrayBuffer]"===a.buffer.toString())){var d,e=j;a instanceof ArrayBuffer?(d=a,e+=l):(d=a.buffer,"[object Int8Array]"===c?e+=n:"[object Uint8Array]"===c?e+=o:"[object Uint8ClampedArray]"===c?e+=p:"[object Int16Array]"===c?e+=q:"[object Uint16Array]"===c?e+=s:"[object Int32Array]"===c?e+=r:"[object Uint32Array]"===c?e+=t:"[object Float32Array]"===c?e+=u:"[object Float64Array]"===c?e+=v:b(new Error("Failed to get type for BinaryArray"))),b(e+f(d))}else if("[object Blob]"===c){var g=new FileReader;g.onload=function(){var c=h+a.type+"~"+f(this.result);b(j+m+c)},g.readAsArrayBuffer(a)}else try{b(JSON.stringify(a))}catch(i){console.error("Couldn't convert value into a JSON string: ",a),b(null,i)}}function d(a){if(a.substring(0,k)!==j)return JSON.parse(a);var c,d=a.substring(w),f=a.substring(k,w);if(f===m&&i.test(d)){var g=d.match(i);c=g[1],d=d.substring(g[0].length)}var h=e(d);switch(f){case l:return h;case m:return b([h],{type:c});case n:return new Int8Array(h);case o:return new Uint8Array(h);case p:return new Uint8ClampedArray(h);case q:return new Int16Array(h);case s:return new Uint16Array(h);case r:return new Int32Array(h);case t:return new Uint32Array(h);case u:return new Float32Array(h);case v:return new Float64Array(h);default:throw new Error("Unkown type: "+f)}}function e(a){var b,c,d,e,f,h=.75*a.length,i=a.length,j=0;"="===a[a.length-1]&&(h--,"="===a[a.length-2]&&h--);var k=new ArrayBuffer(h),l=new Uint8Array(k);for(b=0;i>b;b+=4)c=g.indexOf(a[b]),d=g.indexOf(a[b+1]),e=g.indexOf(a[b+2]),f=g.indexOf(a[b+3]),l[j++]=c<<2|d>>4,l[j++]=(15&d)<<4|e>>2,l[j++]=(3&e)<<6|63&f;return k}function f(a){var b,c=new Uint8Array(a),d="";for(b=0;b<c.length;b+=3)d+=g[c[b]>>2],d+=g[(3&c[b])<<4|c[b+1]>>4],d+=g[(15&c[b+1])<<2|c[b+2]>>6],d+=g[63&c[b+2]];return c.length%3===2?d=d.substring(0,d.length-1)+"=":c.length%3===1&&(d=d.substring(0,d.length-2)+"=="),d}var g="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",h="~~local_forage_type~",i=/^~~local_forage_type~([^~]+)~/,j="__lfsc__:",k=j.length,l="arbf",m="blob",n="si08",o="ui08",p="uic8",q="si16",r="si32",s="ur16",t="ui32",u="fl32",v="fl64",w=k+l.length,x={serialize:c,deserialize:d,stringToBuffer:e,bufferToString:f};return x}("undefined"!=typeof window?window:self);b["default"]=c,a.exports=b["default"]},function(a,b,c){"use strict";b.__esModule=!0;var d=function(a){function b(a){var b=this,d={db:null};if(a)for(var e in a)d[e]="string"!=typeof a[e]?a[e].toString():a[e];var f=new Promise(function(a,c){try{d.db=m(d.name,String(d.version),d.description,d.size)}catch(e){return c(e)}d.db.transaction(function(e){e.executeSql("CREATE TABLE IF NOT EXISTS "+d.storeName+" (id INTEGER PRIMARY KEY, key unique, value)",[],function(){b._dbInfo=d,a()},function(a,b){c(b)})})});return new Promise(function(a,b){a(c(3))}).then(function(a){return d.serializer=a,f})}function d(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=new Promise(function(a,c){d.ready().then(function(){var e=d._dbInfo;e.db.transaction(function(d){d.executeSql("SELECT * FROM "+e.storeName+" WHERE key = ? LIMIT 1",[b],function(b,c){var d=c.rows.length?c.rows.item(0).value:null;d&&(d=e.serializer.deserialize(d)),a(d)},function(a,b){c(b)})})})["catch"](c)});return l(e,c),e}function e(a,b){var c=this,d=new Promise(function(b,d){c.ready().then(function(){var e=c._dbInfo;e.db.transaction(function(c){c.executeSql("SELECT * FROM "+e.storeName,[],function(c,d){for(var f=d.rows,g=f.length,h=0;g>h;h++){var i=f.item(h),j=i.value;if(j&&(j=e.serializer.deserialize(j)),j=a(j,i.key,h+1),void 0!==j)return void b(j)}b()},function(a,b){d(b)})})})["catch"](d)});return l(d,b),d}function f(b,c,d){var e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var f=new Promise(function(a,d){e.ready().then(function(){void 0===c&&(c=null);var f=c,g=e._dbInfo;g.serializer.serialize(c,function(c,e){e?d(e):g.db.transaction(function(e){e.executeSql("INSERT OR REPLACE INTO "+g.storeName+" (key, value) VALUES (?, ?)",[b,c],function(){a(f)},function(a,b){d(b)})},function(a){a.code===a.QUOTA_ERR&&d(a)})})})["catch"](d)});return l(f,d),f}function g(b,c){var d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));var e=new Promise(function(a,c){d.ready().then(function(){var e=d._dbInfo;e.db.transaction(function(d){d.executeSql("DELETE FROM "+e.storeName+" WHERE key = ?",[b],function(){a()},function(a,b){c(b)})})})["catch"](c)});return l(e,c),e}function h(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo;d.db.transaction(function(b){b.executeSql("DELETE FROM "+d.storeName,[],function(){a()},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function i(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo;d.db.transaction(function(b){b.executeSql("SELECT COUNT(key) as c FROM "+d.storeName,[],function(b,c){var d=c.rows.item(0).c;a(d)},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function j(a,b){var c=this,d=new Promise(function(b,d){c.ready().then(function(){var e=c._dbInfo;e.db.transaction(function(c){c.executeSql("SELECT key FROM "+e.storeName+" WHERE id = ? LIMIT 1",[a+1],function(a,c){var d=c.rows.length?c.rows.item(0).key:null;b(d)},function(a,b){d(b)})})})["catch"](d)});return l(d,b),d}function k(a){var b=this,c=new Promise(function(a,c){b.ready().then(function(){var d=b._dbInfo;d.db.transaction(function(b){b.executeSql("SELECT key FROM "+d.storeName,[],function(b,c){for(var d=[],e=0;e<c.rows.length;e++)d.push(c.rows.item(e).key);a(d)},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function l(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}var m=a.openDatabase;if(m){var n={_driver:"webSQLStorage",_initStorage:b,iterate:e,getItem:d,setItem:f,removeItem:g,clear:h,length:i,key:j,keys:k};return n}}("undefined"!=typeof window?window:self);b["default"]=d,a.exports=b["default"]}])});
+!function(){let a,b,c,d;!function(){let e={},f={};a=function(a,b,c){e[a]={deps:b,callback:c}},d=c=b=function(a){function c(b){if("."!==b.charAt(0))return b;for(let c=b.split("/"),d=a.split("/").slice(0,-1),e=0,f=c.length;f>e;e++){let g=c[e];if(".."===g)d.pop();else{if("."===g)continue;d.push(g)}}return d.join("/")}if(d._eak_seen=e,f[a])return f[a];if(f[a]={},!e[a])throw new Error("Could not find module "+a);for(let g,h=e[a],i=h.deps,j=h.callback,k=[],l=0,m=i.length;m>l;l++)"exports"===i[l]?k.push(g={}):k.push(b(c(i[l])));let n=j.apply(this,k);return f[a]=g||n}}(),a("promise/all",["./utils","exports"],function(a,b){"use strict";function c(a){let b=this;if(!d(a))throw new TypeError("You must pass an array to all.");return new b(function(b,c){function d(a){return function(b){f(a,b)}}function f(a,c){h[a]=c,0===--i&&b(h)}let g,h=[],i=a.length;0===i&&b([]);for(let j=0;j<a.length;j++)g=a[j],g&&e(g.then)?g.then(d(j),c):f(j,g)})}let d=a.isArray,e=a.isFunction;b.all=c}),a("promise/asap",["exports"],function(a){"use strict";function b(){return function(){process.nextTick(e)}}function c(){let a=0,b=new i(e),c=document.createTextNode("");return b.observe(c,{characterData:!0}),function(){c.data=a=++a%2}}function d(){return function(){j.setTimeout(e,1)}}function e(){for(let a=0;a<k.length;a++){let b=k[a],c=b[0],d=b[1];c(d)}k=[]}function f(a,b){let c=k.push([a,b]);1===c&&g()}let g,h="undefined"!=typeof window?window:{},i=h.MutationObserver||h.WebKitMutationObserver,j="undefined"!=typeof global?global:void 0===this?window:this,k=[];g="undefined"!=typeof process&&"[object process]"==={}.toString.call(process)?b():i?c():d(),a.asap=f}),a("promise/config",["exports"],function(a){"use strict";function b(a,b){return 2!==arguments.length?c[a]:void(c[a]=b)}let c={instrument:!1};a.config=c,a.configure=b}),a("promise/polyfill",["./promise","./utils","exports"],function(a,b,c){"use strict";function d(){let a;a="undefined"!=typeof global?global:"undefined"!=typeof window&&window.document?window:self;let b="Promise"in a&&"resolve"in a.Promise&&"reject"in a.Promise&&"all"in a.Promise&&"race"in a.Promise&&function(){let b;return new a.Promise(function(a){b=a}),f(b)}();b||(a.Promise=e)}let e=a.Promise,f=b.isFunction;c.polyfill=d}),a("promise/promise",["./config","./utils","./all","./race","./resolve","./reject","./asap","exports"],function(a,b,c,d,e,f,g,h){"use strict";function i(a){if(!v(a))throw new TypeError("You must pass a resolver function as the first argument to the promise constructor");if(!(this instanceof i))throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");this._subscribers=[],j(a,this)}function j(a,b){function c(a){o(b,a)}function d(a){q(b,a)}try{a(c,d)}catch(e){d(e)}}function k(a,b,c,d){let e,f,g,h,i=v(c);if(i)try{e=c(d),g=!0}catch(j){h=!0,f=j}else e=d,g=!0;n(b,e)||(i&&g?o(b,e):h?q(b,f):a===D?o(b,e):a===E&&q(b,e))}function l(a,b,c,d){let e=a._subscribers,f=e.length;e[f]=b,e[f+D]=c,e[f+E]=d}function m(a,b){for(let c,d,e=a._subscribers,f=a._detail,g=0;g<e.length;g+=3)c=e[g],d=e[g+b],k(b,c,d,f);a._subscribers=null}function n(a,b){let c,d=null;try{if(a===b)throw new TypeError("A promises callback cannot return that same promise.");if(u(b)&&(d=b.then,v(d)))return d.call(b,function(d){return c?!0:(c=!0,void(b!==d?o(a,d):p(a,d)))},function(b){return c?!0:(c=!0,void q(a,b))}),!0}catch(e){return c?!0:(q(a,e),!0)}return!1}function o(a,b){a===b?p(a,b):n(a,b)||p(a,b)}function p(a,b){a._state===B&&(a._state=C,a._detail=b,t.async(r,a))}function q(a,b){a._state===B&&(a._state=C,a._detail=b,t.async(s,a))}function r(a){m(a,a._state=D)}function s(a){m(a,a._state=E)}let t=a.config,u=(a.configure,b.objectOrFunction),v=b.isFunction,w=(b.now,c.all),x=d.race,y=e.resolve,z=f.reject,A=g.asap;t.async=A;let B=void 0,C=0,D=1,E=2;i.prototype={constructor:i,_state:void 0,_detail:void 0,_subscribers:void 0,then:function(a,b){let c=this,d=new this.constructor(function(){});if(this._state){let e=arguments;t.async(function(){k(c._state,d,e[c._state-1],c._detail)})}else l(this,d,a,b);return d},"catch":function(a){return this.then(null,a)}},i.all=w,i.race=x,i.resolve=y,i.reject=z,h.Promise=i}),a("promise/race",["./utils","exports"],function(a,b){"use strict";function c(a){let b=this;if(!d(a))throw new TypeError("You must pass an array to race.");return new b(function(b,c){for(let d,e=0;e<a.length;e++)d=a[e],d&&"function"==typeof d.then?d.then(b,c):b(d)})}let d=a.isArray;b.race=c}),a("promise/reject",["exports"],function(a){"use strict";function b(a){let b=this;return new b(function(b,c){c(a)})}a.reject=b}),a("promise/resolve",["exports"],function(a){"use strict";function b(a){if(a&&"object"==typeof a&&a.constructor===this)return a;let b=this;return new b(function(b){b(a)})}a.resolve=b}),a("promise/utils",["exports"],function(a){"use strict";function b(a){return c(a)||"object"==typeof a&&null!==a}function c(a){return"function"==typeof a}function d(a){return"[object Array]"===Object.prototype.toString.call(a)}let e=Date.now||function(){return(new Date).getTime()};a.objectOrFunction=b,a.isFunction=c,a.isArray=d,a.now=e}),b("promise/polyfill").polyfill()}(),function(a,b){"object"==typeof exports&&"object"==typeof module?module.exports=b():"function"==typeof define&&define.amd?define([],b):"object"==typeof exports?exports.localforage=b():a.localforage=b()}(this,function(){return function(a){function b(d){if(c[d])return c[d].exports;let e=c[d]={exports:{},id:d,loaded:!1};return a[d].call(e.exports,e,e.exports,b),e.loaded=!0,e.exports}let c={};return b.m=a,b.c=c,b.p="",b(0)}([function(a,b,c){"use strict";function d(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}b.__esModule=!0;let e=function(a){function b(a,b){a[b]=function(){let c=arguments;return a.ready().then(function(){return a[b].apply(a,c)})}}function e(){for(let a=1;a<arguments.length;a++){let b=arguments[a];if(b)for(let c in b)b.hasOwnProperty(c)&&(m(b[c])?arguments[0][c]=b[c].slice():arguments[0][c]=b[c])}return arguments[0]}function f(a){for(let b in h)if(h.hasOwnProperty(b)&&h[b]===a)return!0;return!1}let g={},h={INDEXEDDB:"asyncStorage",LOCALSTORAGE:"localStorageWrapper",WEBSQL:"webSQLStorage"},i=[h.INDEXEDDB,h.WEBSQL,h.LOCALSTORAGE],j=["clear","getItem","iterate","key","keys","length","removeItem","setItem"],k={description:"",driver:i.slice(),name:"localforage",size:4980736,storeName:"keyvaluepairs",version:1},l=function(a){let b={};return b[h.INDEXEDDB]=!!function(){try{let b=b||a.indexedDB||a.webkitIndexedDB||a.mozIndexedDB||a.OIndexedDB||a.msIndexedDB;return"undefined"!=typeof a.openDatabase&&a.navigator&&a.navigator.userAgent&&/Safari/.test(a.navigator.userAgent)&&!/Chrome/.test(a.navigator.userAgent)?!1:b&&"function"==typeof b.open&&"undefined"!=typeof a.IDBKeyRange}catch(c){return!1}}(),b[h.WEBSQL]=!!function(){try{return a.openDatabase}catch(b){return!1}}(),b[h.LOCALSTORAGE]=!!function(){try{return a.localStorage&&"setItem"in a.localStorage&&a.localStorage.setItem}catch(b){return!1}}(),b}(a),m=Array.isArray||function(a){return"[object Array]"===Object.prototype.toString.call(a)},n=function(){function a(b){d(this,a),this.INDEXEDDB=h.INDEXEDDB,this.LOCALSTORAGE=h.LOCALSTORAGE,this.WEBSQL=h.WEBSQL,this._defaultConfig=e({},k),this._config=e({},this._defaultConfig,b),this._driverSet=null,this._initDriver=null,this._ready=!1,this._dbInfo=null,this._wrapLibraryMethodsWithReady(),this.setDriver(this._config.driver)}return a.prototype.config=function(a){if("object"==typeof a){if(this._ready)return new Error("Can't call config() after localforage has been used.");for(let b in a)"storeName"===b&&(a[b]=a[b].replace(/\W/g,"_")),this._config[b]=a[b];return"driver"in a&&a.driver&&this.setDriver(this._config.driver),!0}return"string"==typeof a?this._config[a]:this._config},a.prototype.defineDriver=function(a,b,c){let d=new Promise(function(b,c){try{let d=a._driver,e=new Error("Custom driver not compliant; see https://mozilla.github.io/localForage/#definedriver"),h=new Error("Custom driver name already in use: "+a._driver);if(!a._driver)return void c(e);if(f(a._driver))return void c(h);for(let i=j.concat("_initStorage"),k=0;k<i.length;k++){let m=i[k];if(!m||!a[m]||"function"!=typeof a[m])return void c(e)}let n=Promise.resolve(!0);"_support"in a&&(n=a._support&&"function"==typeof a._support?a._support():Promise.resolve(!!a._support)),n.then(function(c){l[d]=c,g[d]=a,b()},c)}catch(o){c(o)}});return d.then(b,c),d},a.prototype.driver=function(){return this._driver||null},a.prototype.getDriver=function(a,b,d){let e=this,h=function(){if(f(a))switch(a){case e.INDEXEDDB:return new Promise(function(a,b){a(c(1))});case e.LOCALSTORAGE:return new Promise(function(a,b){a(c(2))});case e.WEBSQL:return new Promise(function(a,b){a(c(4))})}else if(g[a])return Promise.resolve(g[a]);return Promise.reject(new Error("Driver not found."))}();return h.then(b,d),h},a.prototype.getSerializer=function(a){let b=new Promise(function(a,b){a(c(3))});return a&&"function"==typeof a&&b.then(function(b){a(b)}),b},a.prototype.ready=function(a){let b=this,c=b._driverSet.then(function(){return null===b._ready&&(b._ready=b._initDriver()),b._ready});return c.then(a,a),c},a.prototype.setDriver=function(a,b,c){function d(){f._config.driver=f.driver()}function e(a){return function(){function b(){for(;c<a.length;){let e=a[c];return c++,f._dbInfo=null,f._ready=null,f.getDriver(e).then(function(a){return f._extend(a),d(),f._ready=f._initStorage(f._config),f._ready})["catch"](b)}d();let g=new Error("No available storage method found.");return f._driverSet=Promise.reject(g),f._driverSet}let c=0;return b()}}let f=this;m(a)||(a=[a]);let g=this._getSupportedDrivers(a),h=null!==this._driverSet?this._driverSet["catch"](function(){return Promise.resolve()}):Promise.resolve();return this._driverSet=h.then(function(){let a=g[0];return f._dbInfo=null,f._ready=null,f.getDriver(a).then(function(a){f._driver=a._driver,d(),f._wrapLibraryMethodsWithReady(),f._initDriver=e(g)})})["catch"](function(){d();let a=new Error("No available storage method found.");return f._driverSet=Promise.reject(a),f._driverSet}),this._driverSet.then(b,c),this._driverSet},a.prototype.supports=function(a){return!!l[a]},a.prototype._extend=function(a){e(this,a)},a.prototype._getSupportedDrivers=function(a){for(let b=[],c=0,d=a.length;d>c;c++){let e=a[c];this.supports(e)&&b.push(e)}return b},a.prototype._wrapLibraryMethodsWithReady=function(){for(let a=0;a<j.length;a++)b(this,j[a])},a.prototype.createInstance=function(b){return new a(b)},a}();return new n}("undefined"!=typeof window?window:self);b["default"]=e,a.exports=b["default"]},function(a,b){"use strict";b.__esModule=!0;let c=function(a){function b(b,c){b=b||[],c=c||{};try{return new Blob(b,c)}catch(d){if("TypeError"!==d.name)throw d;for(let e=a.BlobBuilder||a.MSBlobBuilder||a.MozBlobBuilder||a.WebKitBlobBuilder,f=new e,g=0;g<b.length;g+=1)f.append(b[g]);return f.getBlob(c.type)}}function c(a){for(let b=a.length,c=new ArrayBuffer(b),d=new Uint8Array(c),e=0;b>e;e++)d[e]=a.charCodeAt(e);return c}function d(a){return new Promise(function(b,c){let d=new XMLHttpRequest;d.open("GET",a),d.withCredentials=!0,d.responseType="arraybuffer",d.onreadystatechange=function(){return 4===d.readyState?200===d.status?b({response:d.response,type:d.getResponseHeader("Content-Type")}):void c({status:d.status,response:d.response}):void 0},d.send()})}function e(a){return new Promise(function(c,e){let f=b([""],{type:"image/png"}),g=a.transaction([D],"readwrite");g.objectStore(D).put(f,"key"),g.oncomplete=function(){let b=a.transaction([D],"readwrite"),f=b.objectStore(D).get("key");f.onerror=e,f.onsuccess=function(a){let b=a.target.result,e=URL.createObjectURL(b);d(e).then(function(a){c(!(!a||"image/png"!==a.type))},function(){c(!1)}).then(function(){URL.revokeObjectURL(e)})}},g.onerror=g.onabort=e})["catch"](function(){return!1})}function f(a){return"boolean"==typeof B?Promise.resolve(B):e(a).then(function(a){return B=a})}function g(a){return new Promise(function(b,c){let d=new FileReader;d.onerror=c,d.onloadend=function(c){let d=btoa(c.target.result||"");b({__local_forage_encoded_blob:!0,data:d,type:a.type})},d.readAsBinaryString(a)})}function h(a){let d=c(atob(a.data));return b([d],{type:a.type})}function i(a){return a&&a.__local_forage_encoded_blob}function j(a){let b=this,c=b._initReady().then(function(){let a=C[b._dbInfo.name];return a&&a.dbReady?a.dbReady:void 0});return c.then(a,a),c}function k(a){let b=C[a.name],c={};c.promise=new Promise(function(a){c.resolve=a}),b.deferredOperations.push(c),b.dbReady?b.dbReady=b.dbReady.then(function(){return c.promise}):b.dbReady=c.promise}function l(a){let b=C[a.name],c=b.deferredOperations.pop();c&&c.resolve()}function m(a){function b(){return Promise.resolve()}let c=this,d={db:null};if(a)for(let e in a)d[e]=a[e];C||(C={});let f=C[d.name];f||(f={forages:[],db:null,dbReady:null,deferredOperations:[]},C[d.name]=f),f.forages.push(c),c._initReady||(c._initReady=c.ready,c.ready=j);for(let g=[],h=0;h<f.forages.length;h++){let i=f.forages[h];i!==c&&g.push(i._initReady()["catch"](b))}let k=f.forages.slice(0);return Promise.all(g).then(function(){return d.db=f.db,n(d)}).then(function(a){return d.db=a,q(d,c._defaultConfig.version)?o(d):a}).then(function(a){d.db=f.db=a,c._dbInfo=d;for(let b=0;b<k.length;b++){let e=k[b];e!==c&&(e._dbInfo.db=d.db,e._dbInfo.version=d.version)}})}function n(a){return p(a,!1)}function o(a){return p(a,!0)}function p(b,c){return new Promise(function(d,e){if(b.db){if(!c)return d(b.db);k(b),b.db.close()}let f=[b.name];c&&f.push(b.version);let g=A.open.apply(A,f);c&&(g.onupgradeneeded=function(c){let d=g.result;try{d.createObjectStore(b.storeName),c.oldVersion<=1&&d.createObjectStore(D)}catch(e){if("ConstraintError"!==e.name)throw e;a.console.warn('The database "'+b.name+'" has been upgraded from version '+c.oldVersion+" to version "+c.newVersion+', but the storage "'+b.storeName+'" already exists.')}}),g.onerror=function(){e(g.error)},g.onsuccess=function(){d(g.result),l(b)}})}function q(b,c){if(!b.db)return!0;let d=!b.db.objectStoreNames.contains(b.storeName),e=b.version<b.db.version,f=b.version>b.db.version;if(e&&(b.version!==c&&a.console.warn('The database "'+b.name+"\" can't be downgraded from version "+b.db.version+" to version "+b.version+"."),b.version=b.db.version),f||d){if(d){let g=b.db.version+1;g>b.version&&(b.version=g)}return!0}return!1}function r(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=new Promise(function(a,c){d.ready().then(function(){let e=d._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=f.get(b);g.onsuccess=function(){let b=g.result;void 0===b&&(b=null),i(b)&&(b=h(b)),a(b)},g.onerror=function(){c(g.error)}})["catch"](c)});return z(e,c),e}function s(a,b){let c=this,d=new Promise(function(b,d){c.ready().then(function(){let e=c._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=f.openCursor(),j=1;g.onsuccess=function(){let c=g.result;if(c){let d=c.value;i(d)&&(d=h(d));let e=a(d,c.key,j++);void 0!==e?b(e):c["continue"]()}else b()},g.onerror=function(){d(g.error)}})["catch"](d)});return z(d,b),d}function t(b,c,d){let e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let h=new Promise(function(a,d){let h;e.ready().then(function(){return h=e._dbInfo,c instanceof Blob?f(h.db).then(function(a){return a?c:g(c)}):c}).then(function(c){let e=h.db.transaction(h.storeName,"readwrite"),f=e.objectStore(h.storeName);null===c&&(c=void 0),e.oncomplete=function(){void 0===c&&(c=null),a(c)},e.onabort=e.onerror=function(){let a=g.error?g.error:g.transaction.error;d(a)};let g=f.put(c,b)})["catch"](d)});return z(h,d),h}function u(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=new Promise(function(a,c){d.ready().then(function(){let e=d._dbInfo,f=e.db.transaction(e.storeName,"readwrite"),g=f.objectStore(e.storeName),h=g["delete"](b);f.oncomplete=function(){a()},f.onerror=function(){c(h.error)},f.onabort=function(){let a=h.error?h.error:h.transaction.error;c(a)}})["catch"](c)});return z(e,c),e}function v(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo,e=d.db.transaction(d.storeName,"readwrite"),f=e.objectStore(d.storeName),g=f.clear();e.oncomplete=function(){a()},e.onabort=e.onerror=function(){let a=g.error?g.error:g.transaction.error;c(a)}})["catch"](c)});return z(c,a),c}function w(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo,e=d.db.transaction(d.storeName,"readonly").objectStore(d.storeName),f=e.count();f.onsuccess=function(){a(f.result)},f.onerror=function(){c(f.error)}})["catch"](c)});return z(c,a),c}function x(a,b){let c=this,d=new Promise(function(b,d){return 0>a?void b(null):void c.ready().then(function(){let e=c._dbInfo,f=e.db.transaction(e.storeName,"readonly").objectStore(e.storeName),g=!1,h=f.openCursor();h.onsuccess=function(){let c=h.result;return c?void(0===a?b(c.key):g?b(c.key):(g=!0,c.advance(a))):void b(null)},h.onerror=function(){d(h.error)}})["catch"](d)});return z(d,b),d}function y(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo,e=d.db.transaction(d.storeName,"readonly").objectStore(d.storeName),f=e.openCursor(),g=[];f.onsuccess=function(){let b=f.result;return b?(g.push(b.key),void b["continue"]()):void a(g)},f.onerror=function(){c(f.error)}})["catch"](c)});return z(c,a),c}function z(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}let A=A||a.indexedDB||a.webkitIndexedDB||a.mozIndexedDB||a.OIndexedDB||a.msIndexedDB;if(A){let B,C,D="local-forage-detect-blob-support",E={_driver:"asyncStorage",_initStorage:m,iterate:s,getItem:r,setItem:t,removeItem:u,clear:v,length:w,key:x,keys:y};return E}}("undefined"!=typeof window?window:self);b["default"]=c,a.exports=b["default"]},function(a,b,c){"use strict";b.__esModule=!0;let d=function(a){function b(a){let b=this,d={};if(a)for(let e in a)d[e]=a[e];return d.keyPrefix=d.name+"/",d.storeName!==b._defaultConfig.storeName&&(d.keyPrefix+=d.storeName+"/"),b._dbInfo=d,new Promise(function(a,b){a(c(3))}).then(function(a){return d.serializer=a,Promise.resolve()})}function d(a){let b=this,c=b.ready().then(function(){for(let a=b._dbInfo.keyPrefix,c=m.length-1;c>=0;c--){let d=m.key(c);0===d.indexOf(a)&&m.removeItem(d)}});return l(c,a),c}function e(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=d.ready().then(function(){let a=d._dbInfo,c=m.getItem(a.keyPrefix+b);return c&&(c=a.serializer.deserialize(c)),c});return l(e,c),e}function f(a,b){let c=this,d=c.ready().then(function(){for(let b=c._dbInfo,d=b.keyPrefix,e=d.length,f=m.length,g=1,h=0;f>h;h++){let i=m.key(h);if(0===i.indexOf(d)){let j=m.getItem(i);if(j&&(j=b.serializer.deserialize(j)),j=a(j,i.substring(e),g++),void 0!==j)return j}}});return l(d,b),d}function g(a,b){let c=this,d=c.ready().then(function(){let b,d=c._dbInfo;try{b=m.key(a)}catch(e){b=null}return b&&(b=b.substring(d.keyPrefix.length)),b});return l(d,b),d}function h(a){let b=this,c=b.ready().then(function(){for(let a=b._dbInfo,c=m.length,d=[],e=0;c>e;e++)0===m.key(e).indexOf(a.keyPrefix)&&d.push(m.key(e).substring(a.keyPrefix.length));return d});return l(c,a),c}function i(a){let b=this,c=b.keys().then(function(a){return a.length});return l(c,a),c}function j(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=d.ready().then(function(){let a=d._dbInfo;m.removeItem(a.keyPrefix+b)});return l(e,c),e}function k(b,c,d){let e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let f=e.ready().then(function(){void 0===c&&(c=null);let a=c;return new Promise(function(d,f){let g=e._dbInfo;g.serializer.serialize(c,function(c,e){if(e)f(e);else try{m.setItem(g.keyPrefix+b,c),d(a)}catch(h){("QuotaExceededError"===h.name||"NS_ERROR_DOM_QUOTA_REACHED"===h.name)&&f(h),f(h)}})})});return l(f,d),f}function l(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}let m=null;try{if(!(a.localStorage&&"setItem"in a.localStorage))return;m=a.localStorage}catch(n){return}let o={_driver:"localStorageWrapper",_initStorage:b,iterate:f,getItem:e,setItem:k,removeItem:j,clear:d,length:i,key:g,keys:h};return o}("undefined"!=typeof window?window:self);b["default"]=d,a.exports=b["default"]},function(a,b){"use strict";b.__esModule=!0;let c=function(a){function b(b,c){b=b||[],c=c||{};try{return new Blob(b,c)}catch(d){if("TypeError"!==d.name)throw d;for(let e=a.BlobBuilder||a.MSBlobBuilder||a.MozBlobBuilder||a.WebKitBlobBuilder,f=new e,g=0;g<b.length;g+=1)f.append(b[g]);return f.getBlob(c.type)}}function c(a,b){let c="";if(a&&(c=a.toString()),a&&("[object ArrayBuffer]"===a.toString()||a.buffer&&"[object ArrayBuffer]"===a.buffer.toString())){let d,e=j;a instanceof ArrayBuffer?(d=a,e+=l):(d=a.buffer,"[object Int8Array]"===c?e+=n:"[object Uint8Array]"===c?e+=o:"[object Uint8ClampedArray]"===c?e+=p:"[object Int16Array]"===c?e+=q:"[object Uint16Array]"===c?e+=s:"[object Int32Array]"===c?e+=r:"[object Uint32Array]"===c?e+=t:"[object Float32Array]"===c?e+=u:"[object Float64Array]"===c?e+=v:b(new Error("Failed to get type for BinaryArray"))),b(e+f(d))}else if("[object Blob]"===c){let g=new FileReader;g.onload=function(){let c=h+a.type+"~"+f(this.result);b(j+m+c)},g.readAsArrayBuffer(a)}else try{b(JSON.stringify(a))}catch(i){console.error("Couldn't convert value into a JSON string: ",a),b(null,i)}}function d(a){if(a.substring(0,k)!==j)return JSON.parse(a);let c,d=a.substring(w),f=a.substring(k,w);if(f===m&&i.test(d)){let g=d.match(i);c=g[1],d=d.substring(g[0].length)}let h=e(d);switch(f){case l:return h;case m:return b([h],{type:c});case n:return new Int8Array(h);case o:return new Uint8Array(h);case p:return new Uint8ClampedArray(h);case q:return new Int16Array(h);case s:return new Uint16Array(h);case r:return new Int32Array(h);case t:return new Uint32Array(h);case u:return new Float32Array(h);case v:return new Float64Array(h);default:throw new Error("Unkown type: "+f)}}function e(a){let b,c,d,e,f,h=.75*a.length,i=a.length,j=0;"="===a[a.length-1]&&(h--,"="===a[a.length-2]&&h--);let k=new ArrayBuffer(h),l=new Uint8Array(k);for(b=0;i>b;b+=4)c=g.indexOf(a[b]),d=g.indexOf(a[b+1]),e=g.indexOf(a[b+2]),f=g.indexOf(a[b+3]),l[j++]=c<<2|d>>4,l[j++]=(15&d)<<4|e>>2,l[j++]=(3&e)<<6|63&f;return k}function f(a){let b,c=new Uint8Array(a),d="";for(b=0;b<c.length;b+=3)d+=g[c[b]>>2],d+=g[(3&c[b])<<4|c[b+1]>>4],d+=g[(15&c[b+1])<<2|c[b+2]>>6],d+=g[63&c[b+2]];return c.length%3===2?d=d.substring(0,d.length-1)+"=":c.length%3===1&&(d=d.substring(0,d.length-2)+"=="),d}let g="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",h="~~local_forage_type~",i=/^~~local_forage_type~([^~]+)~/,j="__lfsc__:",k=j.length,l="arbf",m="blob",n="si08",o="ui08",p="uic8",q="si16",r="si32",s="ur16",t="ui32",u="fl32",v="fl64",w=k+l.length,x={serialize:c,deserialize:d,stringToBuffer:e,bufferToString:f};return x}("undefined"!=typeof window?window:self);b["default"]=c,a.exports=b["default"]},function(a,b,c){"use strict";b.__esModule=!0;let d=function(a){function b(a){let b=this,d={db:null};if(a)for(let e in a)d[e]="string"!=typeof a[e]?a[e].toString():a[e];let f=new Promise(function(a,c){try{d.db=m(d.name,String(d.version),d.description,d.size)}catch(e){return c(e)}d.db.transaction(function(e){e.executeSql("CREATE TABLE IF NOT EXISTS "+d.storeName+" (id INTEGER PRIMARY KEY, key unique, value)",[],function(){b._dbInfo=d,a()},function(a,b){c(b)})})});return new Promise(function(a,b){a(c(3))}).then(function(a){return d.serializer=a,f})}function d(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=new Promise(function(a,c){d.ready().then(function(){let e=d._dbInfo;e.db.transaction(function(d){d.executeSql("SELECT * FROM "+e.storeName+" WHERE key = ? LIMIT 1",[b],function(b,c){let d=c.rows.length?c.rows.item(0).value:null;d&&(d=e.serializer.deserialize(d)),a(d)},function(a,b){c(b)})})})["catch"](c)});return l(e,c),e}function e(a,b){let c=this,d=new Promise(function(b,d){c.ready().then(function(){let e=c._dbInfo;e.db.transaction(function(c){c.executeSql("SELECT * FROM "+e.storeName,[],function(c,d){for(let f=d.rows,g=f.length,h=0;g>h;h++){let i=f.item(h),j=i.value;if(j&&(j=e.serializer.deserialize(j)),j=a(j,i.key,h+1),void 0!==j)return void b(j)}b()},function(a,b){d(b)})})})["catch"](d)});return l(d,b),d}function f(b,c,d){let e=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let f=new Promise(function(a,d){e.ready().then(function(){void 0===c&&(c=null);let f=c,g=e._dbInfo;g.serializer.serialize(c,function(c,e){e?d(e):g.db.transaction(function(e){e.executeSql("INSERT OR REPLACE INTO "+g.storeName+" (key, value) VALUES (?, ?)",[b,c],function(){a(f)},function(a,b){d(b)})},function(a){a.code===a.QUOTA_ERR&&d(a)})})})["catch"](d)});return l(f,d),f}function g(b,c){let d=this;"string"!=typeof b&&(a.console.warn(b+" used as a key, but it is not a string."),b=String(b));let e=new Promise(function(a,c){d.ready().then(function(){let e=d._dbInfo;e.db.transaction(function(d){d.executeSql("DELETE FROM "+e.storeName+" WHERE key = ?",[b],function(){a()},function(a,b){c(b)})})})["catch"](c)});return l(e,c),e}function h(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo;d.db.transaction(function(b){b.executeSql("DELETE FROM "+d.storeName,[],function(){a()},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function i(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo;d.db.transaction(function(b){b.executeSql("SELECT COUNT(key) as c FROM "+d.storeName,[],function(b,c){let d=c.rows.item(0).c;a(d)},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function j(a,b){let c=this,d=new Promise(function(b,d){c.ready().then(function(){let e=c._dbInfo;e.db.transaction(function(c){c.executeSql("SELECT key FROM "+e.storeName+" WHERE id = ? LIMIT 1",[a+1],function(a,c){let d=c.rows.length?c.rows.item(0).key:null;b(d)},function(a,b){d(b)})})})["catch"](d)});return l(d,b),d}function k(a){let b=this,c=new Promise(function(a,c){b.ready().then(function(){let d=b._dbInfo;d.db.transaction(function(b){b.executeSql("SELECT key FROM "+d.storeName,[],function(b,c){for(let d=[],e=0;e<c.rows.length;e++)d.push(c.rows.item(e).key);a(d)},function(a,b){c(b)})})})["catch"](c)});return l(c,a),c}function l(a,b){b&&a.then(function(a){b(null,a)},function(a){b(a)})}let m=a.openDatabase;if(m){let n={_driver:"webSQLStorage",_initStorage:b,iterate:e,getItem:d,setItem:f,removeItem:g,clear:h,length:i,key:j,keys:k};return n}}("undefined"!=typeof window?window:self);b["default"]=d,a.exports=b["default"]}])});
 }
 catch (e)
 {
@@ -18530,10 +18530,10 @@ cr.plugins_.LocalStorage = function(runtime)
 };
 (function ()
 {
-	var currentKey = "";
-	var lastValue = "";
-	var keyNamesList = [];
-	var errorMessage = "";
+	let currentKey = "";
+	let lastValue = "";
+	let keyNamesList = [];
+	let errorMessage = "";
 	function getErrorString(err)
 	{
 		if (!err)
@@ -18554,8 +18554,8 @@ cr.plugins_.LocalStorage = function(runtime)
 		errorMessage = msg;
 		self.runtime.trigger(cr.plugins_.LocalStorage.prototype.cnds.OnError, self);
 	};
-	var prefix = "";
-	var is_arcade = (typeof window["is_scirra_arcade"] !== "undefined");
+	let prefix = "";
+	let is_arcade = (typeof window["is_scirra_arcade"] !== "undefined");
 	if (is_arcade)
 		prefix = "sa" + window["scirra_arcade_id"] + "_";
 	function hasRequiredPrefix(key)
@@ -18571,13 +18571,13 @@ cr.plugins_.LocalStorage = function(runtime)
 		if (hasRequiredPrefix(key))
 			return key.substr(prefix.length);
 	};
-	var pluginProto = cr.plugins_.LocalStorage.prototype;
+	let pluginProto = cr.plugins_.LocalStorage.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 	};
@@ -18586,7 +18586,7 @@ cr.plugins_.LocalStorage = function(runtime)
 		this.type = type;
 		this.runtime = type.runtime;
 	};
-	var instanceProto = pluginProto.Instance.prototype;
+	let instanceProto = pluginProto.Instance.prototype;
 	instanceProto.onCreate = function()
 	{
 		this.pendingSets = 0;		// number of pending 'Set item' actions
@@ -18603,7 +18603,7 @@ cr.plugins_.LocalStorage = function(runtime)
 	instanceProto.loadFromJSON = function (o)
 	{
 	};
-	var debugDataChanged = true;
+	let debugDataChanged = true;
 	function Cnds() {};
 	Cnds.prototype.OnItemSet = function (key)
 	{
@@ -18682,9 +18682,9 @@ cr.plugins_.LocalStorage = function(runtime)
 			TriggerStorageError(this, "storage failed to initialise - may be disabled in browser settings");
 			return;
 		}
-		var keyPrefix = prefix + keyNoPrefix;
+		let keyPrefix = prefix + keyNoPrefix;
 		this.pendingSets++;
-		var self = this;
+		let self = this;
 		localforage["setItem"](keyPrefix, value, function (err, valueSet)
 		{
 			debugDataChanged = true;
@@ -18716,9 +18716,9 @@ cr.plugins_.LocalStorage = function(runtime)
 			TriggerStorageError(this, "storage failed to initialise - may be disabled in browser settings");
 			return;
 		}
-		var keyPrefix = prefix + keyNoPrefix;
+		let keyPrefix = prefix + keyNoPrefix;
 		this.pendingGets++;
-		var self = this;
+		let self = this;
 		localforage["getItem"](keyPrefix, function (err, value)
 		{
 			self.pendingGets--;
@@ -18751,8 +18751,8 @@ cr.plugins_.LocalStorage = function(runtime)
 			TriggerStorageError(this, "storage failed to initialise - may be disabled in browser settings");
 			return;
 		}
-		var keyPrefix = prefix + keyNoPrefix;
-		var self = this;
+		let keyPrefix = prefix + keyNoPrefix;
+		let self = this;
 		localforage["getItem"](keyPrefix, function (err, value)
 		{
 			if (err)
@@ -18785,8 +18785,8 @@ cr.plugins_.LocalStorage = function(runtime)
 			TriggerStorageError(this, "storage failed to initialise - may be disabled in browser settings");
 			return;
 		}
-		var keyPrefix = prefix + keyNoPrefix;
-		var self = this;
+		let keyPrefix = prefix + keyNoPrefix;
+		let self = this;
 		localforage["removeItem"](keyPrefix, function (err)
 		{
 			debugDataChanged = true;
@@ -18814,7 +18814,7 @@ cr.plugins_.LocalStorage = function(runtime)
 		}
 		if (is_arcade)
 			return;
-		var self = this;
+		let self = this;
 		localforage["clear"](function (err)
 		{
 			debugDataChanged = true;
@@ -18839,10 +18839,10 @@ cr.plugins_.LocalStorage = function(runtime)
 			TriggerStorageError(this, "storage failed to initialise - may be disabled in browser settings");
 			return;
 		}
-		var self = this;
+		let self = this;
 		localforage["keys"](function (err, keyList)
 		{
-			var i, len, k;
+			let i, len, k;
 			if (err)
 			{
 				errorMessage = getErrorString(err);
@@ -18900,13 +18900,13 @@ cr.plugins_.Particles = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Particles.prototype;
+	let pluginProto = cr.plugins_.Particles.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 		if (this.is_family)
@@ -18965,7 +18965,7 @@ cr.plugins_.Particles = function(runtime)
 	};
 	Particle.prototype.init = function ()
 	{
-		var owner = this.owner;
+		let owner = this.owner;
 		this.x = owner.x - (owner.xrandom / 2) + (Math.random() * owner.xrandom);
 		this.y = owner.y - (owner.yrandom / 2) + (Math.random() * owner.yrandom);
 		this.speed = owner.initspeed - (owner.speedrandom / 2) + (Math.random() * owner.speedrandom);
@@ -18978,7 +18978,7 @@ cr.plugins_.Particles = function(runtime)
 	};
 	Particle.prototype.tick = function (dt)
 	{
-		var owner = this.owner;
+		let owner = this.owner;
 		this.x += Math.cos(this.angle) * this.speed * dt;
 		this.y += Math.sin(this.angle) * this.speed * dt;
 		this.y += this.gs * dt;
@@ -19014,14 +19014,14 @@ cr.plugins_.Particles = function(runtime)
 	};
 	Particle.prototype.draw = function (ctx)
 	{
-		var curopacity = this.owner.opacity * this.opacity;
+		let curopacity = this.owner.opacity * this.opacity;
 		if (curopacity === 0)
 			return;
 		if (this.owner.destroymode === 0)
 			curopacity *= 1 - (this.age / this.owner.timeout);
 		ctx.globalAlpha = curopacity;
-		var drawx = this.x - this.size / 2;
-		var drawy = this.y - this.size / 2;
+		let drawx = this.x - this.size / 2;
+		let drawy = this.y - this.size / 2;
 		if (this.owner.runtime.pixel_rounding)
 		{
 			drawx = (drawx + 0.5) | 0;
@@ -19031,13 +19031,13 @@ cr.plugins_.Particles = function(runtime)
 	};
 	Particle.prototype.drawGL = function (glw)
 	{
-		var curopacity = this.owner.opacity * this.opacity;
+		let curopacity = this.owner.opacity * this.opacity;
 		if (this.owner.destroymode === 0)
 			curopacity *= 1 - (this.age / this.owner.timeout);
-		var drawsize = this.size;
-		var scaleddrawsize = drawsize * this.owner.particlescale;
-		var drawx = this.x - drawsize / 2;
-		var drawy = this.y - drawsize / 2;
+		let drawsize = this.size;
+		let scaleddrawsize = drawsize * this.owner.particlescale;
+		let drawx = this.x - drawsize / 2;
+		let drawy = this.y - drawsize / 2;
 		if (this.owner.runtime.pixel_rounding)
 		{
 			drawx = (drawx + 0.5) | 0;
@@ -19074,11 +19074,11 @@ cr.plugins_.Particles = function(runtime)
 		this.type = type;
 		this.runtime = type.runtime;
 	};
-	var instanceProto = pluginProto.Instance.prototype;
-	var deadparticles = [];
+	let instanceProto = pluginProto.Instance.prototype;
+	let deadparticles = [];
 	instanceProto.onCreate = function()
 	{
-		var props = this.properties;
+		let props = this.properties;
 		this.rate = props[0];
 		this.spraycone = cr.to_radians(props[1]);
 		this.spraytype = props[2];			// 0 = continuous, 1 = one-shot
@@ -19118,14 +19118,14 @@ cr.plugins_.Particles = function(runtime)
 		this.type.loadTextures();
 		if (this.spraytype === 1)
 		{
-			for (var i = 0; i < this.rate; i++)
+			for (let i = 0; i < this.rate; i++)
 				this.allocateParticle().opacity = 0;
 		}
 		this.first_tick = true;		// for re-init'ing one-shot particles on first tick so they assume any new angle/position
 	};
 	instanceProto.saveToJSON = function ()
 	{
-		var o = {
+		let o = {
 			"r": this.rate,
 			"sc": this.spraycone,
 			"st": this.spraytype,
@@ -19150,8 +19150,8 @@ cr.plugins_.Particles = function(runtime)
 			"ft": this.first_tick,
 			"p": []
 		};
-		var i, len, p;
-		var arr = o["p"];
+		let i, len, p;
+		let arr = o["p"];
 		for (i = 0, len = this.particles.length; i < len; i++)
 		{
 			p = this.particles[i];
@@ -19185,8 +19185,8 @@ cr.plugins_.Particles = function(runtime)
 		this.first_tick = o["ft"];
 		deadparticles.push.apply(deadparticles, this.particles);
 		cr.clearArray(this.particles);
-		var i, len, p, d;
-		var arr = o["p"];
+		let i, len, p, d;
+		let arr = o["p"];
 		for (i = 0, len = arr.length; i < len; i++)
 		{
 			p = this.allocateParticle();
@@ -19209,7 +19209,7 @@ cr.plugins_.Particles = function(runtime)
 	};
 	instanceProto.allocateParticle = function ()
 	{
-		var p;
+		let p;
 		if (deadparticles.length)
 		{
 			p = deadparticles.pop();
@@ -19223,8 +19223,8 @@ cr.plugins_.Particles = function(runtime)
 	};
 	instanceProto.tick = function()
 	{
-		var dt = this.runtime.getDt(this);
-		var i, len, p, n, j;
+		let dt = this.runtime.getDt(this);
+		let i, len, p, n, j;
 		if (this.spraytype === 0 && this.spraying)
 		{
 			this.particleCreateCounter += dt * this.rate;
@@ -19271,7 +19271,7 @@ cr.plugins_.Particles = function(runtime)
 	};
 	instanceProto.draw = function (ctx)
 	{
-		var i, len, p, layer = this.layer;
+		let i, len, p, layer = this.layer;
 		for (i = 0, len = this.particles.length; i < len; i++)
 		{
 			p = this.particles[i];
@@ -19285,7 +19285,7 @@ cr.plugins_.Particles = function(runtime)
 	{
 		this.particlescale = this.layer.getScale();
 		glw.setTexture(this.type.webGL_texture);
-		var i, len, p, layer = this.layer;
+		let i, len, p, layer = this.layer;
 		for (i = 0, len = this.particles.length; i < len; i++)
 		{
 			p = this.particles[i];
@@ -19316,7 +19316,7 @@ cr.plugins_.Particles = function(runtime)
 	Acts.prototype.SetRate = function (x)
 	{
 		this.rate = x;
-		var diff, i;
+		let diff, i;
 		if (this.spraytype === 1 && this.first_tick)
 		{
 			if (x < this.particles.length)
@@ -19481,21 +19481,21 @@ cr.plugins_.Sprite = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Sprite.prototype;
+	let pluginProto = cr.plugins_.Sprite.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	function frame_getDataUri()
 	{
 		if (this.datauri.length === 0)
 		{
-			var tmpcanvas = document.createElement("canvas");
+			let tmpcanvas = document.createElement("canvas");
 			tmpcanvas.width = this.width;
 			tmpcanvas.height = this.height;
-			var tmpctx = tmpcanvas.getContext("2d");
+			let tmpctx = tmpcanvas.getContext("2d");
 			if (this.spritesheeted)
 			{
 				tmpctx.drawImage(this.texture_img, this.offx, this.offy, this.width, this.height,
@@ -19513,8 +19513,8 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (this.is_family)
 			return;
-		var i, leni, j, lenj;
-		var anim, frame, animobj, frameobj, wt, uv;
+		let i, leni, j, lenj;
+		let anim, frame, animobj, frameobj, wt, uv;
 		this.all_frames = [];
 		this.has_loaded_textures = false;
 		for (i = 0, leni = this.animations.length; i < leni; i++)
@@ -19578,7 +19578,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	typeProto.updateAllCurrentTexture = function ()
 	{
-		var i, len, inst;
+		let i, len, inst;
 		for (i = 0, len = this.instances.length; i < len; i++)
 		{
 			inst = this.instances[i];
@@ -19589,7 +19589,7 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (this.is_family)
 			return;
-		var i, len, frame;
+		let i, len, frame;
 		for (i = 0, len = this.all_frames.length; i < len; ++i)
 		{
 			frame = this.all_frames[i];
@@ -19603,7 +19603,7 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (this.is_family || !this.instances.length)
 			return;
-		var i, len, frame;
+		let i, len, frame;
 		for (i = 0, len = this.all_frames.length; i < len; ++i)
 		{
 			frame = this.all_frames[i];
@@ -19615,7 +19615,7 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (this.is_family || this.has_loaded_textures || !this.runtime.glwrap)
 			return;
-		var i, len, frame;
+		let i, len, frame;
 		for (i = 0, len = this.all_frames.length; i < len; ++i)
 		{
 			frame = this.all_frames[i];
@@ -19627,7 +19627,7 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (this.is_family || this.instances.length || !this.has_loaded_textures)
 			return;
-		var i, len, frame;
+		let i, len, frame;
 		for (i = 0, len = this.all_frames.length; i < len; ++i)
 		{
 			frame = this.all_frames[i];
@@ -19636,10 +19636,10 @@ cr.plugins_.Sprite = function(runtime)
 		}
 		this.has_loaded_textures = false;
 	};
-	var already_drawn_images = [];
+	let already_drawn_images = [];
 	typeProto.preloadCanvas2D = function (ctx)
 	{
-		var i, len, frameimg;
+		let i, len, frameimg;
 		cr.clearArray(already_drawn_images);
 		for (i = 0, len = this.all_frames.length; i < len; ++i)
 		{
@@ -19654,13 +19654,13 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		this.type = type;
 		this.runtime = type.runtime;
-		var poly_pts = this.type.animations[0].frames[0].poly_pts;
+		let poly_pts = this.type.animations[0].frames[0].poly_pts;
 		if (this.recycled)
 			this.collision_poly.set_pts(poly_pts);
 		else
 			this.collision_poly = new cr.CollisionPoly(poly_pts);
 	};
-	var instanceProto = pluginProto.Instance.prototype;
+	let instanceProto = pluginProto.Instance.prototype;
 	instanceProto.onCreate = function()
 	{
 		this.visible = (this.properties[0] === 0);	// 0=visible, 1=invisible
@@ -19673,7 +19673,7 @@ cr.plugins_.Sprite = function(runtime)
 			this.cur_frame = 0;
 		if (this.cur_frame >= this.cur_animation.frames.length)
 			this.cur_frame = this.cur_animation.frames.length - 1;
-		var curanimframe = this.cur_animation.frames[this.cur_frame];
+		let curanimframe = this.cur_animation.frames[this.cur_frame];
 		this.collision_poly.set_pts(curanimframe.poly_pts);
 		this.hotspotX = curanimframe.hotspotX;
 		this.hotspotY = curanimframe.hotspotY;
@@ -19697,8 +19697,8 @@ cr.plugins_.Sprite = function(runtime)
 		this.changeAnimFrom = 0;
 		this.changeAnimFrame = -1;
 		this.type.loadTextures();
-		var i, leni, j, lenj;
-		var anim, frame, uv, maintex;
+		let i, leni, j, lenj;
+		let anim, frame, uv, maintex;
 		for (i = 0, leni = this.type.animations.length; i < leni; i++)
 		{
 			anim = this.type.animations[i];
@@ -19730,7 +19730,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.saveToJSON = function ()
 	{
-		var o = {
+		let o = {
 			"a": this.cur_animation.sid,
 			"f": this.cur_frame,
 			"cas": this.cur_anim_speed,
@@ -19747,7 +19747,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.loadFromJSON = function (o)
 	{
-		var anim = this.getAnimationBySid(o["a"]);
+		let anim = this.getAnimationBySid(o["a"]);
 		if (anim)
 			this.cur_animation = anim;
 		this.cur_frame = o["f"];
@@ -19794,11 +19794,11 @@ cr.plugins_.Sprite = function(runtime)
 			this.doChangeAnim();
 		if (this.changeAnimFrame >= 0)
 			this.doChangeAnimFrame();
-		var now = this.getNowTime();
-		var cur_animation = this.cur_animation;
-		var prev_frame = cur_animation.frames[this.cur_frame];
-		var next_frame;
-		var cur_frame_time = prev_frame.duration / this.cur_anim_speed;
+		let now = this.getNowTime();
+		let cur_animation = this.cur_animation;
+		let prev_frame = cur_animation.frames[this.cur_frame];
+		let next_frame;
+		let cur_frame_time = prev_frame.duration / this.cur_anim_speed;
 		if (this.animPlaying && now >= this.frameStart + cur_frame_time)
 		{
 			if (this.animForwards)
@@ -19884,7 +19884,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.getAnimationByName = function (name_)
 	{
-		var i, len, a;
+		let i, len, a;
 		for (i = 0, len = this.type.animations.length; i < len; i++)
 		{
 			a = this.type.animations[i];
@@ -19895,7 +19895,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.getAnimationBySid = function (sid_)
 	{
-		var i, len, a;
+		let i, len, a;
 		for (i = 0, len = this.type.animations.length; i < len; i++)
 		{
 			a = this.type.animations[i];
@@ -19906,8 +19906,8 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.doChangeAnim = function ()
 	{
-		var prev_frame = this.cur_animation.frames[this.cur_frame];
-		var anim = this.getAnimationByName(this.changeAnimName);
+		let prev_frame = this.cur_animation.frames[this.cur_frame];
+		let anim = this.getAnimationByName(this.changeAnimName);
 		this.changeAnimName = "";
 		if (!anim)
 			return;
@@ -19930,8 +19930,8 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.doChangeAnimFrame = function ()
 	{
-		var prev_frame = this.cur_animation.frames[this.cur_frame];
-		var prev_frame_number = this.cur_frame;
+		let prev_frame = this.cur_animation.frames[this.cur_frame];
+		let prev_frame_number = this.cur_frame;
 		this.cur_frame = cr.floor(this.changeAnimFrame);
 		if (this.cur_frame < 0)
 			this.cur_frame = 0;
@@ -19947,10 +19947,10 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.OnFrameChanged = function (prev_frame, next_frame)
 	{
-		var oldw = prev_frame.width;
-		var oldh = prev_frame.height;
-		var neww = next_frame.width;
-		var newh = next_frame.height;
+		let oldw = prev_frame.width;
+		let oldh = prev_frame.height;
+		let neww = next_frame.width;
+		let newh = next_frame.height;
 		if (oldw != neww)
 			this.width *= (neww / oldw);
 		if (oldh != newh)
@@ -19961,7 +19961,7 @@ cr.plugins_.Sprite = function(runtime)
 		this.set_bbox_changed();
 		this.curFrame = next_frame;
 		this.curWebGLTexture = next_frame.webGL_texture;
-		var i, len, b;
+		let i, len, b;
 		for (i = 0, len = this.behavior_insts.length; i < len; i++)
 		{
 			b = this.behavior_insts[i];
@@ -19973,13 +19973,13 @@ cr.plugins_.Sprite = function(runtime)
 	instanceProto.draw = function(ctx)
 	{
 		ctx.globalAlpha = this.opacity;
-		var cur_frame = this.curFrame;
-		var spritesheeted = cur_frame.spritesheeted;
-		var cur_image = cur_frame.texture_img;
-		var myx = this.x;
-		var myy = this.y;
-		var w = this.width;
-		var h = this.height;
+		let cur_frame = this.curFrame;
+		let spritesheeted = cur_frame.spritesheeted;
+		let cur_image = cur_frame.texture_img;
+		let myx = this.x;
+		let myy = this.y;
+		let w = this.width;
+		let h = this.height;
 		if (this.angle === 0 && w >= 0 && h >= 0)
 		{
 			myx -= this.hotspotX * w;
@@ -20007,14 +20007,14 @@ cr.plugins_.Sprite = function(runtime)
 				myy = Math.round(myy);
 			}
 			ctx.save();
-			var widthfactor = w > 0 ? 1 : -1;
-			var heightfactor = h > 0 ? 1 : -1;
+			let widthfactor = w > 0 ? 1 : -1;
+			let heightfactor = h > 0 ? 1 : -1;
 			ctx.translate(myx, myy);
 			if (widthfactor !== 1 || heightfactor !== 1)
 				ctx.scale(widthfactor, heightfactor);
 			ctx.rotate(this.angle * widthfactor * heightfactor);
-			var drawx = 0 - (this.hotspotX * cr.abs(w))
-			var drawy = 0 - (this.hotspotY * cr.abs(h));
+			let drawx = 0 - (this.hotspotX * cr.abs(w))
+			let drawy = 0 - (this.hotspotY * cr.abs(h));
 			if (spritesheeted)
 			{
 				ctx.drawImage(cur_image, cur_frame.offx, cur_frame.offy, cur_frame.width, cur_frame.height,
@@ -20031,7 +20031,7 @@ cr.plugins_.Sprite = function(runtime)
 		ctx.lineWidth = 3;
 		ctx.beginPath();
 		this.collision_poly.cache_poly(this.width, this.height, this.angle);
-		var i, len, ax, ay, bx, by;
+		let i, len, ax, ay, bx, by;
 		for (i = 0, len = this.collision_poly.pts_count; i < len; i++)
 		{
 			ax = this.collision_poly.pts_cache[i*2] + this.x;
@@ -20059,12 +20059,12 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		glw.setTexture(this.curWebGLTexture);
 		glw.setOpacity(this.opacity);
-		var cur_frame = this.curFrame;
-		var q = this.bquad;
+		let cur_frame = this.curFrame;
+		let q = this.bquad;
 		if (this.runtime.pixel_rounding)
 		{
-			var ox = Math.round(this.x) - this.x;
-			var oy = Math.round(this.y) - this.y;
+			let ox = Math.round(this.x) - this.x;
+			let oy = Math.round(this.y) - this.y;
 			if (cur_frame.spritesheeted)
 				glw.quadTex(q.tlx + ox, q.tly + oy, q.trx + ox, q.try_ + oy, q.brx + ox, q.bry + oy, q.blx + ox, q.bly + oy, cur_frame.sheetTex);
 			else
@@ -20080,8 +20080,8 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.getImagePointIndexByName = function(name_)
 	{
-		var cur_frame = this.curFrame;
-		var i, len;
+		let cur_frame = this.curFrame;
+		let i, len;
 		for (i = 0, len = cur_frame.image_points.length; i < len; i++)
 		{
 			if (cr.equals_nocase(name_, cur_frame.image_points[i][0]))
@@ -20091,9 +20091,9 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	instanceProto.getImagePoint = function(imgpt, getX)
 	{
-		var cur_frame = this.curFrame;
-		var image_points = cur_frame.image_points;
-		var index;
+		let cur_frame = this.curFrame;
+		let image_points = cur_frame.image_points;
+		let index;
 		if (cr.is_string(imgpt))
 			index = this.getImagePointIndexByName(imgpt);
 		else
@@ -20101,12 +20101,12 @@ cr.plugins_.Sprite = function(runtime)
 		index = cr.floor(index);
 		if (index < 0 || index >= image_points.length)
 			return getX ? this.x : this.y;	// return origin
-		var x = (image_points[index][1] - cur_frame.hotspotX) * this.width;
-		var y = image_points[index][2];
+		let x = (image_points[index][1] - cur_frame.hotspotX) * this.width;
+		let y = image_points[index][2];
 		y = (y - cur_frame.hotspotY) * this.height;
-		var cosa = Math.cos(this.angle);
-		var sina = Math.sin(this.angle);
-		var x_temp = (x * cosa) - (y * sina);
+		let cosa = Math.cos(this.angle);
+		let sina = Math.sin(this.angle);
+		let x_temp = (x * cosa) - (y * sina);
 		y = (y * cosa) + (x * sina);
 		x = x_temp;
 		x += this.x;
@@ -20114,7 +20114,7 @@ cr.plugins_.Sprite = function(runtime)
 		return getX ? x : y;
 	};
 	function Cnds() {};
-	var arrCache = [];
+	let arrCache = [];
 	function allocArr()
 	{
 		if (arrCache.length)
@@ -20138,15 +20138,15 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	function collmemory_add(collmemory, a, b, tickcount)
 	{
-		var a_uid = a.uid;
-		var b_uid = b.uid;
-		var key = makeCollKey(a_uid, b_uid);
+		let a_uid = a.uid;
+		let b_uid = b.uid;
+		let key = makeCollKey(a_uid, b_uid);
 		if (collmemory.hasOwnProperty(key))
 		{
 			collmemory[key][2] = tickcount;
 			return;
 		}
-		var arr = allocArr();
+		let arr = allocArr();
 		arr[0] = a_uid;
 		arr[1] = b_uid;
 		arr[2] = tickcount;
@@ -20154,7 +20154,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	function collmemory_remove(collmemory, a, b)
 	{
-		var key = makeCollKey(a.uid, b.uid);
+		let key = makeCollKey(a.uid, b.uid);
 		if (collmemory.hasOwnProperty(key))
 		{
 			freeArr(collmemory[key]);
@@ -20163,8 +20163,8 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	function collmemory_removeInstance(collmemory, inst)
 	{
-		var uid = inst.uid;
-		var p, entry;
+		let uid = inst.uid;
+		let p, entry;
 		for (p in collmemory)
 		{
 			if (collmemory.hasOwnProperty(p))
@@ -20178,10 +20178,10 @@ cr.plugins_.Sprite = function(runtime)
 			}
 		}
 	};
-	var last_coll_tickcount = -2;
+	let last_coll_tickcount = -2;
 	function collmemory_has(collmemory, a, b)
 	{
-		var key = makeCollKey(a.uid, b.uid);
+		let key = makeCollKey(a.uid, b.uid);
 		if (collmemory.hasOwnProperty(key))
 		{
 			last_coll_tickcount = collmemory[key][2];
@@ -20193,15 +20193,15 @@ cr.plugins_.Sprite = function(runtime)
 			return false;
 		}
 	};
-	var candidates1 = [];
+	let candidates1 = [];
 	Cnds.prototype.OnCollision = function (rtype)
 	{
 		if (!rtype)
 			return false;
-		var runtime = this.runtime;
-		var cnd = runtime.getCurrentCondition();
-		var ltype = cnd.type;
-		var collmemory = null;
+		let runtime = this.runtime;
+		let cnd = runtime.getCurrentCondition();
+		let ltype = cnd.type;
+		let collmemory = null;
 		if (cnd.extra["collmemory"])
 		{
 			collmemory = cnd.extra["collmemory"];
@@ -20218,18 +20218,18 @@ cr.plugins_.Sprite = function(runtime)
 				collmemory_removeInstance(cnd.extra["collmemory"], inst);
 			});
 		}
-		var lsol = ltype.getCurrentSol();
-		var rsol = rtype.getCurrentSol();
-		var linstances = lsol.getObjects();
-		var rinstances;
-		var registeredInstances;
-		var l, linst, r, rinst;
-		var curlsol, currsol;
-		var tickcount = this.runtime.tickcount;
-		var lasttickcount = tickcount - 1;
-		var exists, run;
-		var current_event = runtime.getCurrentEventStack().current_event;
-		var orblock = current_event.orblock;
+		let lsol = ltype.getCurrentSol();
+		let rsol = rtype.getCurrentSol();
+		let linstances = lsol.getObjects();
+		let rinstances;
+		let registeredInstances;
+		let l, linst, r, rinst;
+		let curlsol, currsol;
+		let tickcount = this.runtime.tickcount;
+		let lasttickcount = tickcount - 1;
+		let exists, run;
+		let current_event = runtime.getCurrentEventStack().current_event;
+		let orblock = current_event.orblock;
 		for (l = 0; l < linstances.length; l++)
 		{
 			linst = linstances[l];
@@ -20288,23 +20288,23 @@ cr.plugins_.Sprite = function(runtime)
 		}
 		return false;
 	};
-	var rpicktype = null;
-	var rtopick = new cr.ObjectSet();
-	var needscollisionfinish = false;
-	var candidates2 = [];
-	var temp_bbox = new cr.rect(0, 0, 0, 0);
+	let rpicktype = null;
+	let rtopick = new cr.ObjectSet();
+	let needscollisionfinish = false;
+	let candidates2 = [];
+	let temp_bbox = new cr.rect(0, 0, 0, 0);
 	function DoOverlapCondition(rtype, offx, offy)
 	{
 		if (!rtype)
 			return false;
-		var do_offset = (offx !== 0 || offy !== 0);
-		var oldx, oldy, ret = false, r, lenr, rinst;
-		var cnd = this.runtime.getCurrentCondition();
-		var ltype = cnd.type;
-		var inverted = cnd.inverted;
-		var rsol = rtype.getCurrentSol();
-		var orblock = this.runtime.getCurrentEventStack().current_event.orblock;
-		var rinstances;
+		let do_offset = (offx !== 0 || offy !== 0);
+		let oldx, oldy, ret = false, r, lenr, rinst;
+		let cnd = this.runtime.getCurrentCondition();
+		let ltype = cnd.type;
+		let inverted = cnd.inverted;
+		let rsol = rtype.getCurrentSol();
+		let orblock = this.runtime.getCurrentEventStack().current_event.orblock;
+		let rinstances;
 		if (rsol.select_all)
 		{
 			this.update_bbox();
@@ -20361,10 +20361,10 @@ cr.plugins_.Sprite = function(runtime)
 			return;
 		if (do_pick)
 		{
-			var orblock = this.runtime.getCurrentEventStack().current_event.orblock;
-			var sol = rpicktype.getCurrentSol();
-			var topick = rtopick.valuesRef();
-			var i, len, inst;
+			let orblock = this.runtime.getCurrentEventStack().current_event.orblock;
+			let sol = rpicktype.getCurrentSol();
+			let topick = rtopick.valuesRef();
+			let i, len, inst;
 			if (sol.select_all)
 			{
 				sol.select_all = false;
@@ -20388,7 +20388,7 @@ cr.plugins_.Sprite = function(runtime)
 			{
 				if (orblock)
 				{
-					var initsize = sol.instances.length;
+					let initsize = sol.instances.length;
 					for (i = 0, len = topick.length; i < len; ++i)
 					{
 						sol.instances[initsize + i] = topick[i];
@@ -20426,7 +20426,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	Cnds.prototype.CompareAnimSpeed = function (cmp, x)
 	{
-		var s = (this.animForwards ? this.cur_anim_speed : -this.cur_anim_speed);
+		let s = (this.animForwards ? this.cur_anim_speed : -this.cur_anim_speed);
 		return cr.do_cmp(s, cmp, x);
 	};
 	Cnds.prototype.OnAnimFinished = function (animname)
@@ -20463,7 +20463,7 @@ cr.plugins_.Sprite = function(runtime)
 	{
 		if (!obj || !layer)
 			return;
-		var inst = this.runtime.createInstance(obj, layer, this.getImagePoint(imgpt, true), this.getImagePoint(imgpt, false));
+		let inst = this.runtime.createInstance(obj, layer, this.getImagePoint(imgpt, true), this.getImagePoint(imgpt, false));
 		if (!inst)
 			return;
 		if (typeof inst.angle !== "undefined")
@@ -20472,7 +20472,7 @@ cr.plugins_.Sprite = function(runtime)
 			inst.set_bbox_changed();
 		}
 		this.runtime.isInOnDestroy++;
-		var i, len, s;
+		let i, len, s;
 		this.runtime.trigger(Object.getPrototypeOf(obj.plugin).cnds.OnCreated, inst);
 		if (inst.is_contained)
 		{
@@ -20483,14 +20483,14 @@ cr.plugins_.Sprite = function(runtime)
 			}
 		}
 		this.runtime.isInOnDestroy--;
-		var cur_act = this.runtime.getCurrentAction();
-		var reset_sol = false;
+		let cur_act = this.runtime.getCurrentAction();
+		let reset_sol = false;
 		if (cr.is_undefined(cur_act.extra["Spawn_LastExec"]) || cur_act.extra["Spawn_LastExec"] < this.runtime.execcount)
 		{
 			reset_sol = true;
 			cur_act.extra["Spawn_LastExec"] = this.runtime.execcount;
 		}
-		var sol;
+		let sol;
 		if (obj != this.type)
 		{
 			sol = obj.getCurrentSol();
@@ -20591,7 +20591,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	Acts.prototype.SetMirrored = function (m)
 	{
-		var neww = cr.abs(this.width) * (m === 0 ? -1 : 1);
+		let neww = cr.abs(this.width) * (m === 0 ? -1 : 1);
 		if (this.width === neww)
 			return;
 		this.width = neww;
@@ -20599,7 +20599,7 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	Acts.prototype.SetFlipped = function (f)
 	{
-		var newh = cr.abs(this.height) * (f === 0 ? -1 : 1);
+		let newh = cr.abs(this.height) * (f === 0 ? -1 : 1);
 		if (this.height === newh)
 			return;
 		this.height = newh;
@@ -20607,11 +20607,11 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	Acts.prototype.SetScale = function (s)
 	{
-		var cur_frame = this.curFrame;
-		var mirror_factor = (this.width < 0 ? -1 : 1);
-		var flip_factor = (this.height < 0 ? -1 : 1);
-		var new_width = cur_frame.width * s * mirror_factor;
-		var new_height = cur_frame.height * s * flip_factor;
+		let cur_frame = this.curFrame;
+		let mirror_factor = (this.width < 0 ? -1 : 1);
+		let flip_factor = (this.height < 0 ? -1 : 1);
+		let new_width = cur_frame.width * s * mirror_factor;
+		let new_height = cur_frame.height * s * flip_factor;
 		if (this.width !== new_width || this.height !== new_height)
 		{
 			this.width = new_width;
@@ -20621,9 +20621,9 @@ cr.plugins_.Sprite = function(runtime)
 	};
 	Acts.prototype.LoadURL = function (url_, resize_, crossOrigin_)
 	{
-		var img = new Image();
-		var self = this;
-		var curFrame_ = this.curFrame;
+		let img = new Image();
+		let self = this;
+		let curFrame_ = this.curFrame;
 		img.onload = function ()
 		{
 			if (curFrame_.texture_img.src === img.src)
@@ -20735,7 +20735,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Spritefont2.prototype;
+	let pluginProto = cr.plugins_.Spritefont2.prototype;
 	pluginProto.onCreate = function ()
 	{
 	};
@@ -20744,7 +20744,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 		if (this.is_family)
@@ -20767,7 +20767,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		{
 			this.webGL_texture = this.runtime.glwrap.loadTexture(this.texture_img, false, this.runtime.linearSampling, this.texture_pixelformat);
 		}
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.instances.length; i < len; i++)
 			this.instances[i].webGL_texture = this.webGL_texture;
 	};
@@ -20787,7 +20787,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		this.type = type;
 		this.runtime = type.runtime;
 	};
-	var instanceProto = pluginProto.Instance.prototype;
+	let instanceProto = pluginProto.Instance.prototype;
 	instanceProto.onDestroy = function()
 	{
 		freeAllLines (this.lines);
@@ -20839,7 +20839,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	};
 	instanceProto.saveToJSON = function ()
 	{
-		var save = {
+		let save = {
 			"t": this.text,
 			"csc": this.characterScale,
 			"csp": this.characterSpacing,
@@ -20851,7 +20851,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 			"va": this.valign,
 			"cw": {}
 		};
-		for (var ch in this.characterWidthList)
+		for (let ch in this.characterWidthList)
 			save["cw"][ch] = this.characterWidthList[ch];
 		return save;
 	};
@@ -20868,7 +20868,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 			this.halign = o["ha"];
 		if (o.hasOwnProperty("va"))
 			this.valign = o["va"];
-		for(var ch in o["cw"])
+		for(let ch in o["cw"])
 			this.characterWidthList[ch] = o["cw"][ch];
 		this.text_changed = true;
 		this.lastwrapwidth = this.width;
@@ -20877,7 +20877,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	{
 		return text.replace(/\s\s*$/, '');
 	}
-	var MAX_CACHE_SIZE = 1000;
+	let MAX_CACHE_SIZE = 1000;
 	function alloc(cache,Constructor)
 	{
 		if (cache.length)
@@ -20895,14 +20895,14 @@ cr.plugins_.Spritefont2 = function(runtime)
 	function freeAll(cache,dataList,isArray)
 	{
 		if (isArray) {
-			var i, len;
+			let i, len;
 			for (i = 0, len = dataList.length; i < len; i++)
 			{
 				free(cache,dataList[i]);
 			}
 			cr.clearArray(dataList);
 		} else {
-			var prop;
+			let prop;
 			for(prop in dataList) {
 				if(Object.prototype.hasOwnProperty.call(dataList,prop)) {
 					free(cache,dataList[prop]);
@@ -20912,8 +20912,8 @@ cr.plugins_.Spritefont2 = function(runtime)
 		}
 	}
 	function addLine(inst,lineIndex,cur_line) {
-		var lines = inst.lines;
-		var line;
+		let lines = inst.lines;
+		let line;
 		cur_line = trimRight(cur_line);
 		if (lineIndex >= lines.length)
 			lines.push(allocLine());
@@ -20922,7 +20922,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		line.width = inst.measureWidth(cur_line);
 		inst.textWidth = cr.max(inst.textWidth,line.width);
 	}
-	var linesCache = [];
+	let linesCache = [];
 	function allocLine()       { return alloc(linesCache,Object); }
 	function freeLine(l)       { free(linesCache,l); }
 	function freeAllLines(arr) { freeAll(linesCache,arr,true); }
@@ -20935,7 +20935,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		obj[property].w = w;
 		obj[property].h = h;
 	}
-	var clipCache = [];
+	let clipCache = [];
 	function allocClip()      { return alloc(clipCache,Object); }
 	function freeAllClip(obj) { freeAll(clipCache,obj,false);}
 	function addClipUV(obj,property,left,top,right,bottom) {
@@ -20947,25 +20947,25 @@ cr.plugins_.Spritefont2 = function(runtime)
 		obj[property].right  = right;
 		obj[property].bottom = bottom;
 	}
-	var clipUVCache = [];
+	let clipUVCache = [];
 	function allocClipUV()      { return alloc(clipUVCache,cr.rect);}
 	function freeAllClipUV(obj) { freeAll(clipUVCache,obj,false);}
 	instanceProto.SplitSheet = function() {
-		var texture      = this.texture_img;
-		var texWidth     = texture.width;
-		var texHeight    = texture.height;
-		var charWidth    = this.characterWidth;
-		var charHeight   = this.characterHeight;
-		var charU        = charWidth /texWidth;
-		var charV        = charHeight/texHeight;
-		var charSet      = this.characterSet ;
-		var cols = Math.floor(texWidth/charWidth);
-		var rows = Math.floor(texHeight/charHeight);
-		for ( var c = 0; c < charSet.length; c++) {
+		let texture      = this.texture_img;
+		let texWidth     = texture.width;
+		let texHeight    = texture.height;
+		let charWidth    = this.characterWidth;
+		let charHeight   = this.characterHeight;
+		let charU        = charWidth /texWidth;
+		let charV        = charHeight/texHeight;
+		let charSet      = this.characterSet ;
+		let cols = Math.floor(texWidth/charWidth);
+		let rows = Math.floor(texHeight/charHeight);
+		for ( let c = 0; c < charSet.length; c++) {
 			if  (c >= cols * rows) break;
-			var x = c%cols;
-			var y = Math.floor(c/cols);
-			var letter = charSet.charAt(c);
+			let x = c%cols;
+			let y = Math.floor(c/cols);
+			let letter = charSet.charAt(c);
 			if (this.runtime.glwrap) {
 				addClipUV(
 					this.clipUV, letter,
@@ -20988,13 +20988,13 @@ cr.plugins_.Spritefont2 = function(runtime)
 	/*
      *	Word-Wrapping
      */
-	var wordsCache = [];
+	let wordsCache = [];
 	pluginProto.TokeniseWords = function (text)
 	{
 		cr.clearArray(wordsCache);
-		var cur_word = "";
-		var ch;
-		var i = 0;
+		let cur_word = "";
+		let ch;
+		let i = 0;
 		while (i < text.length)
 		{
 			ch = text.charAt(i);
@@ -21029,25 +21029,25 @@ cr.plugins_.Spritefont2 = function(runtime)
 	};
 	pluginProto.WordWrap = function (inst)
 	{
-		var text = inst.text;
-		var lines = inst.lines;
+		let text = inst.text;
+		let lines = inst.lines;
 		if (!text || !text.length)
 		{
 			freeAllLines(lines);
 			return;
 		}
-		var width = inst.width;
+		let width = inst.width;
 		if (width <= 2.0)
 		{
 			freeAllLines(lines);
 			return;
 		}
-		var charWidth = inst.characterWidth;
-		var charScale = inst.characterScale;
-		var charSpacing = inst.characterSpacing;
+		let charWidth = inst.characterWidth;
+		let charScale = inst.characterScale;
+		let charSpacing = inst.characterSpacing;
 		if ( (text.length * (charWidth * charScale + charSpacing) - charSpacing) <= width && text.indexOf("\n") === -1)
 		{
-			var all_width = inst.measureWidth(text);
+			let all_width = inst.measureWidth(text);
 			if (all_width <= width)
 			{
 				freeAllLines(lines);
@@ -21059,30 +21059,30 @@ cr.plugins_.Spritefont2 = function(runtime)
 				return;
 			}
 		}
-		var wrapbyword = inst.wrapbyword;
+		let wrapbyword = inst.wrapbyword;
 		this.WrapText(inst);
 		inst.textHeight = lines.length * (inst.characterHeight * charScale + inst.lineHeight);
 	};
 	pluginProto.WrapText = function (inst)
 	{
-		var wrapbyword = inst.wrapbyword;
-		var text       = inst.text;
-		var lines      = inst.lines;
-		var width      = inst.width;
-		var wordArray;
+		let wrapbyword = inst.wrapbyword;
+		let text       = inst.text;
+		let lines      = inst.lines;
+		let width      = inst.width;
+		let wordArray;
 		if (wrapbyword) {
 			this.TokeniseWords(text);	// writes to wordsCache
 			wordArray = wordsCache;
 		} else {
 			wordArray = text;
 		}
-		var cur_line = "";
-		var prev_line;
-		var line_width;
-		var i;
-		var lineIndex = 0;
-		var line;
-		var ignore_newline = false;
+		let cur_line = "";
+		let prev_line;
+		let line_width;
+		let i;
+		let lineIndex = 0;
+		let line;
+		let ignore_newline = false;
 		for (i = 0; i < wordArray.length; i++)
 		{
 			if (wordArray[i] === "\n")
@@ -21125,10 +21125,10 @@ cr.plugins_.Spritefont2 = function(runtime)
 		lines.length = lineIndex;
 	};
 	instanceProto.measureWidth = function(text) {
-		var spacing = this.characterSpacing;
-		var len     = text.length;
-		var width   = 0;
-		for (var i = 0; i < len; i++) {
+		let spacing = this.characterSpacing;
+		let len     = text.length;
+		let width   = 0;
+		for (let i = 0; i < len; i++) {
 			width += this.getCharacterWidth(text.charAt(i)) * this.characterScale + spacing;
 		}
 		width -= (width > 0) ? spacing : 0;
@@ -21136,7 +21136,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	};
 	/***/
 	instanceProto.getCharacterWidth = function(character) {
-		var widthList = this.characterWidthList;
+		let widthList = this.characterWidthList;
 		if (widthList[character] !== undefined) {
 			return widthList[character];
 		} else {
@@ -21152,51 +21152,51 @@ cr.plugins_.Spritefont2 = function(runtime)
 			this.lastwrapwidth = this.width;
 		}
 	};
-	var EPSILON = 0.00001;
+	let EPSILON = 0.00001;
 	instanceProto.draw = function(ctx, glmode)
 	{
-		var texture = this.texture_img;
+		let texture = this.texture_img;
 		if (this.text !== "" && texture != null) {
 			this.rebuildText();
 			if (this.height < this.characterHeight*this.characterScale + this.lineHeight) {
 				return;
 			}
 			ctx.globalAlpha = this.opacity;
-			var myx = this.x;
-			var myy = this.y;
+			let myx = this.x;
+			let myy = this.y;
 			if (this.runtime.pixel_rounding)
 			{
 				myx = Math.round(myx);
 				myy = Math.round(myy);
 			}
-			var viewLeft = this.layer.viewLeft;
-			var viewTop = this.layer.viewTop;
-			var viewRight = this.layer.viewRight;
-			var viewBottom = this.layer.viewBottom;
+			let viewLeft = this.layer.viewLeft;
+			let viewTop = this.layer.viewTop;
+			let viewRight = this.layer.viewRight;
+			let viewBottom = this.layer.viewBottom;
 			ctx.save();
 			ctx.translate(myx, myy);
 			ctx.rotate(this.angle);
-			var angle      = this.angle;
-			var ha         = this.halign;
-			var va         = this.valign;
-			var scale      = this.characterScale;
-			var charHeight = this.characterHeight * scale;
-			var lineHeight = this.lineHeight;
-			var charSpace  = this.characterSpacing;
-			var lines = this.lines;
-			var textHeight = this.textHeight;
-			var letterWidth;
-			var halign;
-			var valign = va * cr.max(0,(this.height - textHeight));
-			var offx = -(this.hotspotX * this.width);
-			var offy = -(this.hotspotY * this.height);
+			let angle      = this.angle;
+			let ha         = this.halign;
+			let va         = this.valign;
+			let scale      = this.characterScale;
+			let charHeight = this.characterHeight * scale;
+			let lineHeight = this.lineHeight;
+			let charSpace  = this.characterSpacing;
+			let lines = this.lines;
+			let textHeight = this.textHeight;
+			let letterWidth;
+			let halign;
+			let valign = va * cr.max(0,(this.height - textHeight));
+			let offx = -(this.hotspotX * this.width);
+			let offy = -(this.hotspotY * this.height);
 			offy += valign;
-			var drawX ;
-			var drawY = offy;
-			var roundX, roundY;
-			for(var i = 0; i < lines.length; i++) {
-				var line = lines[i].text;
-				var len  = lines[i].width;
+			let drawX ;
+			let drawY = offy;
+			let roundX, roundY;
+			for(let i = 0; i < lines.length; i++) {
+				let line = lines[i].text;
+				let len  = lines[i].width;
 				halign = ha * cr.max(0,this.width - len);
 				drawX = offx + halign;
 				drawY += lineHeight;
@@ -21205,10 +21205,10 @@ cr.plugins_.Spritefont2 = function(runtime)
 					drawY += charHeight;
 					continue;
 				}
-				for(var j = 0; j < line.length; j++) {
-					var letter = line.charAt(j);
+				for(let j = 0; j < line.length; j++) {
+					let letter = line.charAt(j);
 					letterWidth = this.getCharacterWidth(letter);
-					var clip = this.clipList[letter];
+					let clip = this.clipList[letter];
 					if (angle === 0 && myx + drawX + letterWidth * scale + charSpace < viewLeft)
 					{
 						drawX += letterWidth * scale + charSpace;
@@ -21242,9 +21242,9 @@ cr.plugins_.Spritefont2 = function(runtime)
 			ctx.restore();
 		}
 	};
-	var dQuad = new cr.quad();
+	let dQuad = new cr.quad();
 	function rotateQuad(quad,cosa,sina) {
-		var x_temp;
+		let x_temp;
 		x_temp   = (quad.tlx * cosa) - (quad.tly * sina);
 		quad.tly = (quad.tly * cosa) + (quad.tlx * sina);
 		quad.tlx = x_temp;
@@ -21269,44 +21269,44 @@ cr.plugins_.Spritefont2 = function(runtime)
 			return;
 		}
 		this.update_bbox();
-		var q = this.bquad;
-		var ox = 0;
-		var oy = 0;
+		let q = this.bquad;
+		let ox = 0;
+		let oy = 0;
 		if (this.runtime.pixel_rounding)
 		{
 			ox = Math.round(this.x) - this.x;
 			oy = Math.round(this.y) - this.y;
 		}
-		var viewLeft = this.layer.viewLeft;
-		var viewTop = this.layer.viewTop;
-		var viewRight = this.layer.viewRight;
-		var viewBottom = this.layer.viewBottom;
-		var angle      = this.angle;
-		var ha         = this.halign;
-		var va         = this.valign;
-		var scale      = this.characterScale;
-		var charHeight = this.characterHeight * scale;   // to precalculate in onCreate or on change
-		var lineHeight = this.lineHeight;
-		var charSpace  = this.characterSpacing;
-		var lines = this.lines;
-		var textHeight = this.textHeight;
-		var letterWidth;
-		var cosa,sina;
+		let viewLeft = this.layer.viewLeft;
+		let viewTop = this.layer.viewTop;
+		let viewRight = this.layer.viewRight;
+		let viewBottom = this.layer.viewBottom;
+		let angle      = this.angle;
+		let ha         = this.halign;
+		let va         = this.valign;
+		let scale      = this.characterScale;
+		let charHeight = this.characterHeight * scale;   // to precalculate in onCreate or on change
+		let lineHeight = this.lineHeight;
+		let charSpace  = this.characterSpacing;
+		let lines = this.lines;
+		let textHeight = this.textHeight;
+		let letterWidth;
+		let cosa,sina;
 		if (angle !== 0)
 		{
 			cosa = Math.cos(angle);
 			sina = Math.sin(angle);
 		}
-		var halign;
-		var valign = va * cr.max(0,(this.height - textHeight));
-		var offx = q.tlx + ox;
-		var offy = q.tly + oy;
-		var drawX ;
-		var drawY = valign;
-		var roundX, roundY;
-		for(var i = 0; i < lines.length; i++) {
-			var line       = lines[i].text;
-			var lineWidth  = lines[i].width;
+		let halign;
+		let valign = va * cr.max(0,(this.height - textHeight));
+		let offx = q.tlx + ox;
+		let offy = q.tly + oy;
+		let drawX ;
+		let drawY = valign;
+		let roundX, roundY;
+		for(let i = 0; i < lines.length; i++) {
+			let line       = lines[i].text;
+			let lineWidth  = lines[i].width;
 			halign = ha * cr.max(0,this.width - lineWidth);
 			drawX = halign;
 			drawY += lineHeight;
@@ -21315,10 +21315,10 @@ cr.plugins_.Spritefont2 = function(runtime)
 				drawY += charHeight;
 				continue;
 			}
-			for(var j = 0; j < line.length; j++) {
-				var letter = line.charAt(j);
+			for(let j = 0; j < line.length; j++) {
+				let letter = line.charAt(j);
 				letterWidth = this.getCharacterWidth(letter);
-				var clipUV = this.clipUV[letter];
+				let clipUV = this.clipUV[letter];
 				if (angle === 0 && offx + drawX + letterWidth * scale + charSpace < viewLeft)
 				{
 					drawX += letterWidth * scale + charSpace;
@@ -21329,8 +21329,8 @@ cr.plugins_.Spritefont2 = function(runtime)
 					break;
 				}
 				if (clipUV !== undefined) {
-					var clipWidth  = this.characterWidth*scale;
-					var clipHeight = this.characterHeight*scale;
+					let clipWidth  = this.characterWidth*scale;
+					let clipHeight = this.characterHeight*scale;
 					roundX = drawX;
 					roundY = drawY;
 					if (angle === 0 && scale === 1)
@@ -21384,7 +21384,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	{
 		if (cr.is_number(param) && param < 1e9)
 			param = Math.round(param * 1e10) / 1e10;	// round to nearest ten billionth - hides floating point errors
-		var text_to_set = param.toString();
+		let text_to_set = param.toString();
 		if (this.text !== text_to_set)
 		{
 			this.text = text_to_set;
@@ -21396,7 +21396,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	{
 		if (cr.is_number(param))
 			param = Math.round(param * 1e10) / 1e10;	// round to nearest ten billionth - hides floating point errors
-		var text_to_append = param.toString();
+		let text_to_append = param.toString();
 		if (text_to_append)	// not empty
 		{
 			this.text += text_to_append;
@@ -21429,7 +21429,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 		}
 	};
 	instanceProto.SetCharWidth = function(character,width) {
-		var w = parseInt(width,10);
+		let w = parseInt(width,10);
 		if (this.characterWidthList[character] !== w) {
 			this.characterWidthList[character] = w;
 			this.text_changed = true;
@@ -21439,7 +21439,7 @@ cr.plugins_.Spritefont2 = function(runtime)
 	Acts.prototype.SetCharacterWidth = function(characterSet,width)
 	{
 		if (characterSet !== "") {
-			for(var c = 0; c < characterSet.length; c++) {
+			for(let c = 0; c < characterSet.length; c++) {
 				this.SetCharWidth(characterSet.charAt(c),width);
 			}
 		}
@@ -21509,13 +21509,13 @@ cr.plugins_.Touch = function(runtime)
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.Touch.prototype;
+	let pluginProto = cr.plugins_.Touch.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
 		this.runtime = plugin.runtime;
 	};
-	var typeProto = pluginProto.Type.prototype;
+	let typeProto = pluginProto.Type.prototype;
 	typeProto.onCreate = function()
 	{
 	};
@@ -21526,11 +21526,11 @@ cr.plugins_.Touch = function(runtime)
 		this.touches = [];
 		this.mouseDown = false;
 	};
-	var instanceProto = pluginProto.Instance.prototype;
-	var dummyoffset = {left: 0, top: 0};
+	let instanceProto = pluginProto.Instance.prototype;
+	let dummyoffset = {left: 0, top: 0};
 	instanceProto.findTouch = function (id)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.touches.length; i < len; i++)
 		{
 			if (this.touches[i]["id"] === id)
@@ -21538,29 +21538,29 @@ cr.plugins_.Touch = function(runtime)
 		}
 		return -1;
 	};
-	var appmobi_accx = 0;
-	var appmobi_accy = 0;
-	var appmobi_accz = 0;
+	let appmobi_accx = 0;
+	let appmobi_accy = 0;
+	let appmobi_accz = 0;
 	function AppMobiGetAcceleration(evt)
 	{
 		appmobi_accx = evt.x;
 		appmobi_accy = evt.y;
 		appmobi_accz = evt.z;
 	};
-	var pg_accx = 0;
-	var pg_accy = 0;
-	var pg_accz = 0;
+	let pg_accx = 0;
+	let pg_accy = 0;
+	let pg_accz = 0;
 	function PhoneGapGetAcceleration(evt)
 	{
 		pg_accx = evt.x;
 		pg_accy = evt.y;
 		pg_accz = evt.z;
 	};
-	var theInstance = null;
-	var touchinfo_cache = [];
+	let theInstance = null;
+	let touchinfo_cache = [];
 	function AllocTouchInfo(x, y, id, index)
 	{
-		var ret;
+		let ret;
 		if (touchinfo_cache.length)
 			ret = touchinfo_cache.pop();
 		else
@@ -21573,10 +21573,10 @@ cr.plugins_.Touch = function(runtime)
 		if (touchinfo_cache.length < 100)
 			touchinfo_cache.push(ti);
 	};
-	var GESTURE_HOLD_THRESHOLD = 15;		// max px motion for hold gesture to register
-	var GESTURE_HOLD_TIMEOUT = 500;			// time for hold gesture to register
-	var GESTURE_TAP_TIMEOUT = 333;			// time for tap gesture to register
-	var GESTURE_DOUBLETAP_THRESHOLD = 25;	// max distance apart for taps to be
+	let GESTURE_HOLD_THRESHOLD = 15;		// max px motion for hold gesture to register
+	let GESTURE_HOLD_TIMEOUT = 500;			// time for hold gesture to register
+	let GESTURE_TAP_TIMEOUT = 333;			// time for tap gesture to register
+	let GESTURE_DOUBLETAP_THRESHOLD = 25;	// max distance apart for taps to be
 	function TouchInfo()
 	{
 		this.starttime = 0;
@@ -21595,7 +21595,7 @@ cr.plugins_.Touch = function(runtime)
 	};
 	TouchInfo.prototype.init = function (x, y, id, index)
 	{
-		var nowtime = cr.performance_now();
+		let nowtime = cr.performance_now();
 		this.time = nowtime;
 		this.lasttime = nowtime;
 		this.starttime = nowtime;
@@ -21633,7 +21633,7 @@ cr.plugins_.Touch = function(runtime)
 	{
 		if (this.triggeredHold)
 			return;		// already triggered this gesture
-		var nowtime = cr.performance_now();
+		let nowtime = cr.performance_now();
 		if (nowtime - this.starttime >= GESTURE_HOLD_TIMEOUT && !this.tooFarForHold && cr.distanceTo(this.startx, this.starty, this.x, this.y) < GESTURE_HOLD_THRESHOLD)
 		{
 			this.triggeredHold = true;
@@ -21647,14 +21647,14 @@ cr.plugins_.Touch = function(runtime)
 			inst.getTouchIndex = 0;
 		}
 	};
-	var lastTapX = -1000;
-	var lastTapY = -1000;
-	var lastTapTime = -10000;
+	let lastTapX = -1000;
+	let lastTapY = -1000;
+	let lastTapTime = -10000;
 	TouchInfo.prototype.maybeTriggerTap = function (inst, index)
 	{
 		if (this.triggeredHold)
 			return;
-		var nowtime = cr.performance_now();
+		let nowtime = cr.performance_now();
 		if (nowtime - this.starttime <= GESTURE_TAP_TIMEOUT && !this.tooFarForHold && cr.distanceTo(this.startx, this.starty, this.x, this.y) < GESTURE_HOLD_THRESHOLD)
 		{
 			inst.trigger_index = this.startindex;
@@ -21702,13 +21702,13 @@ cr.plugins_.Touch = function(runtime)
 		this.trigger_id = 0;
 		this.getTouchIndex = 0;
 		this.useMouseInput = (this.properties[0] !== 0);
-		var elem = (this.runtime.fullscreen_mode > 0) ? document : this.runtime.canvas;
-		var elem2 = document;
+		let elem = (this.runtime.fullscreen_mode > 0) ? document : this.runtime.canvas;
+		let elem2 = document;
 		if (this.runtime.isDirectCanvas)
 			elem2 = elem = window["Canvas"];
 		else if (this.runtime.isCocoonJs)
 			elem2 = elem = window;
-		var self = this;
+		let self = this;
 		if (typeof PointerEvent !== "undefined")
 		{
 			elem.addEventListener("pointerdown",
@@ -21816,25 +21816,25 @@ cr.plugins_.Touch = function(runtime)
 		}
 		if (this.isWindows8)
 		{
-			var win8accelerometerFn = function(e) {
-					var reading = e["reading"];
+			let win8accelerometerFn = function(e) {
+					let reading = e["reading"];
 					self.acc_x = reading["accelerationX"];
 					self.acc_y = reading["accelerationY"];
 					self.acc_z = reading["accelerationZ"];
 				};
-			var win8inclinometerFn = function(e) {
-					var reading = e["reading"];
+			let win8inclinometerFn = function(e) {
+					let reading = e["reading"];
 					self.orient_alpha = reading["yawDegrees"];
 					self.orient_beta = reading["pitchDegrees"];
 					self.orient_gamma = reading["rollDegrees"];
 				};
-			var accelerometer = Windows["Devices"]["Sensors"]["Accelerometer"]["getDefault"]();
+			let accelerometer = Windows["Devices"]["Sensors"]["Accelerometer"]["getDefault"]();
             if (accelerometer)
 			{
                 accelerometer["reportInterval"] = Math.max(accelerometer["minimumReportInterval"], 16);
 				accelerometer.addEventListener("readingchanged", win8accelerometerFn);
             }
-			var inclinometer = Windows["Devices"]["Sensors"]["Inclinometer"]["getDefault"]();
+			let inclinometer = Windows["Devices"]["Sensors"]["Inclinometer"]["getDefault"]();
 			if (inclinometer)
 			{
 				inclinometer["reportInterval"] = Math.max(inclinometer["minimumReportInterval"], 16);
@@ -21909,12 +21909,12 @@ cr.plugins_.Touch = function(runtime)
 			return;
 		if (info.preventDefault)
 			info.preventDefault();
-		var i = this.findTouch(info["pointerId"]);
-		var nowtime = cr.performance_now();
+		let i = this.findTouch(info["pointerId"]);
+		let nowtime = cr.performance_now();
 		if (i >= 0)
 		{
-			var offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
-			var t = this.touches[i];
+			let offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
+			let t = this.touches[i];
 			if (nowtime - t.time < 2)
 				return;
 			t.update(nowtime, info.pageX - offset.left, info.pageY - offset.top, info.width || 0, info.height || 0, info.pressure || 0);
@@ -21926,10 +21926,10 @@ cr.plugins_.Touch = function(runtime)
 			return;
 		if (info.preventDefault && cr.isCanvasInputEvent(info))
 			info.preventDefault();
-		var offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
-		var touchx = info.pageX - offset.left;
-		var touchy = info.pageY - offset.top;
-		var nowtime = cr.performance_now();
+		let offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
+		let touchx = info.pageX - offset.left;
+		let touchy = info.pageY - offset.top;
+		let nowtime = cr.performance_now();
 		this.trigger_index = this.touches.length;
 		this.trigger_id = info["pointerId"];
 		this.touches.push(AllocTouchInfo(touchx, touchy, info["pointerId"], this.trigger_index));
@@ -21947,7 +21947,7 @@ cr.plugins_.Touch = function(runtime)
 			return;
 		if (info.preventDefault && cr.isCanvasInputEvent(info))
 			info.preventDefault();
-		var i = this.findTouch(info["pointerId"]);
+		let i = this.findTouch(info["pointerId"]);
 		this.trigger_index = (i >= 0 ? this.touches[i].startindex : -1);
 		this.trigger_id = (i >= 0 ? this.touches[i]["id"] : -1);
 		this.runtime.isInUserInputEvent = true;
@@ -21966,21 +21966,21 @@ cr.plugins_.Touch = function(runtime)
 	{
 		if (info.preventDefault)
 			info.preventDefault();
-		var nowtime = cr.performance_now();
-		var i, len, t, u;
+		let nowtime = cr.performance_now();
+		let i, len, t, u;
 		for (i = 0, len = info.changedTouches.length; i < len; i++)
 		{
 			t = info.changedTouches[i];
-			var j = this.findTouch(t["identifier"]);
+			let j = this.findTouch(t["identifier"]);
 			if (j >= 0)
 			{
-				var offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
+				let offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
 				u = this.touches[j];
 				if (nowtime - u.time < 2)
 					continue;
-				var touchWidth = (t.radiusX || t.webkitRadiusX || t.mozRadiusX || t.msRadiusX || 0) * 2;
-				var touchHeight = (t.radiusY || t.webkitRadiusY || t.mozRadiusY || t.msRadiusY || 0) * 2;
-				var touchForce = t.force || t.webkitForce || t.mozForce || t.msForce || 0;
+				let touchWidth = (t.radiusX || t.webkitRadiusX || t.mozRadiusX || t.msRadiusX || 0) * 2;
+				let touchHeight = (t.radiusY || t.webkitRadiusY || t.mozRadiusY || t.msRadiusY || 0) * 2;
+				let touchForce = t.force || t.webkitForce || t.mozForce || t.msForce || 0;
 				u.update(nowtime, t.pageX - offset.left, t.pageY - offset.top, touchWidth, touchHeight, touchForce);
 			}
 		}
@@ -21989,18 +21989,18 @@ cr.plugins_.Touch = function(runtime)
 	{
 		if (info.preventDefault && cr.isCanvasInputEvent(info))
 			info.preventDefault();
-		var offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
-		var nowtime = cr.performance_now();
+		let offset = this.runtime.isDomFree ? dummyoffset : jQuery(this.runtime.canvas).offset();
+		let nowtime = cr.performance_now();
 		this.runtime.isInUserInputEvent = true;
-		var i, len, t, j;
+		let i, len, t, j;
 		for (i = 0, len = info.changedTouches.length; i < len; i++)
 		{
 			t = info.changedTouches[i];
 			j = this.findTouch(t["identifier"]);
 			if (j !== -1)
 				continue;
-			var touchx = t.pageX - offset.left;
-			var touchy = t.pageY - offset.top;
+			let touchx = t.pageX - offset.left;
+			let touchy = t.pageY - offset.top;
 			this.trigger_index = this.touches.length;
 			this.trigger_id = t["identifier"];
 			this.touches.push(AllocTouchInfo(touchx, touchy, t["identifier"], this.trigger_index));
@@ -22017,7 +22017,7 @@ cr.plugins_.Touch = function(runtime)
 		if (info.preventDefault && cr.isCanvasInputEvent(info))
 			info.preventDefault();
 		this.runtime.isInUserInputEvent = true;
-		var i, len, t, j;
+		let i, len, t, j;
 		for (i = 0, len = info.changedTouches.length; i < len; i++)
 		{
 			t = info.changedTouches[i];
@@ -22057,7 +22057,7 @@ cr.plugins_.Touch = function(runtime)
 		else
 			return this.orient_gamma;
 	};
-	var noop_func = function(){};
+	let noop_func = function(){};
 	function isCompatibilityMouseEvent(e)
 	{
 		return (e["sourceCapabilities"] && e["sourceCapabilities"]["firesTouchEvents"]) ||
@@ -22067,8 +22067,8 @@ cr.plugins_.Touch = function(runtime)
 	{
 		if (isCompatibilityMouseEvent(info))
 			return;
-		var t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
-		var fakeinfo = { changedTouches: [t] };
+		let t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
+		let fakeinfo = { changedTouches: [t] };
 		this.onTouchStart(fakeinfo);
 		this.mouseDown = true;
 	};
@@ -22078,8 +22078,8 @@ cr.plugins_.Touch = function(runtime)
 			return;
 		if (isCompatibilityMouseEvent(info))
 			return;
-		var t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
-		var fakeinfo = { changedTouches: [t] };
+		let t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
+		let fakeinfo = { changedTouches: [t] };
 		this.onTouchMove(fakeinfo);
 	};
 	instanceProto.onMouseUp = function(info)
@@ -22089,15 +22089,15 @@ cr.plugins_.Touch = function(runtime)
 		this.runtime.had_a_click = true;
 		if (isCompatibilityMouseEvent(info))
 			return;
-		var t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
-		var fakeinfo = { changedTouches: [t] };
+		let t = { pageX: info.pageX, pageY: info.pageY, "identifier": 0 };
+		let fakeinfo = { changedTouches: [t] };
 		this.onTouchEnd(fakeinfo);
 		this.mouseDown = false;
 	};
 	instanceProto.tick2 = function()
 	{
-		var i, len, t;
-		var nowtime = cr.performance_now();
+		let i, len, t;
+		let nowtime = cr.performance_now();
 		for (i = 0, len = this.touches.length; i < len; ++i)
 		{
 			t = this.touches[i];
@@ -22125,22 +22125,22 @@ cr.plugins_.Touch = function(runtime)
 			return false;
 		return this.runtime.testAndSelectCanvasPointOverlap(type, this.curTouchX, this.curTouchY, false);
 	};
-	var touching = [];
+	let touching = [];
 	Cnds.prototype.IsTouchingObject = function (type)
 	{
 		if (!type)
 			return false;
-		var sol = type.getCurrentSol();
-		var instances = sol.getObjects();
-		var px, py;
-		var i, leni, j, lenj;
+		let sol = type.getCurrentSol();
+		let instances = sol.getObjects();
+		let px, py;
+		let i, leni, j, lenj;
 		for (i = 0, leni = instances.length; i < leni; i++)
 		{
-			var inst = instances[i];
+			let inst = instances[i];
 			inst.update_bbox();
 			for (j = 0, lenj = this.touches.length; j < lenj; j++)
 			{
-				var touch = this.touches[j];
+				let touch = this.touches[j];
 				px = inst.layer.canvasToLayer(touch.x, touch.y, true);
 				py = inst.layer.canvasToLayer(touch.x, touch.y, false);
 				if (inst.contains_pt(px, py))
@@ -22166,10 +22166,10 @@ cr.plugins_.Touch = function(runtime)
 		index = Math.floor(index);
 		if (index < 0 || index >= this.touches.length)
 			return false;
-		var t = this.touches[index];
-		var dist = cr.distanceTo(t.x, t.y, t.lastx, t.lasty);
-		var timediff = (t.time - t.lasttime) / 1000;
-		var speed = 0;
+		let t = this.touches[index];
+		let dist = cr.distanceTo(t.x, t.y, t.lastx, t.lasty);
+		let timediff = (t.time - t.lasttime) / 1000;
+		let speed = 0;
 		if (timediff > 0)
 			speed = dist / timediff;
 		return cr.do_cmp(speed, cmp, s);
@@ -22184,7 +22184,7 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Cnds.prototype.CompareOrientation = function (orientation_, cmp_, angle_)
 	{
-		var v = 0;
+		let v = 0;
 		if (orientation_ === 0)
 			v = this.getAlpha();
 		else if (orientation_ === 1)
@@ -22195,7 +22195,7 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Cnds.prototype.CompareAcceleration = function (acceleration_, cmp_, angle_)
 	{
-		var v = 0;
+		let v = 0;
 		if (acceleration_ === 0)
 			v = this.acc_g_x;
 		else if (acceleration_ === 1)
@@ -22263,13 +22263,13 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.X = function (ret, layerparam)
 	{
-		var index = this.getTouchIndex;
+		let index = this.getTouchIndex;
 		if (index < 0 || index >= this.touches.length)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
+		let layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22307,7 +22307,7 @@ cr.plugins_.Touch = function(runtime)
 			ret.set_float(0);
 			return;
 		}
-		var layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
+		let layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22339,14 +22339,14 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.XForID = function (ret, id, layerparam)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
-		var layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
+		let touch = this.touches[index];
+		let layer, oldScale, oldZoomRate, oldParallaxX, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22378,13 +22378,13 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.Y = function (ret, layerparam)
 	{
-		var index = this.getTouchIndex;
+		let index = this.getTouchIndex;
 		if (index < 0 || index >= this.touches.length)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
+		let layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22422,7 +22422,7 @@ cr.plugins_.Touch = function(runtime)
 			ret.set_float(0);
 			return;
 		}
-		var layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
+		let layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22454,14 +22454,14 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.YForID = function (ret, id, layerparam)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
-		var layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
+		let touch = this.touches[index];
+		let layer, oldScale, oldZoomRate, oldParallaxY, oldAngle;
 		if (cr.is_undefined(layerparam))
 		{
 			layer = this.runtime.getLayerByNumber(0);
@@ -22510,13 +22510,13 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.AbsoluteXForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(touch.x);
 	};
 	Exps.prototype.AbsoluteY = function (ret)
@@ -22538,13 +22538,13 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.AbsoluteYForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(touch.y);
 	};
 	Exps.prototype.SpeedAt = function (ret, index)
@@ -22555,9 +22555,9 @@ cr.plugins_.Touch = function(runtime)
 			ret.set_float(0);
 			return;
 		}
-		var t = this.touches[index];
-		var dist = cr.distanceTo(t.x, t.y, t.lastx, t.lasty);
-		var timediff = (t.time - t.lasttime) / 1000;
+		let t = this.touches[index];
+		let dist = cr.distanceTo(t.x, t.y, t.lastx, t.lasty);
+		let timediff = (t.time - t.lasttime) / 1000;
 		if (timediff <= 0)
 			ret.set_float(0);
 		else
@@ -22565,15 +22565,15 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.SpeedForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
-		var dist = cr.distanceTo(touch.x, touch.y, touch.lastx, touch.lasty);
-		var timediff = (touch.time - touch.lasttime) / 1000;
+		let touch = this.touches[index];
+		let dist = cr.distanceTo(touch.x, touch.y, touch.lastx, touch.lasty);
+		let timediff = (touch.time - touch.lasttime) / 1000;
 		if (timediff <= 0)
 			ret.set_float(0);
 		else
@@ -22587,18 +22587,18 @@ cr.plugins_.Touch = function(runtime)
 			ret.set_float(0);
 			return;
 		}
-		var t = this.touches[index];
+		let t = this.touches[index];
 		ret.set_float(cr.to_degrees(cr.angleTo(t.lastx, t.lasty, t.x, t.y)));
 	};
 	Exps.prototype.AngleForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(cr.to_degrees(cr.angleTo(touch.lastx, touch.lasty, touch.x, touch.y)));
 	};
 	Exps.prototype.Alpha = function (ret)
@@ -22647,35 +22647,35 @@ cr.plugins_.Touch = function(runtime)
 	};
 	Exps.prototype.WidthForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(touch.width);
 	};
 	Exps.prototype.HeightForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(touch.height);
 	};
 	Exps.prototype.PressureForID = function (ret, id)
 	{
-		var index = this.findTouch(id);
+		let index = this.findTouch(id);
 		if (index < 0)
 		{
 			ret.set_float(0);
 			return;
 		}
-		var touch = this.touches[index];
+		let touch = this.touches[index];
 		ret.set_float(touch.pressure);
 	};
 	pluginProto.exps = new Exps();
@@ -22688,14 +22688,14 @@ cr.behaviors.Fade = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.Fade.prototype;
+	let behaviorProto = cr.behaviors.Fade.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -22706,7 +22706,7 @@ cr.behaviors.Fade = function(runtime)
 		this.inst = inst;				// associated object instance to modify
 		this.runtime = type.runtime;
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
 		this.activeAtStart = this.properties[0] === 1;
@@ -22886,14 +22886,14 @@ cr.behaviors.Persist = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.Persist.prototype;
+	let behaviorProto = cr.behaviors.Persist.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -22904,7 +22904,7 @@ cr.behaviors.Persist = function(runtime)
 		this.inst = inst;				// associated object instance to modify
 		this.runtime = type.runtime;
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
 		this.myProperty = this.properties[0];
@@ -22914,7 +22914,7 @@ cr.behaviors.Persist = function(runtime)
 	};
 	behinstProto.tick = function ()
 	{
-		var dt = this.runtime.getDt(this.inst);
+		let dt = this.runtime.getDt(this.inst);
 	};
 	function Cnds() {};
 	behaviorProto.cnds = new Cnds();
@@ -22931,14 +22931,14 @@ cr.behaviors.Pin = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.Pin.prototype;
+	let behaviorProto = cr.behaviors.Pin.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -22949,7 +22949,7 @@ cr.behaviors.Pin = function(runtime)
 		this.inst = inst;				// associated object instance to modify
 		this.runtime = type.runtime;
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
 		this.pinObject = null;
@@ -22960,7 +22960,7 @@ cr.behaviors.Pin = function(runtime)
 		this.theirStartAngle = 0;
 		this.lastKnownAngle = 0;
 		this.mode = 0;				// 0 = position & angle; 1 = position; 2 = angle; 3 = rope; 4 = bar
-		var self = this;
+		let self = this;
 		if (!this.recycled)
 		{
 			this.myDestroyCallback = (function(inst) {
@@ -23021,14 +23021,14 @@ cr.behaviors.Pin = function(runtime)
 			return;
 		if (this.lastKnownAngle !== this.inst.angle)
 			this.myStartAngle = cr.clamp_angle(this.myStartAngle + (this.inst.angle - this.lastKnownAngle));
-		var newx = this.inst.x;
-		var newy = this.inst.y;
+		let newx = this.inst.x;
+		let newy = this.inst.y;
 		if (this.mode === 3 || this.mode === 4)		// rope mode or bar mode
 		{
-			var dist = cr.distanceTo(this.inst.x, this.inst.y, this.pinObject.x, this.pinObject.y);
+			let dist = cr.distanceTo(this.inst.x, this.inst.y, this.pinObject.x, this.pinObject.y);
 			if ((dist > this.pinDist) || (this.mode === 4 && dist < this.pinDist))
 			{
-				var a = cr.angleTo(this.pinObject.x, this.pinObject.y, this.inst.x, this.inst.y);
+				let a = cr.angleTo(this.pinObject.x, this.pinObject.y, this.inst.x, this.inst.y);
 				newx = this.pinObject.x + Math.cos(a) * this.pinDist;
 				newy = this.pinObject.y + Math.sin(a) * this.pinDist;
 			}
@@ -23038,7 +23038,7 @@ cr.behaviors.Pin = function(runtime)
 			newx = this.pinObject.x + Math.cos(this.pinObject.angle + this.pinAngle) * this.pinDist;
 			newy = this.pinObject.y + Math.sin(this.pinObject.angle + this.pinAngle) * this.pinDist;
 		}
-		var newangle = cr.clamp_angle(this.myStartAngle + (this.pinObject.angle - this.theirStartAngle));
+		let newangle = cr.clamp_angle(this.myStartAngle + (this.pinObject.angle - this.theirStartAngle));
 		this.lastKnownAngle = newangle;
 		if ((this.mode === 0 || this.mode === 1 || this.mode === 3 || this.mode === 4)
 			&& (this.inst.x !== newx || this.inst.y !== newy))
@@ -23064,7 +23064,7 @@ cr.behaviors.Pin = function(runtime)
 	{
 		if (!obj)
 			return;
-		var otherinst = obj.getFirstPicked(this.inst);
+		let otherinst = obj.getFirstPicked(this.inst);
 		if (!otherinst)
 			return;
 		this.pinObject = otherinst;
@@ -23095,14 +23095,14 @@ cr.behaviors.Sin = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.Sin.prototype;
+	let behaviorProto = cr.behaviors.Sin.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -23114,10 +23114,10 @@ cr.behaviors.Sin = function(runtime)
 		this.runtime = type.runtime;
 		this.i = 0;		// period offset (radians)
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
-	var _2pi = 2 * Math.PI;
-	var _pi_2 = Math.PI / 2;
-	var _3pi_2 = (3 * Math.PI) / 2;
+	let behinstProto = behaviorProto.Instance.prototype;
+	let _2pi = 2 * Math.PI;
+	let _pi_2 = Math.PI / 2;
+	let _3pi_2 = (3 * Math.PI) / 2;
 	behinstProto.onCreate = function()
 	{
 		this.active = (this.properties[0] === 1);
@@ -23233,7 +23233,7 @@ cr.behaviors.Sin = function(runtime)
 	};
 	behinstProto.tick = function ()
 	{
-		var dt = this.runtime.getDt(this.inst);
+		let dt = this.runtime.getDt(this.inst);
 		if (!this.active || dt === 0)
 			return;
 		if (this.period === 0)
@@ -23402,14 +23402,14 @@ cr.behaviors.custom = function(runtime)
 };
 (function ()
 {
-	var behaviorProto = cr.behaviors.custom.prototype;
+	let behaviorProto = cr.behaviors.custom.prototype;
 	behaviorProto.Type = function(behavior, objtype)
 	{
 		this.behavior = behavior;
 		this.objtype = objtype;
 		this.runtime = behavior.runtime;
 	};
-	var behtypeProto = behaviorProto.Type.prototype;
+	let behtypeProto = behaviorProto.Type.prototype;
 	behtypeProto.onCreate = function()
 	{
 	};
@@ -23423,7 +23423,7 @@ cr.behaviors.custom = function(runtime)
 		this.dy = 0;
 		this.cancelStep = 0;
 	};
-	var behinstProto = behaviorProto.Instance.prototype;
+	let behinstProto = behaviorProto.Instance.prototype;
 	behinstProto.onCreate = function()
 	{
 		this.stepMode = this.properties[0];	// 0=None, 1=Linear, 2=Horizontal then vertical, 3=Vertical then horizontal
@@ -23471,13 +23471,13 @@ cr.behaviors.custom = function(runtime)
 	{
 		if (x === 0 && y === 0)
 			return;
-		var startx = this.inst.x;
-		var starty = this.inst.y;
-		var sx, sy, prog;
-		var steps = Math.round(Math.sqrt(x * x + y * y) / this.pxPerStep);
+		let startx = this.inst.x;
+		let starty = this.inst.y;
+		let sx, sy, prog;
+		let steps = Math.round(Math.sqrt(x * x + y * y) / this.pxPerStep);
 		if (steps === 0)
 			steps = 1;
-		var i;
+		let i;
 		for (i = 1; i <= steps; i++)
 		{
 			prog = i / steps;
@@ -23502,10 +23502,10 @@ cr.behaviors.custom = function(runtime)
 	};
 	behinstProto.tick = function ()
 	{
-		var dt = this.runtime.getDt(this.inst);
-		var mx = this.dx * dt;
-		var my = this.dy * dt;
-		var i, steps;
+		let dt = this.runtime.getDt(this.inst);
+		let mx = this.dx * dt;
+		let my = this.dy * dt;
+		let i, steps;
 		if ((this.dx === 0 && this.dy === 0) || !this.enabled)
 			return;
 		this.cancelStep = 0;
@@ -23539,7 +23539,7 @@ cr.behaviors.custom = function(runtime)
 	};
 	Cnds.prototype.CompareSpeed = function (axis, cmp, s)
 	{
-		var speed;
+		let speed;
 		switch (axis) {
 		case 0:		speed = this.getSpeed();	break;
 		case 1:		speed = this.dx;			break;
@@ -23583,7 +23583,7 @@ cr.behaviors.custom = function(runtime)
 	};
 	Acts.prototype.SetSpeed = function (axis, s)
 	{
-		var a;
+		let a;
 		switch (axis) {
 		case 0:
 			a = this.getAngle();
@@ -23600,9 +23600,9 @@ cr.behaviors.custom = function(runtime)
 	};
 	Acts.prototype.Accelerate = function (axis, acc)
 	{
-		var dt = this.runtime.getDt(this.inst);
-		var ds = acc * dt;
-		var a;
+		let dt = this.runtime.getDt(this.inst);
+		let ds = acc * dt;
+		let a;
 		switch (axis) {
 		case 0:
 			a = this.getAngle();
@@ -23619,38 +23619,38 @@ cr.behaviors.custom = function(runtime)
 	};
 	Acts.prototype.AccelerateAngle = function (acc, a_)
 	{
-		var dt = this.runtime.getDt(this.inst);
-		var ds = acc * dt;
-		var a = cr.to_radians(a_);
+		let dt = this.runtime.getDt(this.inst);
+		let ds = acc * dt;
+		let a = cr.to_radians(a_);
 		this.dx += Math.cos(a) * ds;
 		this.dy += Math.sin(a) * ds;
 	};
 	Acts.prototype.AcceleratePos = function (acc, x, y)
 	{
-		var dt = this.runtime.getDt(this.inst);
-		var ds = acc * dt;
-		var a = Math.atan2(y - this.inst.y, x - this.inst.x);
+		let dt = this.runtime.getDt(this.inst);
+		let ds = acc * dt;
+		let a = Math.atan2(y - this.inst.y, x - this.inst.x);
 		this.dx += Math.cos(a) * ds;
 		this.dy += Math.sin(a) * ds;
 	};
 	Acts.prototype.SetAngleOfMotion = function (a_)
 	{
-		var a = cr.to_radians(a_);
-		var s = this.getSpeed();
+		let a = cr.to_radians(a_);
+		let s = this.getSpeed();
 		this.dx = Math.cos(a) * s;
 		this.dy = Math.sin(a) * s;
 	};
 	Acts.prototype.RotateAngleOfMotionClockwise = function (a_)
 	{
-		var a = this.getAngle() + cr.to_radians(a_);
-		var s = this.getSpeed();
+		let a = this.getAngle() + cr.to_radians(a_);
+		let s = this.getSpeed();
 		this.dx = Math.cos(a) * s;
 		this.dy = Math.sin(a) * s;
 	};
 	Acts.prototype.RotateAngleOfMotionCounterClockwise = function (a_)
 	{
-		var a = this.getAngle() - cr.to_radians(a_);
-		var s = this.getSpeed();
+		let a = this.getAngle() - cr.to_radians(a_);
+		let s = this.getSpeed();
 		this.dx = Math.cos(a) * s;
 		this.dy = Math.sin(a) * s;
 	};
@@ -23660,7 +23660,7 @@ cr.behaviors.custom = function(runtime)
 	};
 	Acts.prototype.PushOutSolid = function (mode)
 	{
-		var a, ux, uy;
+		let a, ux, uy;
 		switch (mode) {
 		case 0:
 			a = this.getAngle();
@@ -23688,8 +23688,8 @@ cr.behaviors.custom = function(runtime)
 	Acts.prototype.PushOutSolidAngle = function (a)
 	{
 		a = cr.to_radians(a);
-		var ux = Math.cos(a);
-		var uy = Math.sin(a);
+		let ux = Math.cos(a);
+		let uy = Math.sin(a);
 		this.runtime.pushOutSolid(this.inst, ux, uy, Math.max(this.getSpeed() * 3, 100));
 	};
 	Acts.prototype.SetEnabled = function (en)
@@ -23716,22 +23716,22 @@ cr.behaviors.custom = function(runtime)
 	};
 	behaviorProto.exps = new Exps();
 }());
-var easeOutBounceArray = [];
-var easeInElasticArray = [];
-var easeOutElasticArray = [];
-var easeInOutElasticArray = [];
-var easeInCircle = [];
-var easeOutCircle = [];
-var easeInOutCircle = [];
-var easeInBack = [];
-var easeOutBack = [];
-var easeInOutBack = [];
-var litetween_precision = 10000;
-var updateLimit = 0; //0.0165;
+let easeOutBounceArray = [];
+let easeInElasticArray = [];
+let easeOutElasticArray = [];
+let easeInOutElasticArray = [];
+let easeInCircle = [];
+let easeOutCircle = [];
+let easeInOutCircle = [];
+let easeInBack = [];
+let easeOutBack = [];
+let easeInOutBack = [];
+let litetween_precision = 10000;
+let updateLimit = 0; //0.0165;
 function easeOutBouncefunc(t) {
-  var b=0.0;
-  var c=1.0;
-  var d=1.0;
+  let b=0.0;
+  let c=1.0;
+  let d=1.0;
 	if ((t/=d) < (1/2.75)) {
 		result = c*(7.5625*t*t) + b;
 	} else if (t < (2/2.75)) {
@@ -23749,7 +23749,9 @@ function integerize(t, d)
 }
 function easeFunc(easing, t, b, c, d, flip, param)
 {
-  var ret_ease = 0;
+	let mt=0;
+	let s=0;
+  let ret_ease = 0;
   switch (easing) {
 	case 0:		// linear
 		ret_ease = c*t/d + b;
@@ -23828,7 +23830,7 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
 		  ret_ease = easeInBack[integerize(t,d)];
     } else {
-  		var s = param.s;
+  		let s = param.s;
 	  	ret_ease = c*(t/=d)*t*((s+1)*t - s) + b;
     }
     break;
@@ -23836,7 +23838,7 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
 		  ret_ease = easeOutBack[integerize(t,d)];
     } else {
-   		var s = param.s;
+   		let s = param.s;
 	  	ret_ease = c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
     }
     break;
@@ -23844,7 +23846,7 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
 		  ret_ease = easeInOutBack[integerize(t,d)];
     } else {
-      var s = param.s
+      let s = param.s
   		if ((t/=d/2) < 1)
         ret_ease = c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b
       else
@@ -23855,12 +23857,12 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
   		ret_ease = easeInElasticArray[integerize(t, d)];
     } else {
-      var a = param.a;
-      var p = param.p;
-      var s = 0;
+      let a = param.a;
+      let p = param.p;
+      s = 0;
       if (t==0) ret_ease = b; if ((t/=d)==1) ret_ease = b+c;
       if (p==0) p=d*.3;	if (a==0 || a < Math.abs(c)) { a=c; s=p/4; }
-      else var s = p/(2*Math.PI) * Math.asin (c/a);
+      else  s = p/(2*Math.PI) * Math.asin (c/a);
   		ret_ease = -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
     }
     break;
@@ -23868,12 +23870,12 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
       ret_ease = easeOutElasticArray[integerize(t,d)];
     } else {
-      var a = param.a;
-      var p = param.p;
-      var s = 0;
+      let a = param.a;
+      let p = param.p;
+      s = 0;
   		if (t==0) ret_ease= b;  if ((t/=d)==1) ret_ease= b+c;  if (p == 0) p=d*.3;
-  		if (a==0 || a < Math.abs(c)) { a=c; var s=p/4; }
-  		else var s = p/(2*Math.PI) * Math.asin (c/a);
+  		if (a==0 || a < Math.abs(c)) { a=c; let s=p/4; }
+  		else s = p/(2*Math.PI) * Math.asin (c/a);
   		ret_ease= (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b);
     }
     break;
@@ -23881,14 +23883,14 @@ function easeFunc(easing, t, b, c, d, flip, param)
     if (param.optimized) {
       ret_ease = easeInOutElasticArray[integerize(t,d)];
     } else {
-      var a = param.a;
-      var p = param.p;
-      var s = 0;
+      let a = param.a;
+      let p = param.p;
+      let s = 0;
   		if (t==0) ret_ease = b;
   		if ((t/=d/2)==2) ret_ease = b+c;
   		if (p==0) p=d*(.3*1.5);
-  		if (a==0 || a < Math.abs(c)) { a=c; var s=p/4; }
-  		else var s = p/(2*Math.PI) * Math.asin (c/a);
+  		if (a==0 || a < Math.abs(c)) { a=c; let s=p/4; }
+  		else s = p/(2*Math.PI) * Math.asin (c/a);
   		if (t < 1)
         ret_ease = -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b
       else
@@ -23923,15 +23925,15 @@ function easeFunc(easing, t, b, c, d, flip, param)
     }
     break;
 	case 25:	//easeInSmoothstep
-		var mt = (t/d) / 2;
+		mt = (t/d) / 2;
 		ret_ease = (2*(mt * mt * (3 - 2*mt)));
     break;
 	case 26:	//easeOutSmoothstep
-		var mt = ((t/d) + 1) / 2;
+		mt = ((t/d) + 1) / 2;
 		ret_ease = ((2*(mt * mt * (3 - 2*mt))) - 1);
     break;
 	case 27:	//easeInOutSmoothstep
-		var mt = (t / d);
+		mt = (t / d);
 		ret_ease = (mt * mt * (3 - 2*mt));
     break;
 	};
