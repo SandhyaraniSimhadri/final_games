@@ -10017,10 +10017,10 @@ window["cr_setSuspended"] = function(s)
 			if (!from_include)
 				this.runtime.isRunningEvents = true;
 		}
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.events.length; i < len; i++)
 		{
-			var ev = this.events[i];
+			let ev = this.events[i];
 			ev.run();
 				this.runtime.clearSol(ev.solModifiers);
 				if (this.runtime.hasPendingInstances)
@@ -10041,32 +10041,32 @@ window["cr_setSuspended"] = function(s)
 	{
 		if (!trig.orblock)
 			this.runtime.triggers_to_postinit.push(trig);	// needs to be postInit'd later
-		var i, len;
-		var cnd = trig.conditions[index];
-		var type_name;
+		let i, len;
+		let cnd = trig.conditions[index];
+		let type_name;
 		if (cnd.type)
 			type_name = cnd.type.name;
 		else
 			type_name = "system";
-		var fasttrigger = cnd.fasttrigger;
-		var triggers = (fasttrigger ? this.fasttriggers : this.triggers);
+		let fasttrigger = cnd.fasttrigger;
+		let triggers = (fasttrigger ? this.fasttriggers : this.triggers);
 		if (!triggers[type_name])
 			triggers[type_name] = [];
-		var obj_entry = triggers[type_name];
-		var method = cnd.func;
+		let obj_entry = triggers[type_name];
+		let method = cnd.func;
 		if (fasttrigger)
 		{
 			if (!cnd.parameters.length)				// no parameters
 				return;
-			var firstparam = cnd.parameters[0];
+			let firstparam = cnd.parameters[0];
 			if (firstparam.type !== 1 ||			// not a string param
 				firstparam.expression.type !== 2)	// not a string literal node
 			{
 				return;
 			}
-			var fastevs;
-			var firstvalue = firstparam.expression.value.toLowerCase();
-			var i, len;
+			let fastevs;
+			let firstvalue = firstparam.expression.value.toLowerCase();
+			let i, len;
 			for (i = 0, len = obj_entry.length; i < len; i++)
 			{
 				if (obj_entry[i].method == method)
@@ -10124,8 +10124,8 @@ window["cr_setSuspended"] = function(s)
 	/*
 	Selection.prototype.ensure_picked = function (inst, skip_siblings)
 	{
-		var i, len;
-		var orblock = inst.runtime.getCurrentEventStack().current_event.orblock;
+		let i, len;
+		let orblock = inst.runtime.getCurrentEventStack().current_event.orblock;
 		if (this.select_all)
 		{
 			this.select_all = false;
@@ -10171,7 +10171,7 @@ window["cr_setSuspended"] = function(s)
 				cr.shallowAssignArray(this.else_instances, inst.type.instances);
 				this.select_all = false;
 			}
-			var i = this.else_instances.indexOf(inst);
+			let i = this.else_instances.indexOf(inst);
 			if (i !== -1)
 			{
 				this.instances.push(this.else_instances[i]);
@@ -10222,11 +10222,11 @@ window["cr_setSuspended"] = function(s)
 		this.sid = m[4];
 		if (!this.group)
 			this.runtime.blocksBySid[this.sid.toString()] = this;
-		var i, len;
-		var cm = m[5];
+		let i, len;
+		let cm = m[5];
 		for (i = 0, len = cm.length; i < len; i++)
 		{
-			var cnd = new cr.condition(this, cm[i]);
+			let cnd = new cr.condition(this, cm[i]);
 			cnd.index = i;
 			cr.seal(cnd);
 			this.conditions.push(cnd);
@@ -10238,17 +10238,17 @@ window["cr_setSuspended"] = function(s)
 			*/
 			this.addSolModifier(cnd.type);
 		}
-		var am = m[6];
+		let am = m[6];
 		for (i = 0, len = am.length; i < len; i++)
 		{
-			var act = new cr.action(this, am[i]);
+			let act = new cr.action(this, am[i]);
 			act.index = i;
 			cr.seal(act);
 			this.actions.push(act);
 		}
 		if (m.length === 8)
 		{
-			var em = m[7];
+			let em = m[7];
 			for (i = 0, len = em.length; i < len; i++)
 				this.sheet.init_event(em[i], this, this.subevents);
 		}
@@ -10261,8 +10261,8 @@ window["cr_setSuspended"] = function(s)
 	window["_c2hh_"] = "6675A49D81F749DB6AFA185C8F841C9D4FA0592B";
 	EventBlock.prototype.postInit = function (hasElse/*, prevBlock_*/)
 	{
-		var i, len;
-		var p = this.parent;
+		let i, len;
+		let p = this.parent;
 		if (this.group)
 		{
 			this.toplevelgroup = true;
@@ -10288,7 +10288,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		this.solModifiers = findMatchingSolModifier(this.solModifiers);
 		this.solModifiersIncludingParents = findMatchingSolModifier(this.solModifiersIncludingParents);
-		var i, len/*, s*/;
+		i, len/*, s*/;
 		for (i = 0, len = this.conditions.length; i < len; i++)
 			this.conditions[i].postInit();
 		for (i = 0, len = this.actions.length; i < len; i++)
@@ -10314,7 +10314,7 @@ window["cr_setSuspended"] = function(s)
 		if (this.group_active === !!a)
 			return;		// same state
 		this.group_active = !!a;
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.contained_includes.length; i < len; ++i)
 		{
 			this.contained_includes[i].updateActive();
@@ -10324,7 +10324,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	function addSolModifierToList(type, arr)
 	{
-		var i, len, t;
+		let i, len, t;
 		if (!type)
 			return;
 		if (arr.indexOf(type) === -1)
@@ -10364,11 +10364,11 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.run = function ()
 	{
-		var i, len, c, any_true = false, cnd_result;
-		var runtime = this.runtime;
-		var evinfo = this.runtime.getCurrentEventStack();
+		let i, len, c, any_true = false, cnd_result;
+		let runtime = this.runtime;
+		let evinfo = this.runtime.getCurrentEventStack();
 		evinfo.current_event = this;
-		var conditions = this.conditions;
+		let conditions = this.conditions;
 			if (!this.is_else_block)
 				evinfo.else_branch_ran = false;
 		if (this.orblock)
@@ -10417,7 +10417,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.run_orblocktrigger = function (index)
 	{
-		var evinfo = this.runtime.getCurrentEventStack();
+		let evinfo = this.runtime.getCurrentEventStack();
 		evinfo.current_event = this;
 		if (this.conditions[index].run())
 		{
@@ -10427,8 +10427,8 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.run_actions_and_subevents = function ()
 	{
-		var evinfo = this.runtime.getCurrentEventStack();
-		var len;
+		let evinfo = this.runtime.getCurrentEventStack();
+		let len;
 		for (evinfo.actindex = 0, len = this.actions.length; evinfo.actindex < len; evinfo.actindex++)
 		{
 			if (this.actions[evinfo.actindex].run())
@@ -10438,8 +10438,8 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.resume_actions_and_subevents = function ()
 	{
-		var evinfo = this.runtime.getCurrentEventStack();
-		var len;
+		let evinfo = this.runtime.getCurrentEventStack();
+		let len;
 		for (len = this.actions.length; evinfo.actindex < len; evinfo.actindex++)
 		{
 			if (this.actions[evinfo.actindex].run())
@@ -10451,8 +10451,8 @@ window["cr_setSuspended"] = function(s)
 	{
 		if (!this.subevents.length)
 			return;
-		var i, len, subev, pushpop/*, skipped_pop = false, pop_modifiers = null*/;
-		var last = this.subevents.length - 1;
+		let i, len, subev, pushpop/*, skipped_pop = false, pop_modifiers = null*/;
+		let last = this.subevents.length - 1;
 			this.runtime.pushEventStack(this);
 		if (this.solWriterAfterCnds)
 		{
@@ -10480,10 +10480,10 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.run_pretrigger = function ()
 	{
-		var evinfo = this.runtime.getCurrentEventStack();
+		let evinfo = this.runtime.getCurrentEventStack();
 		evinfo.current_event = this;
-		var any_true = false;
-		var i, len;
+		let any_true = false;
+		let i, len;
 		for (evinfo.cndindex = 0, len = this.conditions.length; evinfo.cndindex < len; evinfo.cndindex++)
 		{
 ;
@@ -10497,9 +10497,9 @@ window["cr_setSuspended"] = function(s)
 	EventBlock.prototype.retrigger = function ()
 	{
 		this.runtime.execcount++;
-		var prevcndindex = this.runtime.getCurrentEventStack().cndindex;
-		var len;
-		var evinfo = this.runtime.pushEventStack(this);
+		let prevcndindex = this.runtime.getCurrentEventStack().cndindex;
+		let len;
+		let evinfo = this.runtime.pushEventStack(this);
 		if (!this.orblock)
 		{
 			for (evinfo.cndindex = prevcndindex + 1, len = this.conditions.length; evinfo.cndindex < len; evinfo.cndindex++)
@@ -10517,7 +10517,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventBlock.prototype.isFirstConditionOfType = function (cnd)
 	{
-		var cndindex = cnd.index;
+		let cndindex = cnd.index;
 		if (cndindex === 0)
 			return true;
 		--cndindex;
@@ -10582,11 +10582,11 @@ window["cr_setSuspended"] = function(s)
 			this.run = this.run_true;
 		if (m.length === 10)
 		{
-			var i, len;
-			var em = m[9];
+			let i, len;
+			let em = m[9];
 			for (i = 0, len = em.length; i < len; i++)
 			{
-				var param = new cr.parameter(this, em[i]);
+				let param = new cr.parameter(this, em[i]);
 				cr.seal(param);
 				this.parameters.push(param);
 			}
@@ -10595,7 +10595,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Condition.prototype.postInit = function ()
 	{
-		var i, len, p;
+		let i, len, p;
 		for (i = 0, len = this.parameters.length; i < len; i++)
 		{
 			p = this.parameters[i];
@@ -10616,38 +10616,38 @@ window["cr_setSuspended"] = function(s)
 	};
 	Condition.prototype.run_system = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.parameters.length; i < len; i++)
 			this.results[i] = this.parameters[i].get();
 		return cr.xor(this.func.apply(this.runtime.system, this.results), this.inverted);
 	};
 	Condition.prototype.run_static = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.parameters.length; i < len; i++)
 			this.results[i] = this.parameters[i].get();
-		var ret = this.func.apply(this.behaviortype ? this.behaviortype : this.type, this.results);
+		let ret = this.func.apply(this.behaviortype ? this.behaviortype : this.type, this.results);
 		this.type.applySolToContainer();
 		return ret;
 	};
 	Condition.prototype.run_object = function ()
 	{
-		var i, j, k, leni, lenj, p, ret, met, inst, s, sol2;
-		var type = this.type;
-		var sol = type.getCurrentSol();
-		var is_orblock = this.block.orblock && !this.trigger;		// triggers in OR blocks need to work normally
-		var offset = 0;
-		var is_contained = type.is_contained;
-		var is_family = type.is_family;
-		var family_index = type.family_index;
-		var beh_index = this.beh_index;
-		var is_beh = (beh_index > -1);
+		let i, j, k, leni, lenj, p, ret, met, inst, s, sol2;
+		let type = this.type;
+		let sol = type.getCurrentSol();
+		let is_orblock = this.block.orblock && !this.trigger;		// triggers in OR blocks need to work normally
+		let offset = 0;
+		let is_contained = type.is_contained;
+		let is_family = type.is_family;
+		let family_index = type.family_index;
+		let beh_index = this.beh_index;
+		let is_beh = (beh_index > -1);
 		var params_vary = this.anyParamVariesPerInstance;
-		var parameters = this.parameters;
-		var results = this.results;
-		var inverted = this.inverted;
-		var func = this.func;
-		var arr, container;
+		let parameters = this.parameters;
+		let results = this.results;
+		let inverted = this.inverted;
+		let func = this.func;
+		let arr, container;
 		if (params_vary)
 		{
 			for (j = 0, lenj = parameters.length; j < lenj; ++j)
@@ -10704,9 +10704,9 @@ window["cr_setSuspended"] = function(s)
 		}
 		else {
 			k = 0;
-			var using_else_instances = (is_orblock && !this.block.isFirstConditionOfType(this));
+			let using_else_instances = (is_orblock && !this.block.isFirstConditionOfType(this));
 			arr = (using_else_instances ? sol.else_instances : sol.instances);
-			var any_true = false;
+			let any_true = false;
 			for (i = 0, leni = arr.length; i < leni; ++i)
 			{
 				inst = arr[i];
@@ -10802,7 +10802,7 @@ window["cr_setSuspended"] = function(s)
 						cr.truncateArray(sol2.instances, k);
 				}
 			}
-			var pick_in_finish = any_true;		// don't pick in finish() if we're only doing the logic test below
+			let pick_in_finish = any_true;		// don't pick in finish() if we're only doing the logic test below
 			if (using_else_instances && !any_true)
 			{
 				for (i = 0, leni = sol.instances.length; i < leni; i++)
@@ -10875,11 +10875,11 @@ window["cr_setSuspended"] = function(s)
 		this.runtime.actsBySid[this.sid.toString()] = this;
 		if (m.length === 6)
 		{
-			var i, len;
-			var em = m[5];
+			let i, len;
+			let em = m[5];
 			for (i = 0, len = em.length; i < len; i++)
 			{
-				var param = new cr.parameter(this, em[i]);
+				let param = new cr.parameter(this, em[i]);
 				cr.seal(param);
 				this.parameters.push(param);
 			}
@@ -10888,7 +10888,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Action.prototype.postInit = function ()
 	{
-		var i, len, p;
+		let i, len, p;
 		for (i = 0, len = this.parameters.length; i < len; i++)
 		{
 			p = this.parameters[i];
@@ -10899,27 +10899,27 @@ window["cr_setSuspended"] = function(s)
 	};
 	Action.prototype.run_system = function ()
 	{
-		var runtime = this.runtime;
-		var i, len;
-		var parameters = this.parameters;
-		var results = this.results;
+		let runtime = this.runtime;
+		let i, len;
+		let parameters = this.parameters;
+		let results = this.results;
 		for (i = 0, len = parameters.length; i < len; ++i)
 			results[i] = parameters[i].get();
 		return this.func.apply(runtime.system, results);
 	};
 	Action.prototype.run_object = function ()
 	{
-		var type = this.type;
-		var beh_index = this.beh_index;
-		var family_index = type.family_index;
+		let type = this.type;
+		let beh_index = this.beh_index;
+		let family_index = type.family_index;
 		var params_vary = this.anyParamVariesPerInstance;
-		var parameters = this.parameters;
-		var results = this.results;
-		var func = this.func;
-		var instances = type.getCurrentSol().getObjects();
-		var is_family = type.is_family;
-		var is_beh = (beh_index > -1);
-		var i, j, leni, lenj, p, inst, offset;
+		let parameters = this.parameters;
+		let results = this.results;
+		let func = this.func;
+		let instances = type.getCurrentSol().getObjects();
+		let is_family = type.is_family;
+		let is_beh = (beh_index > -1);
+		let i, j, leni, lenj, p, inst, offset;
 		if (params_vary)
 		{
 			for (j = 0, lenj = parameters.length; j < lenj; ++j)
@@ -10961,8 +10961,8 @@ window["cr_setSuspended"] = function(s)
 		return false;
 	};
 	cr.action = Action;
-	var tempValues = [];
-	var tempValuesPtr = -1;
+	let tempValues = [];
+	let tempValuesPtr = -1;
 	function pushTempValue()
 	{
 		tempValuesPtr++;
@@ -11078,7 +11078,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Parameter.prototype.postInit = function ()
 	{
-		var i, len;
+		let i, len;
 		if (this.type === 11)		// eventvar
 		{
 			this.eventvar = this.runtime.getEventVariableByName(this.varname, this.block.parent);
@@ -11111,7 +11111,7 @@ window["cr_setSuspended"] = function(s)
 	Parameter.prototype.get_exp = function (solindex)
 	{
 		this.solindex = solindex || 0;   // default SOL index to use
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.expression.get(temp);
 		popTempValue();
 		return temp.data;      			// return actual JS value, not expvalue
@@ -11119,7 +11119,7 @@ window["cr_setSuspended"] = function(s)
 	Parameter.prototype.get_exp_str = function (solindex)
 	{
 		this.solindex = solindex || 0;   // default SOL index to use
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.expression.get(temp);
 		popTempValue();
 		if (cr.is_string(temp.data))
@@ -11138,7 +11138,7 @@ window["cr_setSuspended"] = function(s)
 	Parameter.prototype.get_layer = function (solindex)
 	{
 		this.solindex = solindex || 0;   // default SOL index to use
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.expression.get(temp);
 		popTempValue();
 		if (temp.is_number())
@@ -11160,11 +11160,11 @@ window["cr_setSuspended"] = function(s)
 	};
 	Parameter.prototype.get_familyvar = function (solindex_)
 	{
-		var solindex = solindex_ || 0;
-		var familytype = this.owner.type;
-		var realtype = null;
-		var sol = familytype.getCurrentSol();
-		var objs = sol.getObjects();
+		let solindex = solindex_ || 0;
+		let familytype = this.owner.type;
+		let realtype = null;
+		let sol = familytype.getCurrentSol();
+		let objs = sol.getObjects();
 		if (objs.length)
 			realtype = objs[solindex % objs.length].type;
 		else if (sol.else_instances.length)
@@ -11185,7 +11185,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Parameter.prototype.get_variadic = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.subparams.length; i < len; i++)
 		{
 			this.variadicret[i] = this.subparams[i].get();
@@ -11228,7 +11228,7 @@ window["cr_setSuspended"] = function(s)
 	EventVariable.prototype.setValue = function (x)
 	{
 ;
-		var lvs = this.runtime.getCurrentLocalVarStack();
+		let lvs = this.runtime.getCurrentLocalVarStack();
 		if (!this.parent || this.is_static || !lvs)
 			this.data = x;
 		else	// local nonstatic variable: use event stack to keep value at this level of recursion
@@ -11240,7 +11240,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventVariable.prototype.getValue = function ()
 	{
-		var lvs = this.runtime.getCurrentLocalVarStack();
+		let lvs = this.runtime.getCurrentLocalVarStack();
 		if (!this.parent || this.is_static || !lvs || this.is_constant)
 			return this.data;
 		else	// local nonstatic variable
@@ -11283,7 +11283,7 @@ window["cr_setSuspended"] = function(s)
 ;
         this.sheet.includes.add(this);
 		this.solModifiers = findMatchingSolModifier(this.solModifiers);
-		var p = this.parent;
+		let p = this.parent;
 		while (p)
 		{
 			if (p.group)
@@ -11303,7 +11303,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventInclude.prototype.updateActive = function ()
 	{
-		var p = this.parent;
+		let p = this.parent;
 		while (p)
 		{
 			if (p.group && !p.group_active)
@@ -11378,7 +11378,7 @@ window["cr_setSuspended"] = function(s)
 					this.eval_instvar_exp,
 					this.eval_behavior_exp,
 					this.eval_eventvar_exp][this.type];
-		var paramsModel = null;
+		let paramsModel = null;
 		this.value = null;
 		this.first = null;
 		this.second = null;
@@ -11495,7 +11495,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		if (paramsModel)
 		{
-			var i, len;
+			let i, len;
 			for (i = 0, len = paramsModel.length; i < len; i++)
 				this.parameters.push(new cr.expNode(owner_, paramsModel[i]));
 		}
@@ -11518,13 +11518,13 @@ window["cr_setSuspended"] = function(s)
 			this.instance_expr.postInit();
 		if (this.parameters)
 		{
-			var i, len;
+			let i, len;
 			for (i = 0, len = this.parameters.length; i < len; i++)
 				this.parameters[i].postInit();
 		}
 	};
-	var tempValues = [];
-	var tempValuesPtr = -1;
+	let tempValues = [];
+	let tempValuesPtr = -1;
 	function pushTempValue()
 	{
 		++tempValuesPtr;
@@ -11538,7 +11538,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	function eval_params(parameters, results, temp)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = parameters.length; i < len; ++i)
 		{
 			parameters[i].get(temp);
@@ -11547,24 +11547,24 @@ window["cr_setSuspended"] = function(s)
 	}
 	ExpNode.prototype.eval_system_exp = function (ret)
 	{
-		var parameters = this.parameters;
-		var results = this.results;
+		let parameters = this.parameters;
+		let results = this.results;
 		results[0] = ret;
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		eval_params(parameters, results, temp);
 		popTempValue();
 		this.func.apply(this.runtime.system, results);
 	};
 	ExpNode.prototype.eval_object_exp = function (ret)
 	{
-		var object_type = this.object_type;
-		var results = this.results;
-		var parameters = this.parameters;
-		var instance_expr = this.instance_expr;
-		var func = this.func;
-		var index = this.owner.solindex;			// default to parameter's intended SOL index
-		var sol = object_type.getCurrentSol();
-		var instances = sol.getObjects();
+		let object_type = this.object_type;
+		let results = this.results;
+		let parameters = this.parameters;
+		let instance_expr = this.instance_expr;
+		let func = this.func;
+		let index = this.owner.solindex;			// default to parameter's intended SOL index
+		let sol = object_type.getCurrentSol();
+		let instances = sol.getObjects();
 		if (!instances.length)
 		{
 			if (sol.else_instances.length)
@@ -11580,7 +11580,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		results[0] = ret;
 		ret.object_class = object_type;		// so expression can access family type if need be
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		eval_params(parameters, results, temp);
 		if (instance_expr) {
 			instance_expr.get(temp);
@@ -11590,25 +11590,25 @@ window["cr_setSuspended"] = function(s)
 			}
 		}
 		popTempValue();
-		var len = instances.length;
+		let len = instances.length;
 		if (index >= len || index <= -len)
 			index %= len;      // wraparound
 		if (index < 0)
 			index += len;
-		var returned_val = func.apply(instances[index], results);
+		let returned_val = func.apply(instances[index], results);
 ;
 	};
 	ExpNode.prototype.eval_behavior_exp = function (ret)
 	{
-		var object_type = this.object_type;
-		var results = this.results;
-		var parameters = this.parameters;
-		var instance_expr = this.instance_expr;
-		var beh_index = this.beh_index;
-		var func = this.func;
-		var index = this.owner.solindex;			// default to parameter's intended SOL index
-		var sol = object_type.getCurrentSol();
-		var instances = sol.getObjects();
+		let object_type = this.object_type;
+		let results = this.results;
+		let parameters = this.parameters;
+		let instance_expr = this.instance_expr;
+		let beh_index = this.beh_index;
+		let func = this.func;
+		let index = this.owner.solindex;			// default to parameter's intended SOL index
+		let sol = object_type.getCurrentSol();
+		let instances = sol.getObjects();
 		if (!instances.length)
 		{
 			if (sol.else_instances.length)
@@ -11624,7 +11624,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		results[0] = ret;
 		ret.object_class = object_type;		// so expression can access family type if need be
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		eval_params(parameters, results, temp);
 		if (instance_expr) {
 			instance_expr.get(temp);
@@ -11634,29 +11634,29 @@ window["cr_setSuspended"] = function(s)
 			}
 		}
 		popTempValue();
-		var len = instances.length;
+		let len = instances.length;
 		if (index >= len || index <= -len)
 			index %= len;      // wraparound
 		if (index < 0)
 			index += len;
-		var inst = instances[index];
-		var offset = 0;
+		let inst = instances[index];
+		let offset = 0;
 		if (object_type.is_family)
 		{
 			offset = inst.type.family_beh_map[object_type.family_index];
 		}
-		var returned_val = func.apply(inst.behavior_insts[beh_index + offset], results);
+		let returned_val = func.apply(inst.behavior_insts[beh_index + offset], results);
 ;
 	};
 	ExpNode.prototype.eval_instvar_exp = function (ret)
 	{
-		var instance_expr = this.instance_expr;
-		var object_type = this.object_type;
-		var varindex = this.varindex;
-		var index = this.owner.solindex;		// default to parameter's intended SOL index
-		var sol = object_type.getCurrentSol();
-		var instances = sol.getObjects();
-		var inst;
+		let instance_expr = this.instance_expr;
+		let object_type = this.object_type;
+		let varindex = this.varindex;
+		let index = this.owner.solindex;		// default to parameter's intended SOL index
+		let sol = object_type.getCurrentSol();
+		let instances = sol.getObjects();
+		let inst;
 		if (!instances.length)
 		{
 			if (sol.else_instances.length)
@@ -11672,12 +11672,12 @@ window["cr_setSuspended"] = function(s)
 		}
 		if (instance_expr)
 		{
-			var temp = pushTempValue();
+			let temp = pushTempValue();
 			instance_expr.get(temp);
 			if (temp.is_number())
 			{
 				index = temp.data;
-				var type_instances = object_type.instances;
+				let type_instances = object_type.instances;
 				if (type_instances.length !== 0)		// avoid NaN result with %
 				{
 					index %= type_instances.length;     // wraparound
@@ -11685,7 +11685,7 @@ window["cr_setSuspended"] = function(s)
 						index += type_instances.length;
 				}
 				inst = object_type.getInstanceByIID(index);
-				var to_ret = inst.instance_vars[varindex];
+				let to_ret = inst.instance_vars[varindex];
 				if (cr.is_string(to_ret))
 					ret.set_string(to_ret);
 				else
@@ -11695,18 +11695,18 @@ window["cr_setSuspended"] = function(s)
 			}
 			popTempValue();
 		}
-		var len = instances.length;
+		let len = instances.length;
 		if (index >= len || index <= -len)
 			index %= len;		// wraparound
 		if (index < 0)
 			index += len;
 		inst = instances[index];
-		var offset = 0;
+		let offset = 0;
 		if (object_type.is_family)
 		{
 			offset = inst.type.family_var_map[object_type.family_index];
 		}
-		var to_ret = inst.instance_vars[varindex + offset];
+		let to_ret = inst.instance_vars[varindex + offset];
 		if (cr.is_string(to_ret))
 			ret.set_string(to_ret);
 		else
@@ -11736,7 +11736,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_add = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11749,7 +11749,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_subtract = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11762,7 +11762,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_multiply = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11775,7 +11775,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_divide = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11787,7 +11787,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_mod = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11800,7 +11800,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_power = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11813,7 +11813,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_and = function (ret)
 	{
 		this.first.get(ret);			// left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (temp.is_string() || ret.is_string())
 			this.eval_and_stringconcat(ret, temp);
@@ -11850,7 +11850,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_or = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		if (ret.is_number() && temp.is_number())
 		{
@@ -11872,7 +11872,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_equal = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data === temp.data ? 1 : 0);
 		popTempValue();
@@ -11880,7 +11880,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_notequal = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data !== temp.data ? 1 : 0);
 		popTempValue();
@@ -11888,7 +11888,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_less = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data < temp.data ? 1 : 0);
 		popTempValue();
@@ -11896,7 +11896,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_lessequal = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data <= temp.data ? 1 : 0);
 		popTempValue();
@@ -11904,7 +11904,7 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_greater = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data > temp.data ? 1 : 0);
 		popTempValue();
@@ -11912,14 +11912,14 @@ window["cr_setSuspended"] = function(s)
 	ExpNode.prototype.eval_greaterequal = function (ret)
 	{
 		this.first.get(ret);                // left operand
-		var temp = pushTempValue();
+		let temp = pushTempValue();
 		this.second.get(temp);			// right operand
 		ret.set_int(ret.data >= temp.data ? 1 : 0);
 		popTempValue();
 	};
 	ExpNode.prototype.eval_eventvar_exp = function (ret)
 	{
-		var val = this.eventvar.getValue();
+		let val = this.eventvar.getValue();
 		if (cr.is_number(val))
 			ret.set_float(val);
 		else
@@ -12033,11 +12033,11 @@ cr.system_object = function (runtime)
 };
 cr.system_object.prototype.saveToJSON = function ()
 {
-	var o = {};
-	var i, len, j, lenj, p, w, t, sobj;
+	let o = {};
+	let i, len, j, lenj, p, w, t, sobj;
 	o["waits"] = [];
-	var owaits = o["waits"];
-	var waitobj;
+	let owaits = o["waits"];
+	let waitobj;
 	for (i = 0, len = this.waits.length; i < len; i++)
 	{
 		w = this.waits[i];
@@ -12074,8 +12074,8 @@ cr.system_object.prototype.saveToJSON = function ()
 };
 cr.system_object.prototype.loadFromJSON = function (o)
 {
-	var owaits = o["waits"];
-	var i, len, j, lenj, p, w, addWait, e, aindex, t, savedsol, nusol, inst;
+	let owaits = o["waits"];
+	let i, len, j, lenj, p, w, addWait, e, aindex, t, savedsol, nusol, inst;
 	cr.clearArray(this.waits);
 	for (i = 0, len = owaits.length; i < len; i++)
 	{
@@ -12135,7 +12135,7 @@ cr.system_object.prototype.loadFromJSON = function (o)
 };
 (function ()
 {
-	var sysProto = cr.system_object.prototype;
+	let sysProto = cr.system_object.prototype;
 	function SysCnds() {};
     SysCnds.prototype.EveryTick = function()
     {
@@ -12155,10 +12155,10 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysCnds.prototype.CompareTime = function (cmp, t)
     {
-        var elapsed = this.runtime.kahanTime.sum;
+        let elapsed = this.runtime.kahanTime.sum;
         if (cmp === 0)
         {
-            var cnd = this.runtime.getCurrentCondition();
+            let cnd = this.runtime.getCurrentCondition();
             if (!cnd.extra["CompareTime_executed"])
             {
                 if (elapsed >= t)
@@ -12193,11 +12193,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
 	};
     SysCnds.prototype.Repeat = function (count)
     {
-		var current_frame = this.runtime.getCurrentEventStack();
-        var current_event = current_frame.current_event;
-		var solModifierAfterCnds = current_frame.isModifierAfterCnds();
-        var current_loop = this.runtime.pushLoopStack();
-        var i;
+		let current_frame = this.runtime.getCurrentEventStack();
+        let current_event = current_frame.current_event;
+		let solModifierAfterCnds = current_frame.isModifierAfterCnds();
+        let current_loop = this.runtime.pushLoopStack();
+        let i;
 		if (solModifierAfterCnds)
 		{
 			for (i = 0; i < count && !current_loop.stopped; i++)
@@ -12221,11 +12221,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
 	SysCnds.prototype.While = function (count)
     {
-		var current_frame = this.runtime.getCurrentEventStack();
-        var current_event = current_frame.current_event;
-		var solModifierAfterCnds = current_frame.isModifierAfterCnds();
-        var current_loop = this.runtime.pushLoopStack();
-        var i;
+		let current_frame = this.runtime.getCurrentEventStack();
+        let current_event = current_frame.current_event;
+		let solModifierAfterCnds = current_frame.isModifierAfterCnds();
+        let current_loop = this.runtime.pushLoopStack();
+        let i;
 		if (solModifierAfterCnds)
 		{
 			for (i = 0; !current_loop.stopped; i++)
@@ -12251,11 +12251,11 @@ cr.system_object.prototype.loadFromJSON = function (o)
     };
     SysCnds.prototype.For = function (name, start, end)
     {
-        var current_frame = this.runtime.getCurrentEventStack();
-        var current_event = current_frame.current_event;
-		var solModifierAfterCnds = current_frame.isModifierAfterCnds();
-        var current_loop = this.runtime.pushLoopStack(name);
-        var i;
+        let current_frame = this.runtime.getCurrentEventStack();
+        let current_event = current_frame.current_event;
+		let solModifierAfterCnds = current_frame.isModifierAfterCnds();
+        let current_loop = this.runtime.pushLoopStack(name);
+        let i;
 		if (end < start)
 		{
 			if (solModifierAfterCnds)
@@ -12301,22 +12301,22 @@ cr.system_object.prototype.loadFromJSON = function (o)
         this.runtime.popLoopStack();
 		return false;
     };
-	var foreach_instancestack = [];
-	var foreach_instanceptr = -1;
+	let foreach_instancestack = [];
+	let foreach_instanceptr = -1;
     SysCnds.prototype.ForEach = function (obj)
     {
-        var sol = obj.getCurrentSol();
+        let sol = obj.getCurrentSol();
 		foreach_instanceptr++;
 		if (foreach_instancestack.length === foreach_instanceptr)
 			foreach_instancestack.push([]);
-		var instances = foreach_instancestack[foreach_instanceptr];
+		let instances = foreach_instancestack[foreach_instanceptr];
 		cr.shallowAssignArray(instances, sol.getObjects());
-        var current_frame = this.runtime.getCurrentEventStack();
-        var current_event = current_frame.current_event;
-		var solModifierAfterCnds = current_frame.isModifierAfterCnds();
-        var current_loop = this.runtime.pushLoopStack();
-        var i, len, j, lenj, inst, s, sol2;
-		var is_contained = obj.is_contained;
+        let current_frame = this.runtime.getCurrentEventStack();
+        let current_event = current_frame.current_event;
+		let solModifierAfterCnds = current_frame.isModifierAfterCnds();
+        let current_loop = this.runtime.pushLoopStack();
+        let i, len, j, lenj, inst, s, sol2;
+		let is_contained = obj.is_contained;
 		if (solModifierAfterCnds)
 		{
 			for (i = 0, len = instances.length; i < len && !current_loop.stopped; i++)
