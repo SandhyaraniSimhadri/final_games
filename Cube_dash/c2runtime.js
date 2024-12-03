@@ -889,7 +889,7 @@ if (typeof Object.getPrototypeOf !== "function") {
 		this.pts_count = r.pts_count;
 		cr.shallowAssignArray(this.pts_cache, r.pts_cache);
 		this.bboxLeft = r.bboxLeft;
-		this.bboxTop - r.bboxTop;
+		this.bboxTop = r.bboxTop;
 		this.bboxRight = r.bboxRight;
 		this.bboxBottom = r.bboxBottom;
 	};
