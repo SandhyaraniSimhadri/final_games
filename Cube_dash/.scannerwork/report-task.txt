@@ -2,5 +2,5 @@ projectKey=Cube_dash-03-12-2024
 serverUrl=http://localhost:9000
 serverVersion=10.6.0.92116
 dashboardUrl=http://localhost:9000/dashboard?id=Cube_dash-03-12-2024
-ceTaskId=b4fbd9b1-f334-4701-a236-75ceabc773e9
-ceTaskUrl=http://localhost:9000/api/ce/task?id=b4fbd9b1-f334-4701-a236-75ceabc773e9
+ceTaskId=ff239780-a3d2-41e9-88a0-84a4f8c9afec
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ff239780-a3d2-41e9-88a0-84a4f8c9afec
