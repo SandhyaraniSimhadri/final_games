@@ -1676,6 +1676,7 @@ if (typeof Object.getPrototypeOf !== "function")
 		return false;
 	};
 }());
+
 var MatrixArray=typeof Float32Array!=="undefined"?Float32Array:Array,glMatrixArrayType=MatrixArray,vec3={},mat3={},mat4={},quat4={};vec3.create=function(a){var b=new MatrixArray(3);a&&(b[0]=a[0],b[1]=a[1],b[2]=a[2]);return b};vec3.set=function(a,b){b[0]=a[0];b[1]=a[1];b[2]=a[2];return b};vec3.add=function(a,b,c){if(!c||a===c)return a[0]+=b[0],a[1]+=b[1],a[2]+=b[2],a;c[0]=a[0]+b[0];c[1]=a[1]+b[1];c[2]=a[2]+b[2];return c};
 vec3.subtract=function(a,b,c){if(!c||a===c)return a[0]-=b[0],a[1]-=b[1],a[2]-=b[2],a;c[0]=a[0]-b[0];c[1]=a[1]-b[1];c[2]=a[2]-b[2];return c};vec3.negate=function(a,b){b||(b=a);b[0]=-a[0];b[1]=-a[1];b[2]=-a[2];return b};vec3.scale=function(a,b,c){if(!c||a===c)return a[0]*=b,a[1]*=b,a[2]*=b,a;c[0]=a[0]*b;c[1]=a[1]*b;c[2]=a[2]*b;return c};
 vec3.normalize=function(a,b){b||(b=a);var c=a[0],d=a[1],e=a[2],g=Math.sqrt(c*c+d*d+e*e);if(g){if(g===1)return b[0]=c,b[1]=d,b[2]=e,b}else return b[0]=0,b[1]=0,b[2]=0,b;g=1/g;b[0]=c*g;b[1]=d*g;b[2]=e*g;return b};vec3.cross=function(a,b,c){c||(c=a);var d=a[0],e=a[1],a=a[2],g=b[0],f=b[1],b=b[2];c[0]=e*b-a*f;c[1]=a*g-d*b;c[2]=d*f-e*g;return c};vec3.length=function(a){var b=a[0],c=a[1],a=a[2];return Math.sqrt(b*b+c*c+a*a)};vec3.dot=function(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]};
@@ -1713,25 +1714,25 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 {
 	var MAX_VERTICES = 8000;						// equates to 2500 objects being drawn
 	var MAX_INDICES = (MAX_VERTICES / 2) * 3;		// 6 indices for every 4 vertices
-	var MAX_POINTS = 8000;
-	var MULTI_BUFFERS = 4;							// cycle 4 buffers to try and avoid blocking
-	var BATCH_NULL = 0;
-	var BATCH_QUAD = 1;
-	var BATCH_SETTEXTURE = 2;
-	var BATCH_SETOPACITY = 3;
-	var BATCH_SETBLEND = 4;
-	var BATCH_UPDATEMODELVIEW = 5;
-	var BATCH_RENDERTOTEXTURE = 6;
-	var BATCH_CLEAR = 7;
-	var BATCH_POINTS = 8;
-	var BATCH_SETPROGRAM = 9;
-	var BATCH_SETPROGRAMPARAMETERS = 10;
-	var BATCH_SETTEXTURE1 = 11;
-	var BATCH_SETCOLOR = 12;
-	var BATCH_SETDEPTHTEST = 13;
-	var BATCH_SETEARLYZMODE = 14;
+	let MAX_POINTS = 8000;
+	let MULTI_BUFFERS = 4;							// cycle 4 buffers to try and avoid blocking
+	let BATCH_NULL = 0;
+	let BATCH_QUAD = 1;
+	let BATCH_SETTEXTURE = 2;
+	let BATCH_SETOPACITY = 3;
+	let BATCH_SETBLEND = 4;
+	let BATCH_UPDATEMODELVIEW = 5;
+	let BATCH_RENDERTOTEXTURE = 6;
+	let BATCH_CLEAR = 7;
+	let BATCH_POINTS = 8;
+	let BATCH_SETPROGRAM = 9;
+	let BATCH_SETPROGRAMPARAMETERS = 10;
+	let BATCH_SETTEXTURE1 = 11;
+	let BATCH_SETCOLOR = 12;
+	let BATCH_SETDEPTHTEST = 13;
+	let BATCH_SETEARLYZMODE = 14;
 	/*
-	var lose_ext = null;
+	let lose_ext = null;
 	window.lose_context = function ()
 	{
 		if (!lose_ext)
@@ -1751,7 +1752,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		lose_ext.restoreContext();
 	};
 	*/
-	var tempMat4 = mat4.create();
+	let tempMat4 = mat4.create();
 	function GLWrap_(gl, isMobile, enableFrontToBack)
 	{
 		this.isIE = /msie/i.test(navigator.userAgent) || /trident/i.test(navigator.userAgent);
@@ -1783,8 +1784,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.initState = function ()
 	{
-		var gl = this.gl;
-		var i, len;
+		let gl = this.gl;
+		let i, len;
 		this.lastOpacity = 1;
 		this.lastTexture0 = null;			// last bound to TEXTURE0
 		this.lastTexture1 = null;			// last bound to TEXTURE1
@@ -1828,9 +1829,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.curBuffer = 0;
 		this.indexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-		var indexData = new Uint16Array(MAX_INDICES);
+		let indexData = new Uint16Array(MAX_INDICES);
 		i = 0, len = MAX_INDICES;
-		var fv = 0;
+		let fv = 0;
 		while (i < len)
 		{
 			indexData[i++] = fv;		// top left
@@ -1845,7 +1846,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.vertexPtr = 0;
 		this.texPtr = 0;
 		this.pointPtr = 0;
-		var fsSource, vsSource;
+		let fsSource, vsSource;
 		this.shaderPrograms = [];
 		fsSource = [
 			"varying mediump vec2 vTex;",
@@ -1884,7 +1885,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				"}"
 			].join("\n");
 		}
-		var shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<default>");
+		let shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<default>");
 ;
 		this.shaderPrograms.push(shaderProg);		// Default shader is always shader 0
 		fsSource = [
@@ -1895,7 +1896,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			"	gl_FragColor *= opacity;",
 			"}"
 		].join("\n");
-		var pointVsSource = [
+		let pointVsSource = [
 			"attribute vec4 aPos;",
 			"varying float opacity;",
 			"uniform mat4 matP;",
@@ -1917,7 +1918,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			"		discard;",						// discarding non-opaque fragments
 			"}"
 		].join("\n");
-		var shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<earlyz>");
+		shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<earlyz>");
 ;
 		this.shaderPrograms.push(shaderProg);		// Early-Z shader is always shader 2
 		fsSource = [
@@ -1926,10 +1927,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			"	gl_FragColor = colorFill;",
 			"}"
 		].join("\n");
-		var shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<fill>");
+		shaderProg = this.createShaderProgram({src: fsSource}, vsSource, "<fill>");
 ;
 		this.shaderPrograms.push(shaderProg);		// Fill-color shader is always shader 3
-		for (var shader_name in cr.shaders)
+		for (let shader_name in cr.shaders)
 		{
 			if (cr.shaders.hasOwnProperty(shader_name))
 				this.shaderPrograms.push(this.createShaderProgram(cr.shaders[shader_name], vsSource, shader_name));
@@ -1953,7 +1954,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		this.tmpVec3 = vec3.create([0, 0, 0]);
 ;
-		var pointsizes = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+		let pointsizes = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 		this.minPointSize = pointsizes[0];
 		this.maxPointSize = pointsizes[1];
 		if (this.maxPointSize > 2048)
@@ -2041,33 +2042,33 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.createShaderProgram = function(shaderEntry, vsSource, name)
 	{
-		var gl = this.gl;
-		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+		let gl = this.gl;
+		let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 		gl.shaderSource(fragmentShader, shaderEntry.src);
 		gl.compileShader(fragmentShader);
 		if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS))
 		{
-			var compilationlog = gl.getShaderInfoLog(fragmentShader);
+			let compilationlog = gl.getShaderInfoLog(fragmentShader);
 			gl.deleteShader(fragmentShader);
 			throw new Error("error compiling fragment shader: " + compilationlog);
 		}
-		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+		let vertexShader = gl.createShader(gl.VERTEX_SHADER);
 		gl.shaderSource(vertexShader, vsSource);
 		gl.compileShader(vertexShader);
 		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS))
 		{
-			var compilationlog = gl.getShaderInfoLog(vertexShader);
+			let compilationlog = gl.getShaderInfoLog(vertexShader);
 			gl.deleteShader(fragmentShader);
 			gl.deleteShader(vertexShader);
 			throw new Error("error compiling vertex shader: " + compilationlog);
 		}
-		var shaderProgram = gl.createProgram();
+		let shaderProgram = gl.createProgram();
 		gl.attachShader(shaderProgram, fragmentShader);
 		gl.attachShader(shaderProgram, vertexShader);
 		gl.linkProgram(shaderProgram);
 		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
 		{
-			var compilationlog = gl.getProgramInfoLog(shaderProgram);
+			let compilationlog = gl.getProgramInfoLog(shaderProgram);
 			gl.deleteShader(fragmentShader);
 			gl.deleteShader(vertexShader);
 			gl.deleteProgram(shaderProgram);
@@ -2076,14 +2077,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		gl.useProgram(shaderProgram);
 		gl.deleteShader(fragmentShader);
 		gl.deleteShader(vertexShader);
-		var ret = new GLShaderProgram(gl, shaderProgram, name);
+		let ret = new GLShaderProgram(gl, shaderProgram, name);
 		ret.extendBoxHorizontal = shaderEntry.extendBoxHorizontal || 0;
 		ret.extendBoxVertical = shaderEntry.extendBoxVertical || 0;
 		ret.crossSampling = !!shaderEntry.crossSampling;
 		ret.preservesOpaqueness = !!shaderEntry.preservesOpaqueness;
 		ret.animated = !!shaderEntry.animated;
 		ret.parameters = shaderEntry.parameters || [];
-		var i, len;
+		let i, len;
 		for (i = 0, len = ret.parameters.length; i < len; i++)
 		{
 			ret.parameters[i][1] = gl.getUniformLocation(shaderProgram, ret.parameters[i][0]);
@@ -2095,7 +2096,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.getShaderIndex = function(name_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.shaderPrograms.length; i < len; i++)
 		{
 			if (this.shaderPrograms[i].name === name_)
@@ -2105,9 +2106,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.project = function (x, y, out)
 	{
-		var mv = this.matMV;
-		var proj = this.matP;
-		var fTempo = [0, 0, 0, 0, 0, 0, 0, 0];
+		let mv = this.matMV;
+		let proj = this.matP;
+		let fTempo = [0, 0, 0, 0, 0, 0, 0, 0];
 		fTempo[0] = mv[0]*x+mv[4]*y+mv[12];
 		fTempo[1] = mv[1]*x+mv[5]*y+mv[13];
 		fTempo[2] = mv[2]*x+mv[6]*y+mv[14];
@@ -2130,7 +2131,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (this.width === w && this.height === h && !force)
 			return;
 		this.endBatch();
-		var gl = this.gl;
+		let gl = this.gl;
 		this.width = w;
 		this.height = h;
 		gl.viewport(0, 0, w, h);
@@ -2144,14 +2145,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		else
 		{
 			mat4.perspective(45, w / h, this.zNear, this.zFar, this.matP);
-			var tl = [0, 0];
-			var br = [0, 0];
+			let tl = [0, 0];
+			let br = [0, 0];
 			this.project(0, 0, tl);
 			this.project(1, 1, br);
 			this.worldScale[0] = 1 / (br[0] - tl[0]);
 			this.worldScale[1] = -1 / (br[1] - tl[1]);
 		}
-		var i, len, s;
+		let i, len, s;
 		for (i = 0, len = this.shaderPrograms.length; i < len; i++)
 		{
 			s = this.shaderPrograms[i];
@@ -2217,7 +2218,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (areMat4sEqual(this.lastMV, this.matMV))
 			return;
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_UPDATEMODELVIEW;
 		if (b.mat4param)
 			mat4.set(this.matMV, b.mat4param);
@@ -2259,8 +2260,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doSetEarlyZPass = function ()
 	{
-		var gl = this.gl;
-		var glwrap = this.glwrap;
+		let gl = this.gl;
+		let glwrap = this.glwrap;
 		if (this.startIndex !== 0)		// enable
 		{
 			gl.depthMask(true);			// enable depth writes
@@ -2286,17 +2287,17 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doSetTexture1 = function ()
 	{
-		var gl = this.gl;
+		let gl = this.gl;
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, this.texParam);
 		gl.activeTexture(gl.TEXTURE0);
 	};
 	GLBatchJob.prototype.doSetOpacity = function ()
 	{
-		var o = this.opacityParam;
-		var glwrap = this.glwrap;
+		let o = this.opacityParam;
+		let glwrap = this.glwrap;
 		glwrap.currentOpacity = o;
-		var curProg = glwrap.currentShader;
+		let curProg = glwrap.currentShader;
 		if (curProg.locOpacity && curProg.lpOpacity !== o)
 		{
 			curProg.lpOpacity = o;
@@ -2313,7 +2314,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doUpdateModelView = function ()
 	{
-		var i, len, s, shaderPrograms = this.glwrap.shaderPrograms, currentProgram = this.glwrap.currentProgram;
+		let i, len, s, shaderPrograms = this.glwrap.shaderPrograms, currentProgram = this.glwrap.currentProgram;
 		for (i = 0, len = shaderPrograms.length; i < len; i++)
 		{
 			s = shaderPrograms[i];
@@ -2329,8 +2330,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doRenderToTexture = function ()
 	{
-		var gl = this.gl;
-		var glwrap = this.glwrap;
+		let gl = this.gl;
+		let glwrap = this.glwrap;
 		if (this.texParam)
 		{
 			if (glwrap.lastTexture1 === this.texParam)
@@ -2357,8 +2358,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doClear = function ()
 	{
-		var gl = this.gl;
-		var mode = this.startIndex;
+		let gl = this.gl;
+		let mode = this.startIndex;
 		if (mode === 0)			// clear whole surface
 		{
 			gl.clearColor(this.mat4param[0], this.mat4param[1], this.mat4param[2], this.mat4param[3]);
@@ -2379,8 +2380,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doSetDepthTestEnabled = function ()
 	{
-		var gl = this.gl;
-		var enable = this.startIndex;
+		let gl = this.gl;
+		let enable = this.startIndex;
 		if (enable !== 0)
 		{
 			gl.enable(gl.DEPTH_TEST);
@@ -2392,11 +2393,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doPoints = function ()
 	{
-		var gl = this.gl;
-		var glwrap = this.glwrap;
+		let gl = this.gl;
+		let glwrap = this.glwrap;
 		if (glwrap.enableFrontToBack)
 			gl.disable(gl.DEPTH_TEST);
-		var s = glwrap.shaderPrograms[1];
+		let s = glwrap.shaderPrograms[1];
 		gl.useProgram(s.shaderProgram);
 		if (!s.hasCurrentMatMV && s.locMatMV)
 		{
@@ -2426,9 +2427,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLBatchJob.prototype.doSetProgram = function ()
 	{
-		var gl = this.gl;
-		var glwrap = this.glwrap;
-		var s = glwrap.shaderPrograms[this.startIndex];		// recycled param to save memory
+		let gl = this.gl;
+		let glwrap = this.glwrap;
+		let s = glwrap.shaderPrograms[this.startIndex];		// recycled param to save memory
 		glwrap.currentProgram = this.startIndex;			// current batch program
 		glwrap.currentShader = s;
 		gl.useProgram(s.shaderProgram);						// switch to
@@ -2457,15 +2458,15 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	}
 	GLBatchJob.prototype.doSetColor = function ()
 	{
-		var s = this.glwrap.currentShader;
-		var mat4param = this.mat4param;
+		let s = this.glwrap.currentShader;
+		let mat4param = this.mat4param;
 		this.gl.uniform4f(s.locColorFill, mat4param[0], mat4param[1], mat4param[2], mat4param[3]);
 	};
 	GLBatchJob.prototype.doSetProgramParameters = function ()
 	{
-		var i, len, s = this.glwrap.currentShader;
-		var gl = this.gl;
-		var mat4param = this.mat4param;
+		let i, len, s = this.glwrap.currentShader;
+		let gl = this.gl;
+		let mat4param = this.mat4param;
 		if (s.locSamplerBack && this.glwrap.lastTexture1 !== this.texParam)
 		{
 			gl.activeTexture(gl.TEXTURE1);
@@ -2473,8 +2474,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			this.glwrap.lastTexture1 = this.texParam;
 			gl.activeTexture(gl.TEXTURE0);
 		}
-		var v = mat4param[0];
-		var v2;
+		let v = mat4param[0];
+		let v2;
 		if (s.locPixelWidth && v !== s.lpPixelWidth)
 		{
 			s.lpPixelWidth = v;
@@ -2561,7 +2562,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return;
 		if (this.gl.isContextLost())
 			return;
-		var gl = this.gl;
+		let gl = this.gl;
 		if (this.pointPtr > 0)
 		{
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.pointBuffer);
@@ -2571,7 +2572,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (this.vertexPtr > 0)
 		{
-			var s = this.currentShader;
+			let s = this.currentShader;
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffers[this.curBuffer]);
 			gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.vertexData.subarray(0, this.vertexPtr));
 			if (s && s.locAPos >= 0 && s.name !== "<point>")
@@ -2581,7 +2582,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			if (s && s.locATex >= 0 && s.name !== "<point>")
 				gl.vertexAttribPointer(s.locATex, 2, gl.FLOAT, false, 0, 0);
 		}
-		var i, len, b;
+		let i, len, b;
 		for (i = 0, len = this.batchPtr; i < len; i++)
 		{
 			b = this.batch[i];
@@ -2647,7 +2648,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return;
 		if (this.isEarlyZPass)
 			return;		// ignore
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETOPACITY;
 		b.opacityParam = op;
 		this.lastOpacity = op;
@@ -2659,7 +2660,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (tex === this.lastTexture0)
 			return;
 ;
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETTEXTURE;
 		b.texParam = tex;
 		this.lastTexture0 = tex;
@@ -2672,7 +2673,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return;
 		if (this.isEarlyZPass)
 			return;		// ignore
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETBLEND;
 		b.startIndex = s;		// recycle params to save memory
 		b.indexCount = d;
@@ -2693,23 +2694,23 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		this.setBlend(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 	};
-	var LAST_VERTEX = MAX_VERTICES * 2 - 8;
+	let LAST_VERTEX = MAX_VERTICES * 2 - 8;
 	GLWrap_.prototype.quad = function(tlx, tly, trx, try_, brx, bry, blx, bly)
 	{
 		if (this.vertexPtr >= LAST_VERTEX)
 			this.endBatch();
-		var v = this.vertexPtr;			// vertex cursor
-		var t = this.texPtr;
-		var vd = this.vertexData;		// vertex data array
-		var td = this.texcoordData;		// texture coord data array
-		var currentZ = this.currentZ;
+		let v = this.vertexPtr;			// vertex cursor
+		let t = this.texPtr;
+		let vd = this.vertexData;		// vertex data array
+		let td = this.texcoordData;		// texture coord data array
+		let currentZ = this.currentZ;
 		if (this.hasQuadBatchTop)
 		{
 			this.batch[this.batchPtr - 1].indexCount += 6;
 		}
 		else
 		{
-			var b = this.pushBatch();
+			let b = this.pushBatch();
 			b.type = BATCH_QUAD;
 			b.startIndex = this.enableFrontToBack ? v : (v / 2) * 3;
 			b.indexCount = 6;
@@ -2757,28 +2758,28 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (this.vertexPtr >= LAST_VERTEX)
 			this.endBatch();
-		var v = this.vertexPtr;			// vertex cursor
-		var t = this.texPtr;
-		var vd = this.vertexData;		// vertex data array
-		var td = this.texcoordData;		// texture coord data array
-		var currentZ = this.currentZ;
+		let v = this.vertexPtr;			// vertex cursor
+		let t = this.texPtr;
+		let vd = this.vertexData;		// vertex data array
+		let td = this.texcoordData;		// texture coord data array
+		let currentZ = this.currentZ;
 		if (this.hasQuadBatchTop)
 		{
 			this.batch[this.batchPtr - 1].indexCount += 6;
 		}
 		else
 		{
-			var b = this.pushBatch();
+			let b = this.pushBatch();
 			b.type = BATCH_QUAD;
 			b.startIndex = this.enableFrontToBack ? v : (v / 2) * 3;
 			b.indexCount = 6;
 			this.hasQuadBatchTop = true;
 			this.hasPointBatchTop = false;
 		}
-		var rc_left = rcTex.left;
-		var rc_top = rcTex.top;
-		var rc_right = rcTex.right;
-		var rc_bottom = rcTex.bottom;
+		let rc_left = rcTex.left;
+		let rc_top = rcTex.top;
+		let rc_right = rcTex.right;
+		let rc_bottom = rcTex.bottom;
 		if (this.enableFrontToBack)
 		{
 			vd[v++] = tlx;
@@ -2820,18 +2821,18 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (this.vertexPtr >= LAST_VERTEX)
 			this.endBatch();
-		var v = this.vertexPtr;			// vertex cursor
-		var t = this.texPtr;
-		var vd = this.vertexData;		// vertex data array
-		var td = this.texcoordData;		// texture coord data array
-		var currentZ = this.currentZ;
+		let v = this.vertexPtr;			// vertex cursor
+		let t = this.texPtr;
+		let vd = this.vertexData;		// vertex data array
+		let td = this.texcoordData;		// texture coord data array
+		let currentZ = this.currentZ;
 		if (this.hasQuadBatchTop)
 		{
 			this.batch[this.batchPtr - 1].indexCount += 6;
 		}
 		else
 		{
-			var b = this.pushBatch();
+			let b = this.pushBatch();
 			b.type = BATCH_QUAD;
 			b.startIndex = this.enableFrontToBack ? v : (v / 2) * 3;
 			b.indexCount = 6;
@@ -2877,13 +2878,13 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.convexPoly = function(pts)
 	{
-		var pts_count = pts.length / 2;
+		let pts_count = pts.length / 2;
 ;
-		var tris = pts_count - 2;	// 3 points = 1 tri, 4 points = 2 tris, 5 points = 3 tris etc.
-		var last_tri = tris - 1;
-		var p0x = pts[0];
-		var p0y = pts[1];
-		var i, i2, p1x, p1y, p2x, p2y, p3x, p3y;
+		let tris = pts_count - 2;	// 3 points = 1 tri, 4 points = 2 tris, 5 points = 3 tris etc.
+		let last_tri = tris - 1;
+		let p0x = pts[0];
+		let p0y = pts[1];
+		let i, i2, p1x, p1y, p2x, p2y, p3x, p3y;
 		for (i = 0; i < tris; i += 2)		// draw 2 triangles at a time
 		{
 			i2 = i * 2;
@@ -2903,20 +2904,20 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			}
 		}
 	};
-	var LAST_POINT = MAX_POINTS - 4;
+	let LAST_POINT = MAX_POINTS - 4;
 	GLWrap_.prototype.point = function(x_, y_, size_, opacity_)
 	{
 		if (this.pointPtr >= LAST_POINT)
 			this.endBatch();
-		var p = this.pointPtr;			// point cursor
-		var pd = this.pointData;		// point data array
+		let p = this.pointPtr;			// point cursor
+		let pd = this.pointData;		// point data array
 		if (this.hasPointBatchTop)
 		{
 			this.batch[this.batchPtr - 1].indexCount++;
 		}
 		else
 		{
-			var b = this.pushBatch();
+			let b = this.pushBatch();
 			b.type = BATCH_POINTS;
 			b.startIndex = p;
 			b.indexCount = 1;
@@ -2933,7 +2934,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (this.lastProgram === progIndex)
 			return;			// no change
-		var shaderProg = this.shaderPrograms[progIndex];
+		let shaderProg = this.shaderPrograms[progIndex];
 		if (!shaderProg)
 		{
 			if (this.lastProgram === 0)
@@ -2941,7 +2942,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			progIndex = 0;
 			shaderProg = this.shaderPrograms[0];
 		}
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETPROGRAM;
 		b.startIndex = progIndex;
 		this.lastProgram = progIndex;
@@ -2950,12 +2951,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.programUsesDest = function (progIndex)
 	{
-		var s = this.shaderPrograms[progIndex];
+		let s = this.shaderPrograms[progIndex];
 		return !!(s.locDestStart || s.locDestEnd);
 	};
 	GLWrap_.prototype.programUsesCrossSampling = function (progIndex)
 	{
-		var s = this.shaderPrograms[progIndex];
+		let s = this.shaderPrograms[progIndex];
 		return !!(s.locDestStart || s.locDestEnd || s.crossSampling);
 	};
 	GLWrap_.prototype.programPreservesOpaqueness = function (progIndex)
@@ -2964,7 +2965,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.programExtendsBox = function (progIndex)
 	{
-		var s = this.shaderPrograms[progIndex];
+		let s = this.shaderPrograms[progIndex];
 		return s.extendBoxHorizontal !== 0 || s.extendBoxVertical !== 0;
 	};
 	GLWrap_.prototype.getProgramBoxExtendHorizontal = function (progIndex)
@@ -2985,9 +2986,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.setProgramParameters = function (backTex, pixelWidth, pixelHeight, destStartX, destStartY, destEndX, destEndY, layerScale, layerAngle, viewOriginLeft, viewOriginTop, scrollPosX, scrollPosY, seconds, params)
 	{
-		var i, len;
-		var s = this.shaderPrograms[this.lastProgram];
-		var b, mat4param, shaderParams;
+		let i, len;
+		let s = this.shaderPrograms[this.lastProgram];
+		let b, mat4param, shaderParams;
 		if (s.hasAnyOptionalUniforms || params.length)
 		{
 			b = this.pushBatch();
@@ -3030,7 +3031,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.clear = function (r, g, b_, a)
 	{
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_CLEAR;
 		b.startIndex = 0;					// clear all mode
 		if (!b.mat4param)
@@ -3046,7 +3047,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (w < 0 || h < 0)
 			return;							// invalid clear area
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_CLEAR;
 		b.startIndex = 1;					// clear rect mode
 		if (!b.mat4param)
@@ -3060,7 +3061,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.clearDepth = function ()
 	{
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_CLEAR;
 		b.startIndex = 2;					// clear depth mode
 		this.hasQuadBatchTop = false;
@@ -3073,7 +3074,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		e = !!e;
 		if (this.isEarlyZPass === e)
 			return;		// no change
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETEARLYZMODE;
 		b.startIndex = (e ? 1 : 0);
 		this.hasQuadBatchTop = false;
@@ -3093,7 +3094,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!this.enableFrontToBack)
 			return;		// no depth buffer in use
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETDEPTHTEST;
 		b.startIndex = (e ? 1 : 0);
 		this.hasQuadBatchTop = false;
@@ -3104,8 +3105,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		mat4.set(this.lastMV, tempMat4);
 		this.resetModelView();
 		this.updateModelView();
-		var halfw = this.width / 2;
-		var halfh = this.height / 2;
+		let halfw = this.width / 2;
+		let halfh = this.height / 2;
 		this.quad(-halfw, halfh, halfw, halfh, halfw, -halfh, -halfw, -halfh);
 		mat4.set(tempMat4, this.matMV);
 		this.updateModelView();
@@ -3113,7 +3114,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	GLWrap_.prototype.setColorFillMode = function (r_, g_, b_, a_)
 	{
 		this.switchProgram(3);
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_SETCOLOR;
 		if (!b.mat4param)
 			b.mat4param = mat4.create();
@@ -3148,29 +3149,29 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	function nextHighestPowerOfTwo(x) {
 		--x;
-		for (var i = 1; i < 32; i <<= 1) {
+		for (let i = 1; i < 32; i <<= 1) {
 			x = x | x >> i;
 		}
 		return x + 1;
 	}
-	var all_textures = [];
-	var textures_by_src = {};
+	let all_textures = [];
+	let textures_by_src = {};
 	GLWrap_.prototype.contextLost = function ()
 	{
 		cr.clearArray(all_textures);
 		textures_by_src = {};
 	};
-	var BF_RGBA8 = 0;
-	var BF_RGB8 = 1;
-	var BF_RGBA4 = 2;
-	var BF_RGB5_A1 = 3;
-	var BF_RGB565 = 4;
+	let BF_RGBA8 = 0;
+	let BF_RGB8 = 1;
+	let BF_RGBA4 = 2;
+	let BF_RGB5_A1 = 3;
+	let BF_RGB565 = 4;
 	GLWrap_.prototype.loadTexture = function (img, tiling, linearsampling, pixelformat, tiletype, nomip)
 	{
 		tiling = !!tiling;
 		linearsampling = !!linearsampling;
-		var tex_key = img.src + "," + tiling + "," + linearsampling + (tiling ? ("," + tiletype) : "");
-		var webGL_texture = null;
+		let tex_key = img.src + "," + tiling + "," + linearsampling + (tiling ? ("," + tiletype) : "");
+		let webGL_texture = null;
 		if (typeof img.src !== "undefined" && textures_by_src.hasOwnProperty(tex_key))
 		{
 			webGL_texture = textures_by_src[tex_key];
@@ -3179,14 +3180,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		this.endBatch();
 ;
-		var gl = this.gl;
-		var isPOT = (cr.isPOT(img.width) && cr.isPOT(img.height));
+		let gl = this.gl;
+		let isPOT = (cr.isPOT(img.width) && cr.isPOT(img.height));
 		webGL_texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, webGL_texture);
 		gl.pixelStorei(gl["UNPACK_PREMULTIPLY_ALPHA_WEBGL"], true);
-		var internalformat = gl.RGBA;
-		var format = gl.RGBA;
-		var type = gl.UNSIGNED_BYTE;
+		let internalformat = gl.RGBA;
+		let format = gl.RGBA;
+		let type = gl.UNSIGNED_BYTE;
 		if (pixelformat && !this.isIE)
 		{
 			switch (pixelformat) {
@@ -3209,10 +3210,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (this.version === 1 && !isPOT && tiling)
 		{
-			var canvas = document.createElement("canvas");
+			let canvas = document.createElement("canvas");
 			canvas.width = cr.nextHighestPowerOfTwo(img.width);
 			canvas.height = cr.nextHighestPowerOfTwo(img.height);
-			var ctx = canvas.getContext("2d");
+			let ctx = canvas.getContext("2d");
 			if (typeof ctx["imageSmoothingEnabled"] !== "undefined")
 			{
 				ctx["imageSmoothingEnabled"] = linearsampling;
@@ -3282,10 +3283,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	GLWrap_.prototype.createEmptyTexture = function (w, h, linearsampling, _16bit, tiling)
 	{
 		this.endBatch();
-		var gl = this.gl;
+		let gl = this.gl;
 		if (this.isIE)
 			_16bit = false;
-		var webGL_texture = gl.createTexture();
+		let webGL_texture = gl.createTexture();
 		gl.bindTexture(gl.TEXTURE_2D, webGL_texture);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, _16bit ? gl.UNSIGNED_SHORT_4_4_4_4 : gl.UNSIGNED_BYTE, null);
 		if (tiling)
@@ -3310,7 +3311,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	GLWrap_.prototype.videoToTexture = function (video_, texture_, _16bit)
 	{
 		this.endBatch();
-		var gl = this.gl;
+		let gl = this.gl;
 		if (this.isIE)
 			_16bit = false;
 		gl.bindTexture(gl.TEXTURE_2D, texture_);
@@ -3355,8 +3356,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	GLWrap_.prototype.estimateVRAM = function ()
 	{
-		var total = this.width * this.height * 4 * 2;
-		var i, len, t;
+		let total = this.width * this.height * 4 * 2;
+		let i, len, t;
 		for (i = 0, len = all_textures.length; i < len; i++)
 		{
 			t = all_textures[i];
@@ -3373,7 +3374,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (tex === this.renderToTex)
 			return;
 ;
-		var b = this.pushBatch();
+		let b = this.pushBatch();
 		b.type = BATCH_RENDERTOTEXTURE;
 		b.texParam = tex;
 		this.renderToTex = tex;
@@ -3385,7 +3386,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 ;
 (function()
 {
-	var raf = window["requestAnimationFrame"] ||
+	let raf = window["requestAnimationFrame"] ||
 	  window["mozRequestAnimationFrame"]    ||
 	  window["webkitRequestAnimationFrame"] ||
 	  window["msRequestAnimationFrame"]     ||
@@ -3398,7 +3399,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return;
 		else
 			canvas["c2runtime"] = this;
-		var self = this;
+		let self = this;
 		this.isCrosswalk = /crosswalk/i.test(navigator.userAgent) || /xwalk/i.test(navigator.userAgent) || !!(typeof window["c2isCrosswalk"] !== "undefined" && window["c2isCrosswalk"]);
 		this.isCordova = this.isCrosswalk || (typeof window["device"] !== "undefined" && (typeof window["device"]["cordova"] !== "undefined" || typeof window["device"]["phonegap"] !== "undefined")) || (typeof window["c2iscordova"] !== "undefined" && window["c2iscordova"]);
 		this.isPhoneGap = this.isCordova;
@@ -3610,7 +3611,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.requestProjectData = function ()
 	{
-		var self = this;
+		let self = this;
 		if (this.isWKWebView)
 		{
 			this.fetchLocalFileViaCordovaAsText("data.js", function (str)
@@ -3622,16 +3623,16 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			});
 			return;
 		}
-		var xhr;
+		let xhr;
 		if (this.isWindowsPhone8)
 			xhr = new ActiveXObject("Microsoft.XMLHTTP");
 		else
 			xhr = new XMLHttpRequest();
-		var datajs_filename = "data.js";
+		let datajs_filename = "data.js";
 		if (this.isWindows8App || this.isWindowsPhone8 || this.isWindowsPhone81 || this.isWindows10)
 			datajs_filename = "data.json";
 		xhr.open("GET", datajs_filename, true);
-		var supportsJsonResponse = false;
+		let supportsJsonResponse = false;
 		if (!this.isDomFree && ("response" in xhr) && ("responseType" in xhr))
 		{
 			try {
@@ -3677,7 +3678,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				{
 					if (self.isEjecta)
 					{
-						var str = xhr["responseText"];
+						let str = xhr["responseText"];
 						str = str.substr(str.indexOf("{"));		// trim any BOM
 						self.loadProject(JSON.parse(str));
 					}
@@ -3697,14 +3698,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.initRendererAndLoader = function ()
 	{
-		var self = this;
-		var i, len, j, lenj, k, lenk, t, s, l, y;
+		let self = this;
+		let i, len, j, lenj, k, lenk, t, s, l, y;
 		this.isRetina = ((!this.isDomFree || this.isEjecta || this.isCordova) && this.useHighDpi && !this.isAndroidStockBrowser);
 		if (this.fullscreen_mode === 0 && this.isiOS)
 			this.isRetina = false;
 		this.devicePixelRatio = (this.isRetina ? (window["devicePixelRatio"] || window["webkitDevicePixelRatio"] || window["mozDevicePixelRatio"] || window["msDevicePixelRatio"] || 1) : 1);
 		this.ClearDeathRow();
-		var attribs;
+		let attribs;
 		if (this.fullscreen_mode > 0)
 			this["setSize"](window.innerWidth, window.innerHeight, true);
 		this.canvas.addEventListener("webglcontextlost", function (ev) {
@@ -3748,12 +3749,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (this.gl)
 		{
-			var isWebGL2 = (this.gl.getParameter(this.gl.VERSION).indexOf("WebGL 2") === 0);
-			var debug_ext = this.gl.getExtension("WEBGL_debug_renderer_info");
+			let isWebGL2 = (this.gl.getParameter(this.gl.VERSION).indexOf("WebGL 2") === 0);
+			let debug_ext = this.gl.getExtension("WEBGL_debug_renderer_info");
 			if (debug_ext)
 			{
-				var unmasked_vendor = this.gl.getParameter(debug_ext.UNMASKED_VENDOR_WEBGL);
-				var unmasked_renderer = this.gl.getParameter(debug_ext.UNMASKED_RENDERER_WEBGL);
+				let unmasked_vendor = this.gl.getParameter(debug_ext.UNMASKED_VENDOR_WEBGL);
+				let unmasked_renderer = this.gl.getParameter(debug_ext.UNMASKED_RENDERER_WEBGL);
 				this.glUnmaskedRenderer = unmasked_renderer + " [" + unmasked_vendor + "]";
 			}
 			if (this.enableFrontToBack)
@@ -3883,7 +3884,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				});
 				jQuery(window).blur(function ()
 				{
-					var parent = window.parent;
+					let parent = window.parent;
 					if (!parent || !parent.document.hasFocus())
 						self["setSuspended"](true);
 				});
@@ -3894,7 +3895,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		});
 		if (!this.isDomFree)
 		{
-			var unfocusFormControlFunc = function (e) {
+			let unfocusFormControlFunc = function (e) {
 				if (cr.isCanvasInputEvent(e) && document["activeElement"] && document["activeElement"] !== document.getElementsByTagName("body")[0] && document["activeElement"].blur)
 				{
 					try {
@@ -3927,23 +3928,23 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.extra = {};
 		cr.seal(this);
 	};
-	var webkitRepaintFlag = false;
+	let webkitRepaintFlag = false;
 	Runtime.prototype["setSize"] = function (w, h, force)
 	{
-		var offx = 0, offy = 0;
-		var neww = 0, newh = 0, intscale = 0;
+		let offx = 0, offy = 0;
+		let neww = 0, newh = 0, intscale = 0;
 		if (this.lastWindowWidth === w && this.lastWindowHeight === h && !force)
 			return;
 		this.lastWindowWidth = w;
 		this.lastWindowHeight = h;
-		var mode = this.fullscreen_mode;
-		var orig_aspect, cur_aspect;
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
+		let mode = this.fullscreen_mode;
+		let orig_aspect, cur_aspect;
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
 		if (!isfullscreen && this.fullscreen_mode === 0 && !force)
 			return;			// ignore size events when not fullscreen and not using a fullscreen-in-browser mode
 		if (isfullscreen)
 			mode = this.fullscreen_scaling;
-		var dpr = this.devicePixelRatio;
+		let dpr = this.devicePixelRatio;
 		if (mode >= 4)
 		{
 			orig_aspect = this.original_width / this.original_height;
@@ -4028,8 +4029,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				this.draw_width = this.original_width;
 				this.draw_height = this.original_height;
 				this.fullscreenScalingQuality = false;
-				/*var orig_aspect = this.original_width / this.original_height;
-				var cur_aspect = this.width / this.height;
+				/*let orig_aspect = this.original_width / this.original_height;
+				let cur_aspect = this.width / this.height;
 				if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 					this.aspect_scale = this.height / this.original_height;
 				else
@@ -4113,7 +4114,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!this.autoLockOrientation || this.orientations === 0)
 			return;
-		var orientation = "portrait";
+		let orientation = "portrait";
 		if (this.orientations === 2)
 			orientation = "landscape";
 		try {
@@ -4138,7 +4139,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		this.glwrap.contextLost();
 		this.is_WebGL_context_lost = true;
-		var i, len, t;
+		let i, len, t;
 		for (i = 0, len = this.types_by_index.length; i < len; i++)
 		{
 			t = this.types_by_index[i];
@@ -4149,7 +4150,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	Runtime.prototype.onContextRestored = function ()
 	{
 		this.is_WebGL_context_lost = false;
-		var i, len, t;
+		let i, len, t;
 		for (i = 0, len = this.types_by_index.length; i < len; i++)
 		{
 			t = this.types_by_index[i];
@@ -4161,20 +4162,20 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (this.isDomFree)
 			return;
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"] || this.isNodeFullscreen) && !this.isCordova;
-		var overlay_position = isfullscreen ? jQuery(this.canvas).offset() : jQuery(this.canvas).position();
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"] || this.isNodeFullscreen) && !this.isCordova;
+		let overlay_position = isfullscreen ? jQuery(this.canvas).offset() : jQuery(this.canvas).position();
 		overlay_position.position = "absolute";
 		jQuery(this.overlay_canvas).css(overlay_position);
 	};
-	var caf = window["cancelAnimationFrame"] ||
+	let caf = window["cancelAnimationFrame"] ||
 	  window["mozCancelAnimationFrame"]    ||
 	  window["webkitCancelAnimationFrame"] ||
 	  window["msCancelAnimationFrame"]     ||
 	  window["oCancelAnimationFrame"];
 	Runtime.prototype["setSuspended"] = function (s)
 	{
-		var i, len;
-		var self = this;
+		let i, len;
+		let self = this;
 		if (s && !this.isSuspended)
 		{
 			cr.logexport("[Construct 2] Suspending");
@@ -4213,7 +4214,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 ;
 		if (!data_response || !data_response["project"])
 			cr.logerror("Project model unavailable");
-		var pm = data_response["project"];
+		let pm = data_response["project"];
 		this.name = pm[0];
 		this.first_layout = pm[1];
 		this.fullscreen_mode = pm[12];	// 0 = off, 1 = crop, 2 = scale inner, 3 = scale outer, 4 = letterbox scale, 5 = integer letterbox scale
@@ -4232,7 +4233,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.loaderstyle = pm[19];
 		if (this.loaderstyle === 0)
 		{
-			var loaderImage = new Image();
+			let loaderImage = new Image();
 			loaderImage.crossOrigin = "anonymous";
 			this.setImageSrc(loaderImage, "loading-logo.png");
 			this.loaderlogos = {
@@ -4241,29 +4242,29 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		else if (this.loaderstyle === 4)	// c2 splash
 		{
-			var loaderC2logo_1024 = new Image();
+			let loaderC2logo_1024 = new Image();
 			loaderC2logo_1024.src = "";
-			var loaderC2logo_512 = new Image();
+			let loaderC2logo_512 = new Image();
 			loaderC2logo_512.src = "";
-			var loaderC2logo_256 = new Image();
+			let loaderC2logo_256 = new Image();
 			loaderC2logo_256.src = "";
-			var loaderC2logo_128 = new Image();
+			let loaderC2logo_128 = new Image();
 			loaderC2logo_128.src = "";
-			var loaderPowered_1024 = new Image();
+			let loaderPowered_1024 = new Image();
 			loaderPowered_1024.src = "";
-			var loaderPowered_512 = new Image();
+			let loaderPowered_512 = new Image();
 			loaderPowered_512.src = "";
-			var loaderPowered_256 = new Image();
+			let loaderPowered_256 = new Image();
 			loaderPowered_256.src = "";
-			var loaderPowered_128 = new Image();
+			let loaderPowered_128 = new Image();
 			loaderPowered_128.src = "";
-			var loaderWebsite_1024 = new Image();
+			let loaderWebsite_1024 = new Image();
 			loaderWebsite_1024.src = "";
-			var loaderWebsite_512 = new Image();
+			let loaderWebsite_512 = new Image();
 			loaderWebsite_512.src = "";
-			var loaderWebsite_256 = new Image();
+			let loaderWebsite_256 = new Image();
 			loaderWebsite_256.src = "";
-			var loaderWebsite_128 = new Image();
+			let loaderWebsite_128 = new Image();
 			loaderWebsite_128.src = "";
 			this.loaderlogos = {
 				logo: [loaderC2logo_1024, loaderC2logo_512, loaderC2logo_256, loaderC2logo_128],
@@ -4274,8 +4275,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.next_uid = pm[21];
 		this.objectRefTable = cr.getObjectRefTable();
 		this.system = new cr.system_object(this);
-		var i, len, j, lenj, k, lenk, idstr, m, b, t, f, p;
-		var plugin, plugin_ctor;
+		let i, len, j, lenj, k, lenk, idstr, m, b, t, f, p;
+		let plugin, plugin_ctor;
 		for (i = 0, len = pm[2].length; i < len; i++)
 		{
 			m = pm[2][i];
@@ -4309,7 +4310,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			}
 ;
 ;
-			var type_inst = new plugin.Type(plugin);
+			let type_inst = new plugin.Type(plugin);
 ;
 			type_inst.name = m[0];
 			type_inst.is_family = m[2];
@@ -4384,8 +4385,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			for (j = 0, lenj = m[8].length; j < lenj; j++)
 			{
 				b = m[8][j];
-				var behavior_ctor = this.GetObjectReference(b[1]);
-				var behavior_plugin = null;
+				let behavior_ctor = this.GetObjectReference(b[1]);
+				let behavior_plugin = null;
 				for (k = 0, lenk = this.behaviors.length; k < lenk; k++)
 				{
 					if (this.behaviors[k] instanceof behavior_ctor)
@@ -4412,7 +4413,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				}
 				if (behavior_plugin.my_types.indexOf(type_inst) === -1)
 					behavior_plugin.my_types.push(type_inst);
-				var behavior_type = new behavior_plugin.Type(behavior_plugin, type_inst);
+				let behavior_type = new behavior_plugin.Type(behavior_plugin, type_inst);
 				behavior_type.name = b[0];
 				behavior_type.sid = b[2];
 				behavior_type.onCreate();
@@ -4444,7 +4445,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			this.types_by_index.push(type_inst);
 			if (plugin.singleglobal)
 			{
-				var instance = new plugin.Instance(type_inst);
+				let instance = new plugin.Instance(type_inst);
 				instance.uid = this.next_uid++;
 				instance.puid = this.next_puid++;
 				instance.iid = 0;
@@ -4459,9 +4460,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		for (i = 0, len = pm[4].length; i < len; i++)
 		{
-			var familydata = pm[4][i];
-			var familytype = this.types_by_index[familydata[0]];
-			var familymember;
+			let familydata = pm[4][i];
+			let familytype = this.types_by_index[familydata[0]];
+			let familymember;
 			for (j = 1, lenj = familydata.length; j < lenj; j++)
 			{
 				familymember = this.types_by_index[familydata[j]];
@@ -4471,8 +4472,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		for (i = 0, len = pm[28].length; i < len; i++)
 		{
-			var containerdata = pm[28][i];
-			var containertypes = [];
+			let containerdata = pm[28][i];
+			let containertypes = [];
 			for (j = 0, lenj = containerdata.length; j < lenj; j++)
 				containertypes.push(this.types_by_index[containerdata[j]]);
 			for (j = 0, lenj = containertypes.length; j < lenj; j++)
@@ -4491,10 +4492,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				t.family_var_map = new Array(this.family_count);
 				t.family_beh_map = new Array(this.family_count);
 				t.family_fx_map = new Array(this.family_count);
-				var all_fx = [];
-				var varsum = 0;
-				var behsum = 0;
-				var fxsum = 0;
+				let all_fx = [];
+				let varsum = 0;
+				let behsum = 0;
+				let fxsum = 0;
 				for (j = 0, lenj = t.families.length; j < lenj; j++)
 				{
 					f = t.families[j];
@@ -4515,7 +4516,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		for (i = 0, len = pm[5].length; i < len; i++)
 		{
 			m = pm[5][i];
-			var layout = new cr.layout(this, m);
+			let layout = new cr.layout(this, m);
 			cr.seal(layout);
 			this.layouts[layout.name] = layout;
 			this.layouts_by_index.push(layout);
@@ -4523,7 +4524,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		for (i = 0, len = pm[6].length; i < len; i++)
 		{
 			m = pm[6][i];
-			var sheet = new cr.eventsheet(this, m);
+			let sheet = new cr.eventsheet(this, m);
 			cr.seal(sheet);
 			this.eventsheets[sheet.name] = sheet;
 			this.eventsheets_by_index.push(sheet);
@@ -4557,14 +4558,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		cr.clearArray(this.objectRefTable);
 		this.initRendererAndLoader();
 	};
-	var anyImageHadError = false;
-	var MAX_PARALLEL_IMAGE_LOADS = 100;
-	var currentlyActiveImageLoads = 0;
-	var imageLoadQueue = [];		// array of [img, srcToSet]
+	let anyImageHadError = false;
+	let MAX_PARALLEL_IMAGE_LOADS = 100;
+	let currentlyActiveImageLoads = 0;
+	let imageLoadQueue = [];		// array of [img, srcToSet]
 	Runtime.prototype.queueImageLoad = function (img_, src_)
 	{
-		var self = this;
-		var doneFunc = function ()
+		let self = this;
+		let doneFunc = function ()
 		{
 			currentlyActiveImageLoads--;
 			self.maybeLoadNextImages();
@@ -4576,7 +4577,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.maybeLoadNextImages = function ()
 	{
-		var next;
+		let next;
 		while (imageLoadQueue.length && currentlyActiveImageLoads < MAX_PARALLEL_IMAGE_LOADS)
 		{
 			currentlyActiveImageLoads++;
@@ -4623,7 +4624,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.findWaitingTexture = function (src_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.wait_for_textures.length; i < len; i++)
 		{
 			if (this.wait_for_textures[i].cr_src === src_)
@@ -4631,8 +4632,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		return null;
 	};
-	var audio_preload_totalsize = 0;
-	var audio_preload_started = false;
+	let audio_preload_totalsize = 0;
+	let audio_preload_started = false;
 	Runtime.prototype.getready = function ()
 	{
 		if (!this.audioInstance)
@@ -4641,15 +4642,15 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.areAllTexturesAndSoundsLoaded = function ()
 	{
-		var totalsize = audio_preload_totalsize;
-		var completedsize = 0;
-		var audiocompletedsize = 0;
-		var ret = true;
-		var i, len, img;
+		let totalsize = audio_preload_totalsize;
+		let completedsize = 0;
+		let audiocompletedsize = 0;
+		let ret = true;
+		let i, len, img;
 		for (i = 0, len = this.wait_for_textures.length; i < len; i++)
 		{
 			img = this.wait_for_textures[i];
-			var filesize = img.cr_filesize;
+			let filesize = img.cr_filesize;
 			if (!filesize || filesize <= 0)
 				filesize = 50000;
 			totalsize += filesize;
@@ -4676,48 +4677,48 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			this.progress = (completedsize / totalsize);
 		return ret;
 	};
-	var isC2SplashDone = false;
+	let isC2SplashDone = false;
 	Runtime.prototype.go = function ()
 	{
 		if (!this.ctx && !this.glwrap)
 			return;
-		var ctx = this.ctx || this.overlay_ctx;
+		let ctx = this.ctx || this.overlay_ctx;
 		if (this.overlay_canvas)
 			this.positionOverlayCanvas();
-		var curwidth = window.innerWidth;
-		var curheight = window.innerHeight;
+		let curwidth = window.innerWidth;
+		let curheight = window.innerHeight;
 		if (this.lastWindowWidth !== curwidth || this.lastWindowHeight !== curheight)
 		{
 			this["setSize"](curwidth, curheight);
 		}
 		this.progress = 0;
 		this.last_progress = -1;
-		var self = this;
+		let self = this;
 		if (this.areAllTexturesAndSoundsLoaded() && (this.loaderstyle !== 4 || isC2SplashDone))
 		{
 			this.go_loading_finished();
 		}
 		else
 		{
-			var ms_elapsed = Date.now() - this.start_time;
+			let ms_elapsed = Date.now() - this.start_time;
 			if (ctx)
 			{
-				var overlay_width = this.width;
-				var overlay_height = this.height;
-				var dpr = this.devicePixelRatio;
+				let overlay_width = this.width;
+				let overlay_height = this.height;
+				let dpr = this.devicePixelRatio;
 				if (this.loaderstyle < 3 && (this.isCocoonJs || (ms_elapsed >= 500 && this.last_progress != this.progress)))
 				{
 					ctx.clearRect(0, 0, overlay_width, overlay_height);
-					var mx = overlay_width / 2;
-					var my = overlay_height / 2;
-					var haslogo = (this.loaderstyle === 0 && this.loaderlogos.logo.complete);
-					var hlw = 40 * dpr;
-					var hlh = 0;
-					var logowidth = 80 * dpr;
-					var logoheight;
+					let mx = overlay_width / 2;
+					let my = overlay_height / 2;
+					let haslogo = (this.loaderstyle === 0 && this.loaderlogos.logo.complete);
+					let hlw = 40 * dpr;
+					let hlh = 0;
+					let logowidth = 80 * dpr;
+					let logoheight;
 					if (haslogo)
 					{
-						var loaderLogoImage = this.loaderlogos.logo;
+						let loaderLogoImage = this.loaderlogos.logo;
 						logowidth = loaderLogoImage.width * dpr;
 						logoheight = loaderLogoImage.height * dpr;
 						hlw = logowidth / 2;
@@ -4742,9 +4743,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 						ctx.font = (this.isEjecta ? "12pt ArialMT" : "12pt Arial");
 						ctx.fillStyle = anyImageHadError ? "#f00" : "#999";
 						ctx.textBaseLine = "middle";
-						var percent_text = Math.round(this.progress * 100) + "%";
-						var text_dim = ctx.measureText ? ctx.measureText(percent_text) : null;
-						var text_width = text_dim ? text_dim.width : 0;
+						let percent_text = Math.round(this.progress * 100) + "%";
+						let text_dim = ctx.measureText ? ctx.measureText(percent_text) : null;
+						let text_width = text_dim ? text_dim.width : 0;
 						ctx.fillText(percent_text, mx - (text_width / 2), my);
 					}
 					this.last_progress = this.progress;
@@ -4762,18 +4763,18 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			setTimeout(function() { self.go(); }, (this.isCocoonJs ? 10 : 100));
 		}
 	};
-	var splashStartTime = -1;
-	var splashFadeInDuration = 300;
-	var splashFadeOutDuration = 300;
-	var splashAfterFadeOutWait = (typeof cr_is_preview === "undefined" ? 200 : 0);
-	var splashIsFadeIn = true;
-	var splashIsFadeOut = false;
-	var splashFadeInFinish = 0;
-	var splashFadeOutStart = 0;
-	var splashMinDisplayTime = (typeof cr_is_preview === "undefined" ? 3000 : 0);
-	var renderViaCanvas = null;
-	var renderViaCtx = null;
-	var splashFrameNumber = 0;
+	let splashStartTime = -1;
+	let splashFadeInDuration = 300;
+	let splashFadeOutDuration = 300;
+	let splashAfterFadeOutWait = (typeof cr_is_preview === "undefined" ? 200 : 0);
+	let splashIsFadeIn = true;
+	let splashIsFadeOut = false;
+	let splashFadeInFinish = 0;
+	let splashFadeOutStart = 0;
+	let splashMinDisplayTime = (typeof cr_is_preview === "undefined" ? 3000 : 0);
+	let renderViaCanvas = null;
+	let renderViaCtx = null;
+	let splashFrameNumber = 0;
 	function maybeCreateRenderViaCanvas(w, h)
 	{
 		if (!renderViaCanvas || renderViaCanvas.width !== w || renderViaCanvas.height !== h)
@@ -4799,23 +4800,23 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (isC2SplashDone)
 			return;
-		var w = Math.ceil(this.width);
-		var h = Math.ceil(this.height);
-		var dpr = this.devicePixelRatio;
-		var logoimages = this.loaderlogos.logo;
-		var poweredimages = this.loaderlogos.powered;
-		var websiteimages = this.loaderlogos.website;
-		for (var i = 0; i < 4; ++i)
+		let w = Math.ceil(this.width);
+		let h = Math.ceil(this.height);
+		let dpr = this.devicePixelRatio;
+		let logoimages = this.loaderlogos.logo;
+		let poweredimages = this.loaderlogos.powered;
+		let websiteimages = this.loaderlogos.website;
+		for (let i = 0; i < 4; ++i)
 		{
 			if (!logoimages[i].complete || !poweredimages[i].complete || !websiteimages[i].complete)
 				return;
 		}
 		if (splashFrameNumber === 0)
 			splashStartTime = Date.now();
-		var nowTime = Date.now();
-		var isRenderingVia = false;
-		var renderToCtx = ctx;
-		var drawW, drawH;
+		let nowTime = Date.now();
+		let isRenderingVia = false;
+		let renderToCtx = ctx;
+		let drawW, drawH;
 		if (splashIsFadeIn || splashIsFadeOut)
 		{
 			ctx.clearRect(0, 0, w, h);
@@ -4910,7 +4911,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		this.start_time = Date.now();
 		this.last_fps_time = cr.performance_now();       // for counting framerate
-		var i, len, t;
+		let i, len, t;
 		if (this.uses_loader_layout)
 		{
 			for (i = 0, len = this.types_by_index.length; i < len; i++)
@@ -4931,8 +4932,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (this.fullscreen_mode >= 2)
 		{
-			var orig_aspect = this.original_width / this.original_height;
-			var cur_aspect = this.width / this.height;
+			let orig_aspect = this.original_width / this.original_height;
+			let cur_aspect = this.width / this.height;
 			if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 				this.aspect_scale = this.height / this.original_height;
 			else
@@ -4973,8 +4974,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!this.running_layout)
 			return;
-		var nowtime = cr.performance_now();
-		var logic_start = nowtime;
+		let nowtime = cr.performance_now();
+		let logic_start = nowtime;
 		if (!debug_step && this.isSuspended && !background_wake)
 			return;
 		if (!background_wake)
@@ -4986,15 +4987,15 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				this.timeout_id = setTimeout(this.tickFunc, this.isMobile ? 1 : 16);
 			}
 		}
-		var raf_time = timestamp || nowtime;
-		var fsmode = this.fullscreen_mode;
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"]) && !this.isCordova;
+		let raf_time = timestamp || nowtime;
+		let fsmode = this.fullscreen_mode;
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"]) && !this.isCordova;
 		if ((isfullscreen || this.isNodeFullscreen) && this.fullscreen_scaling > 0)
 			fsmode = this.fullscreen_scaling;
 		if (fsmode > 0)	// r222: experimentally enabling this workaround for all platforms
 		{
-			var curwidth = window.innerWidth;
-			var curheight = window.innerHeight;
+			let curwidth = window.innerWidth;
+			let curheight = window.innerHeight;
 			if (this.lastWindowWidth !== curwidth || this.lastWindowHeight !== curheight)
 			{
 				this["setSize"](curwidth, curheight);
@@ -5026,7 +5027,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (this.isloading)
 		{
-			var done = this.areAllTexturesAndSoundsLoaded();		// updates this.progress
+			let done = this.areAllTexturesAndSoundsLoaded();		// updates this.progress
 			this.loadingprogress = this.progress;
 			if (done)
 			{
@@ -5068,7 +5069,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.logic = function (cur_time)
 	{
-		var i, leni, j, lenj, k, lenk, type, inst, binst;
+		let i, leni, j, lenj, k, lenk, type, inst, binst;
 		if (cur_time - this.last_fps_time >= 1000)  // every 1 second
 		{
 			this.last_fps_time += 1000;
@@ -5079,10 +5080,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			this.cpuutilisation = this.logictime;
 			this.logictime = 0;
 		}
-		var wallDt = 0;
+		let wallDt = 0;
 		if (this.last_tick_time !== 0)
 		{
-			var ms_diff = cur_time - this.last_tick_time;
+			let ms_diff = cur_time - this.last_tick_time;
 			if (ms_diff < 0)
 				ms_diff = 0;
 			wallDt = ms_diff / 1000.0; // dt measured in seconds
@@ -5096,12 +5097,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
         this.dt = this.dt1 * this.timescale;
         this.kahanTime.add(this.dt);
 		this.wallTime.add(wallDt);		// prevent min/max framerate affecting wall clock
-		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"] || this.isNodeFullscreen) && !this.isCordova;
+		let isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || document["fullScreen"] || !!document["msFullscreenElement"] || this.isNodeFullscreen) && !this.isCordova;
 		if (this.fullscreen_mode >= 2 /* scale */ || (isfullscreen && this.fullscreen_scaling > 0))
 		{
-			var orig_aspect = this.original_width / this.original_height;
-			var cur_aspect = this.width / this.height;
-			var mode = this.fullscreen_mode;
+			let orig_aspect = this.original_width / this.original_height;
+			let cur_aspect = this.width / this.height;
+			let mode = this.fullscreen_mode;
 			if (isfullscreen && this.fullscreen_scaling > 0)
 				mode = this.fullscreen_scaling;
 			if ((mode !== 2 && cur_aspect > orig_aspect) || (mode === 2 && cur_aspect < orig_aspect))
@@ -5126,7 +5127,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.isInOnDestroy--;
 		this.ClearDeathRow();		// allow instance list changing
 		this.isInOnDestroy++;
-        var tickarr = this.objects_to_pretick.valuesRef();
+        let tickarr = this.objects_to_pretick.valuesRef();
         for (i = 0, leni = tickarr.length; i < leni; i++)
             tickarr[i].pretick();
 		for (i = 0, leni = this.types_by_index.length; i < leni; i++)
@@ -5183,7 +5184,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				continue;	// type doesn't have any behaviors
 			for (j = 0, lenj = type.instances.length; j < lenj; j++)
 			{
-				var inst = type.instances[j];
+				let inst = type.instances[j];
 				for (k = 0, lenk = inst.behavior_insts.length; k < lenk; k++)
 				{
 					binst = inst.behavior_insts[k];
@@ -5199,7 +5200,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.onWindowBlur = function ()
 	{
-		var i, leni, j, lenj, k, lenk, type, inst, binst;
+		let i, leni, j, lenj, k, lenk, type, inst, binst;
 		for (i = 0, leni = this.types_by_index.length; i < leni; i++)
 		{
 			type = this.types_by_index[i];
@@ -5223,9 +5224,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.doChangeLayout = function (changeToLayout)
 	{
-		var prev_layout = this.running_layout;
+		let prev_layout = this.running_layout;
 		this.running_layout.stopRunning();
-		var i, len, j, lenj, k, lenk, type, inst, binst;
+		let i, len, j, lenj, k, lenk, type, inst, binst;
 		if (this.glwrap)
 		{
 			for (i = 0, len = this.types_by_index.length; i < len; i++)
@@ -5251,7 +5252,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.runLayoutChangeMethods = function (isBeforeChange)
 	{
-		var i, len, beh, type, j, lenj, inst, k, lenk, binst;
+		let i, len, beh, type, j, lenj, inst, k, lenk, binst;
 		for (i = 0, len = this.behaviors.length; i < len; i++)
 		{
 			beh = this.behaviors[i];
@@ -5362,13 +5363,13 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	Runtime.prototype.getObjectByUID = function (uid_)
 	{
 ;
-		var uidstr = uid_.toString();
+		let uidstr = uid_.toString();
 		if (this.objectsByUid.hasOwnProperty(uidstr))
 			return this.objectsByUid[uidstr];
 		else
 			return null;
 	};
-	var objectset_cache = [];
+	let objectset_cache = [];
 	function alloc_objectset()
 	{
 		if (objectset_cache.length)
@@ -5383,11 +5384,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.DestroyInstance = function (inst)
 	{
-		var i, len;
-		var type = inst.type;
-		var typename = type.name;
-		var has_typename = this.deathRow.hasOwnProperty(typename);
-		var obj_set = null;
+		let i, len;
+		let type = inst.type;
+		let typename = type.name;
+		let has_typename = this.deathRow.hasOwnProperty(typename);
+		let obj_set = null;
 		if (has_typename)
 		{
 			obj_set = this.deathRow[typename];
@@ -5421,8 +5422,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!this.hasPendingInstances)
 			return;
-		var inst, type, instances;
-		var i, j, leni, lenj, obj_set;
+		let inst, type, instances;
+		let i, j, leni, lenj, obj_set;
 		this.isInClearDeathRow = true;
 		for (i = 0, leni = this.createRow.length; i < leni; ++i)
 		{
@@ -5443,7 +5444,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.IterateDeathRow = function ()
 	{
-		for (var p in this.deathRow)
+		for (let p in this.deathRow)
 		{
 			if (this.deathRow.hasOwnProperty(p))
 			{
@@ -5453,12 +5454,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.ClearDeathRowForType = function (obj_set)
 	{
-		var arr = obj_set.valuesRef();			// get array of items from set
+		let arr = obj_set.valuesRef();			// get array of items from set
 ;
-		var type = arr[0].type;
+		let type = arr[0].type;
 ;
 ;
-		var i, len, j, lenj, w, f, layer_instances, inst;
+		let i, len, j, lenj, w, f, layer_instances, inst;
 		cr.arrayRemoveAllFromObjectSet(type.instances, obj_set);
 		type.stale_iids = true;
 		if (type.instances.length === 0)
@@ -5484,7 +5485,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				}
 			}
 		}
-		var first_layer = arr[0].layer;
+		let first_layer = arr[0].layer;
 		if (first_layer)
 		{
 			if (first_layer.useRenderCells)
@@ -5512,14 +5513,14 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.ClearDeathRowForSingleInstance = function (inst, type)
 	{
-		var i, len, binst;
+		let i, len, binst;
 		for (i = 0, len = this.destroycallbacks.length; i < len; ++i)
 			this.destroycallbacks[i](inst);
 		if (inst.collcells)
 		{
 			type.collision_grid.update(inst, inst.collcells, null);
 		}
-		var layer = inst.layer;
+		let layer = inst.layer;
 		if (layer)
 		{
 			layer.removeFromInstanceList(inst, true);		// remove from both instance list and render grid
@@ -5549,7 +5550,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (type.is_family)
 		{
-			var i = cr.floor(Math.random() * type.members.length);
+			let i = cr.floor(Math.random() * type.members.length);
 			return this.createInstance(type.members[i], layer, sx, sy);
 		}
 		if (!type.default_instance)
@@ -5558,25 +5559,25 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		return this.createInstanceFromInit(type.default_instance, layer, false, sx, sy, false);
 	};
-	var all_behaviors = [];
+	let all_behaviors = [];
 	Runtime.prototype.createInstanceFromInit = function (initial_inst, layer, is_startup_instance, sx, sy, skip_siblings)
 	{
-		var i, len, j, lenj, p, effect_fallback, x, y;
+		let i, len, j, lenj, p, effect_fallback, x, y;
 		if (!initial_inst)
 			return null;
-		var type = this.types_by_index[initial_inst[1]];
+		let type = this.types_by_index[initial_inst[1]];
 ;
 ;
-		var is_world = type.plugin.is_world;
+		let is_world = type.plugin.is_world;
 ;
 		if (this.isloading && is_world && !type.isOnLoaderLayout)
 			return null;
 		if (is_world && !this.glwrap && initial_inst[0][11] === 11)
 			return null;
-		var original_layer = layer;
+		let original_layer = layer;
 		if (!is_world)
 			layer = null;
-		var inst;
+		let inst;
 		if (type.deadCache.length)
 		{
 			inst = type.deadCache.pop();
@@ -5602,7 +5603,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		inst.get_iid = cr.inst_get_iid;
 		inst.toString = cr.inst_toString;
-		var initial_vars = initial_inst[3];
+		let initial_vars = initial_inst[3];
 		if (inst.recycled)
 		{
 			cr.wipe(inst.extra);
@@ -5624,7 +5625,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			inst.instance_vars[i] = initial_vars[i][0];
 		if (is_world)
 		{
-			var wm = initial_inst[0];
+			let wm = initial_inst[0];
 ;
 			inst.x = cr.is_undefined(sx) ? wm[0] : sx;
 			inst.y = cr.is_undefined(sy) ? wm[1] : sy;
@@ -5707,7 +5708,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			inst.collisionsEnabled = true;
 			this.redraw = true;
 		}
-		var initial_props, binst;
+		let initial_props, binst;
 		cr.clearArray(all_behaviors);
 		for (i = 0, len = type.families.length; i < len; i++)
 		{
@@ -5718,7 +5719,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		{
 			for (i = 0, len = all_behaviors.length; i < len; i++)
 			{
-				var btype = all_behaviors[i];
+				let btype = all_behaviors[i];
 				binst = inst.behavior_insts[i];
 				binst.recycled = true;
 				btype.behavior.Instance.call(binst, btype, inst);
@@ -5734,8 +5735,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			inst.behavior_insts = [];
 			for (i = 0, len = all_behaviors.length; i < len; i++)
 			{
-				var btype = all_behaviors[i];
-				var binst = new btype.behavior.Instance(btype, inst);
+				let btype = all_behaviors[i];
+				let binst = new btype.behavior.Instance(btype, inst);
 				binst.recycled = false;
 				binst.properties = initial_inst[4][i].slice(0);
 				binst.onCreate();
@@ -5809,10 +5810,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getLayerByName = function (layer_name)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.running_layout.layers.length; i < len; i++)
 		{
-			var layer = this.running_layout.layers[i];
+			let layer = this.running_layout.layers[i];
 			if (cr.equals_nocase(layer.name, layer_name))
 				return layer;
 		}
@@ -5836,7 +5837,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.clearSol = function (solModifiers)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = solModifiers.length; i < len; i++)
 		{
 			solModifiers[i].getCurrentSol().select_all = true;
@@ -5844,7 +5845,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushCleanSol = function (solModifiers)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = solModifiers.length; i < len; i++)
 		{
 			solModifiers[i].pushCleanSol();
@@ -5852,7 +5853,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushCopySol = function (solModifiers)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = solModifiers.length; i < len; i++)
 		{
 			solModifiers[i].pushCopySol();
@@ -5860,7 +5861,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.popSol = function (solModifiers)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = solModifiers.length; i < len; i++)
 		{
 			solModifiers[i].popSol();
@@ -5870,12 +5871,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!type.any_cell_changed)
 			return;		// all instances must already be up-to-date
-		var i, len, instances = type.instances;
+		let i, len, instances = type.instances;
 		for (i = 0, len = instances.length; i < len; ++i)
 		{
 			instances[i].update_collision_cell();
 		}
-		var createRow = this.createRow;
+		let createRow = this.createRow;
 		for (i = 0, len = createRow.length; i < len; ++i)
 		{
 			if (createRow[i].type === type)
@@ -5885,8 +5886,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getCollisionCandidates = function (layer, rtype, bbox, candidates)
 	{
-		var i, len, t;
-		var is_parallaxed = (layer ? (layer.parallaxX !== 1 || layer.parallaxY !== 1) : false);
+		let i, len, t;
+		let is_parallaxed = (layer ? (layer.parallaxX !== 1 || layer.parallaxY !== 1) : false);
 		if (rtype.is_family)
 		{
 			for (i = 0, len = rtype.members.length; i < len; ++i)
@@ -5918,7 +5919,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getTypesCollisionCandidates = function (layer, types, bbox, candidates)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = types.length; i < len; ++i)
 		{
 			this.getCollisionCandidates(layer, types[i], bbox, candidates);
@@ -5926,24 +5927,24 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getSolidCollisionCandidates = function (layer, bbox, candidates)
 	{
-		var solid = this.getSolidBehavior();
+		let solid = this.getSolidBehavior();
 		if (!solid)
 			return null;
 		this.getTypesCollisionCandidates(layer, solid.my_types, bbox, candidates);
 	};
 	Runtime.prototype.getJumpthruCollisionCandidates = function (layer, bbox, candidates)
 	{
-		var jumpthru = this.getJumpthruBehavior();
+		let jumpthru = this.getJumpthruBehavior();
 		if (!jumpthru)
 			return null;
 		this.getTypesCollisionCandidates(layer, jumpthru.my_types, bbox, candidates);
 	};
 	Runtime.prototype.testAndSelectCanvasPointOverlap = function (type, ptx, pty, inverted)
 	{
-		var sol = type.getCurrentSol();
-		var i, j, inst, len;
-		var orblock = this.getCurrentEventStack().current_event.orblock;
-		var lx, ly, arr;
+		let sol = type.getCurrentSol();
+		let i, j, inst, len;
+		let orblock = this.getCurrentEventStack().current_event.orblock;
+		let lx, ly, arr;
 		if (sol.select_all)
 		{
 			if (!inverted)
@@ -6006,10 +6007,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return false;
 		a.update_bbox();
 		b.update_bbox();
-		var layera = a.layer;
-		var layerb = b.layer;
-		var different_layers = (layera !== layerb && (layera.parallaxX !== layerb.parallaxX || layerb.parallaxY !== layerb.parallaxY || layera.scale !== layerb.scale || layera.angle !== layerb.angle || layera.zoomRate !== layerb.zoomRate));
-		var i, len, i2, i21, x, y, haspolya, haspolyb, polya, polyb;
+		let layera = a.layer;
+		let layerb = b.layer;
+		let different_layers = (layera !== layerb && (layera.parallaxX !== layerb.parallaxX || layerb.parallaxY !== layerb.parallaxY || layera.scale !== layerb.scale || layera.angle !== layerb.angle || layera.zoomRate !== layerb.zoomRate));
+		let i, len, i2, i21, x, y, haspolya, haspolyb, polya, polyb;
 		if (!different_layers)	// same layers: easy check
 		{
 			if (!a.bbox.intersects_rect(b.bbox))
@@ -6095,18 +6096,18 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			return polya.intersects_poly(polyb, 0, 0);
 		}
 	};
-	var tmpQuad = new cr.quad();
-	var tmpRect = new cr.rect(0, 0, 0, 0);
-	var collrect_candidates = [];
+	let tmpQuad = new cr.quad();
+	let tmpRect = new cr.rect(0, 0, 0, 0);
+	let collrect_candidates = [];
 	Runtime.prototype.testTilemapOverlap = function (tm, a)
 	{
-		var i, len, c, rc;
-		var bbox = a.bbox;
-		var tmx = tm.x;
-		var tmy = tm.y;
+		let i, len, c, rc;
+		let bbox = a.bbox;
+		let tmx = tm.x;
+		let tmy = tm.y;
 		tm.getCollisionRectCandidates(bbox, collrect_candidates);
-		var collrects = collrect_candidates;
-		var haspolya = (a.collision_poly && !a.collision_poly.is_empty());
+		let collrects = collrect_candidates;
+		let haspolya = (a.collision_poly && !a.collision_poly.is_empty());
 		for (i = 0, len = collrects.length; i < len; ++i)
 		{
 			c = collrects[i];
@@ -6166,17 +6167,17 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (!b || !b.collisionsEnabled)
 			return false;
 		b.update_bbox();
-		var layerb = b.layer;
-		var haspolyb, polyb;
+		let layerb = b.layer;
+		let haspolyb, polyb;
 		if (!b.bbox.intersects_rect(r))
 			return false;
 		if (b.tilemap_exists)
 		{
 			b.getCollisionRectCandidates(r, collrect_candidates);
-			var collrects = collrect_candidates;
-			var i, len, c, tilerc;
-			var tmx = b.x;
-			var tmy = b.y;
+			let collrects = collrect_candidates;
+			let i, len, c, tilerc;
+			let tmx = b.x;
+			let tmy = b.y;
 			for (i = 0, len = collrects.length; i < len; ++i)
 			{
 				c = collrects[i];
@@ -6221,18 +6222,18 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (!b || !b.collisionsEnabled)
 			return false;
 		b.update_bbox();
-		var layerb = b.layer;
-		var haspolyb, polyb;
+		let layerb = b.layer;
+		let haspolyb, polyb;
 		tmpRect.set(cr.min(x1, x2), cr.min(y1, y2), cr.max(x1, x2), cr.max(y1, y2));
 		if (!b.bbox.intersects_rect(tmpRect))
 			return false;
 		if (b.tilemap_exists)
 		{
 			b.getCollisionRectCandidates(tmpRect, collrect_candidates);
-			var collrects = collrect_candidates;
-			var i, len, c, tilerc;
-			var tmx = b.x;
-			var tmy = b.y;
+			let collrects = collrect_candidates;
+			let i, len, c, tilerc;
+			let tmx = b.x;
+			let tmy = b.y;
 			for (i = 0, len = collrects.length; i < len; ++i)
 			{
 				c = collrects[i];
@@ -6277,7 +6278,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		if (!b)
 			return false;
-		var i, len, j, lenj, f;
+		let i, len, j, lenj, f;
 		for (i = 0, len = t.behaviors.length; i < len; i++)
 		{
 			if (t.behaviors[i].behavior instanceof b)
@@ -6313,10 +6314,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		return this.jumpthruBehavior;
 	};
-	var candidates = [];
+	let candidates = [];
 	Runtime.prototype.testOverlapSolid = function (inst)
 	{
-		var i, len, s;
+		let i, len, s;
 		inst.update_bbox();
 		this.getSolidCollisionCandidates(inst.layer, inst.bbox, candidates);
 		for (i = 0, len = candidates.length; i < len; ++i)
@@ -6335,7 +6336,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.testRectOverlapSolid = function (r)
 	{
-		var i, len, s;
+		let i, len, s;
 		this.getSolidCollisionCandidates(null, r, candidates);
 		for (i = 0, len = candidates.length; i < len; ++i)
 		{
@@ -6351,10 +6352,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		cr.clearArray(candidates);
 		return null;
 	};
-	var jumpthru_array_ret = [];
+	let jumpthru_array_ret = [];
 	Runtime.prototype.testOverlapJumpThru = function (inst, all)
 	{
-		var ret = null;
+		let ret = null;
 		if (all)
 		{
 			ret = jumpthru_array_ret;
@@ -6362,7 +6363,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		inst.update_bbox();
 		this.getJumpthruCollisionCandidates(inst.layer, inst.bbox, candidates);
-		var i, len, j;
+		let i, len, j;
 		for (i = 0, len = candidates.length; i < len; ++i)
 		{
 			j = candidates[i];
@@ -6384,11 +6385,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushOutSolid = function (inst, xdir, ydir, dist, include_jumpthrus, specific_jumpthru)
 	{
-		var push_dist = dist || 50;
-		var oldx = inst.x
-		var oldy = inst.y;
-		var i;
-		var last_overlapped = null, secondlast_overlapped = null;
+		let push_dist = dist || 50;
+		let oldx = inst.x
+		let oldy = inst.y;
+		let i;
+		let last_overlapped = null, secondlast_overlapped = null;
 		for (i = 0; i < push_dist; i++)
 		{
 			inst.x = (oldx + (xdir * i));
@@ -6427,11 +6428,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	Runtime.prototype.pushOutSolidAxis = function(inst, xdir, ydir, dist)
 	{
 		dist = dist || 50;
-		var oldX = inst.x;
-		var oldY = inst.y;
-		var lastOverlapped = null;
-		var secondLastOverlapped = null;
-		var i, which, sign;
+		let oldX = inst.x;
+		let oldY = inst.y;
+		let lastOverlapped = null;
+		let secondLastOverlapped = null;
+		let i, which, sign;
 		for (i = 0; i < dist; ++i)
 		{
 			for (which = 0; which < 2; ++which)
@@ -6463,10 +6464,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushOut = function (inst, xdir, ydir, dist, otherinst)
 	{
-		var push_dist = dist || 50;
-		var oldx = inst.x
-		var oldy = inst.y;
-		var i;
+		let push_dist = dist || 50;
+		let oldx = inst.x
+		let oldy = inst.y;
+		let i;
 		for (i = 0; i < push_dist; i++)
 		{
 			inst.x = (oldx + (xdir * i));
@@ -6482,12 +6483,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushInFractional = function (inst, xdir, ydir, obj, limit)
 	{
-		var divisor = 2;
-		var frac;
-		var forward = false;
-		var overlapping = false;
-		var bestx = inst.x;
-		var besty = inst.y;
+		let divisor = 2;
+		let frac;
+		let forward = false;
+		let overlapping = false;
+		let bestx = inst.x;
+		let besty = inst.y;
 		while (divisor <= limit)
 		{
 			frac = 1 / divisor;
@@ -6517,13 +6518,13 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.pushOutSolidNearest = function (inst, max_dist_)
 	{
-		var max_dist = (cr.is_undefined(max_dist_) ? 100 : max_dist_);
-		var dist = 0;
-		var oldx = inst.x
-		var oldy = inst.y;
-		var dir = 0;
-		var dx = 0, dy = 0;
-		var last_overlapped = this.testOverlapSolid(inst);
+		let max_dist = (cr.is_undefined(max_dist_) ? 100 : max_dist_);
+		let dist = 0;
+		let oldx = inst.x
+		let oldy = inst.y;
+		let dir = 0;
+		let dx = 0, dy = 0;
+		let last_overlapped = this.testOverlapSolid(inst);
 		if (!last_overlapped)
 			return true;		// already clear of solids
 		while (dist <= max_dist)
@@ -6562,7 +6563,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.addRegisteredCollisionCandidates = function (inst, otherType, arr)
 	{
-		var i, len, r, otherInst;
+		let i, len, r, otherInst;
 		for (i = 0, len = this.registered_collisions.length; i < len; ++i)
 		{
 			r = this.registered_collisions[i];
@@ -6588,7 +6589,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.checkRegisteredCollision = function (a, b)
 	{
-		var i, len, x;
+		let i, len, x;
 		for (i = 0, len = this.registered_collisions.length; i < len; i++)
 		{
 			x = this.registered_collisions[i];
@@ -6599,16 +6600,16 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.calculateSolidBounceAngle = function(inst, startx, starty, obj)
 	{
-		var objx = inst.x;
-		var objy = inst.y;
-		var radius = cr.max(10, cr.distanceTo(startx, starty, objx, objy));
-		var startangle = cr.angleTo(startx, starty, objx, objy);
-		var firstsolid = obj || this.testOverlapSolid(inst);
+		let objx = inst.x;
+		let objy = inst.y;
+		let radius = cr.max(10, cr.distanceTo(startx, starty, objx, objy));
+		let startangle = cr.angleTo(startx, starty, objx, objy);
+		let firstsolid = obj || this.testOverlapSolid(inst);
 		if (!firstsolid)
 			return cr.clamp_angle(startangle + cr.PI);
-		var cursolid = firstsolid;
-		var i, curangle, anticlockwise_free_angle, clockwise_free_angle;
-		var increment = cr.to_radians(5);	// 5 degree increments
+		let cursolid = firstsolid;
+		let i, curangle, anticlockwise_free_angle, clockwise_free_angle;
+		let increment = cr.to_radians(5);	// 5 degree increments
 		for (i = 1; i < 36; i++)
 		{
 			curangle = startangle - i * increment;
@@ -6627,7 +6628,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (i === 36)
 			anticlockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
-		var cursolid = firstsolid;
+		cursolid = firstsolid;
 		for (i = 1; i < 36; i++)
 		{
 			curangle = startangle + i * increment;
@@ -6651,8 +6652,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		inst.set_bbox_changed();
 		if (clockwise_free_angle === anticlockwise_free_angle)
 			return clockwise_free_angle;
-		var half_diff = cr.angleDiff(clockwise_free_angle, anticlockwise_free_angle) / 2;
-		var normal;
+		let half_diff = cr.angleDiff(clockwise_free_angle, anticlockwise_free_angle) / 2;
+		let normal;
 		if (cr.angleClockwise(clockwise_free_angle, anticlockwise_free_angle))
 		{
 			normal = cr.clamp_angle(anticlockwise_free_angle + half_diff + cr.PI);
@@ -6662,28 +6663,28 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			normal = cr.clamp_angle(clockwise_free_angle + half_diff);
 		}
 ;
-		var vx = Math.cos(startangle);
-		var vy = Math.sin(startangle);
-		var nx = Math.cos(normal);
-		var ny = Math.sin(normal);
-		var v_dot_n = vx * nx + vy * ny;
-		var rx = vx - 2 * v_dot_n * nx;
-		var ry = vy - 2 * v_dot_n * ny;
+		let vx = Math.cos(startangle);
+		let vy = Math.sin(startangle);
+		let nx = Math.cos(normal);
+		let ny = Math.sin(normal);
+		let v_dot_n = vx * nx + vy * ny;
+		let rx = vx - 2 * v_dot_n * nx;
+		let ry = vy - 2 * v_dot_n * ny;
 		return cr.angleTo(0, 0, rx, ry);
 	};
-	var triggerSheetIndex = -1;
+	let triggerSheetIndex = -1;
 	Runtime.prototype.trigger = function (method, inst, value /* for fast triggers */)
 	{
 ;
 		if (!this.running_layout)
 			return false;
-		var sheet = this.running_layout.event_sheet;
+		let sheet = this.running_layout.event_sheet;
 		if (!sheet)
 			return false;     // no event sheet active; nothing to trigger
-		var ret = false;
-		var r, i, len;
+		let ret = false;
+		let r, i, len;
 		triggerSheetIndex++;
-		var deep_includes = sheet.deep_includes;
+		let deep_includes = sheet.deep_includes;
 		for (i = 0, len = deep_includes.length; i < len; ++i)
 		{
 			r = this.triggerOnSheet(method, inst, deep_includes[i], value);
@@ -6696,8 +6697,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
     };
     Runtime.prototype.triggerOnSheet = function (method, inst, sheet, value)
     {
-        var ret = false;
-		var i, leni, r, families;
+        let ret = false;
+		let i, leni, r, families;
 		if (!inst)
 		{
 			r = this.triggerOnSheetForTypeName(method, inst, "system", sheet, value);
@@ -6718,15 +6719,15 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.triggerOnSheetForTypeName = function (method, inst, type_name, sheet, value)
 	{
-		var i, leni;
-		var ret = false, ret2 = false;
-		var trig, index;
-		var fasttrigger = (typeof value !== "undefined");
-		var triggers = (fasttrigger ? sheet.fasttriggers : sheet.triggers);
-		var obj_entry = triggers[type_name];
+		let i, leni;
+		let ret = false, ret2 = false;
+		let trig, index;
+		let fasttrigger = (typeof value !== "undefined");
+		let triggers = (fasttrigger ? sheet.fasttriggers : sheet.triggers);
+		let obj_entry = triggers[type_name];
 		if (!obj_entry)
 			return ret;
-		var triggers_list = null;
+		let triggers_list = null;
 		for (i = 0, leni = obj_entry.length; i < leni; ++i)
 		{
 			if (obj_entry[i].method == method)
@@ -6737,7 +6738,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		if (!triggers_list)
 			return ret;
-		var triggers_to_fire;
+		let triggers_to_fire;
 		if (fasttrigger)
 		{
 			triggers_to_fire = triggers_list[value];
@@ -6759,31 +6760,31 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.executeSingleTrigger = function (inst, type_name, trig, index)
 	{
-		var i, leni;
-		var ret = false;
+		let i, leni;
+		let ret = false;
 		this.trigger_depth++;
-		var current_event = this.getCurrentEventStack().current_event;
+		let current_event = this.getCurrentEventStack().current_event;
 		if (current_event)
 			this.pushCleanSol(current_event.solModifiersIncludingParents);
-		var isrecursive = (this.trigger_depth > 1);		// calling trigger from inside another trigger
+		let isrecursive = (this.trigger_depth > 1);		// calling trigger from inside another trigger
 		this.pushCleanSol(trig.solModifiersIncludingParents);
 		if (isrecursive)
-			this.pushLocalVarStack();
-		var event_stack = this.pushEventStack(trig);
+			this.pushLocalletStack();
+		let event_stack = this.pushEventStack(trig);
 		event_stack.current_event = trig;
 		if (inst)
 		{
-			var sol = this.types[type_name].getCurrentSol();
+			let sol = this.types[type_name].getCurrentSol();
 			sol.select_all = false;
 			cr.clearArray(sol.instances);
 			sol.instances[0] = inst;
 			this.types[type_name].applySolToContainer();
 		}
-		var ok_to_run = true;
+		let ok_to_run = true;
 		if (trig.parent)
 		{
-			var temp_parents_arr = event_stack.temp_parents_arr;
-			var cur_parent = trig.parent;
+			let temp_parents_arr = event_stack.temp_parents_arr;
+			let cur_parent = trig.parent;
 			while (cur_parent)
 			{
 				temp_parents_arr.push(cur_parent);
@@ -6823,22 +6824,22 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getCurrentCondition = function ()
 	{
-		var evinfo = this.getCurrentEventStack();
+		let evinfo = this.getCurrentEventStack();
 		return evinfo.current_event.conditions[evinfo.cndindex];
 	};
 	Runtime.prototype.getCurrentConditionObjectType = function ()
 	{
-		var cnd = this.getCurrentCondition();
+		let cnd = this.getCurrentCondition();
 		return cnd.type;
 	};
 	Runtime.prototype.isCurrentConditionFirst = function ()
 	{
-		var evinfo = this.getCurrentEventStack();
+		let evinfo = this.getCurrentEventStack();
 		return evinfo.cndindex === 0;
 	};
 	Runtime.prototype.getCurrentAction = function ()
 	{
-		var evinfo = this.getCurrentEventStack();
+		let evinfo = this.getCurrentEventStack();
 		return evinfo.current_event.actions[evinfo.actindex];
 	};
 	Runtime.prototype.pushLocalVarStack = function ()
@@ -6861,7 +6862,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.event_stack_index++;
 		if (this.event_stack_index >= this.event_stack.length)
 			this.event_stack.push(new cr.eventStackFrame());
-		var ret = this.getCurrentEventStack();
+		let ret = this.getCurrentEventStack();
 		ret.reset(cur_event);
 		return ret;
 	};
@@ -6881,7 +6882,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		{
 			this.loop_stack.push(cr.seal({ name: name_, index: 0, stopped: false }));
 		}
-		var ret = this.getCurrentLoop();
+		let ret = this.getCurrentLoop();
 		ret.name = name_;
 		ret.index = 0;
 		ret.stopped = false;
@@ -6898,7 +6899,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getEventVariableByName = function (name, scope)
 	{
-		var i, leni, j, lenj, sheet, e;
+		let i, leni, j, lenj, sheet, e;
 		while (scope)
 		{
 			for (i = 0, leni = scope.subevents.length; i < leni; i++)
@@ -6923,7 +6924,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getLayoutBySid = function (sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.layouts_by_index.length; i < len; i++)
 		{
 			if (this.layouts_by_index[i].sid === sid_)
@@ -6933,7 +6934,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getObjectTypeBySid = function (sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.types_by_index.length; i < len; i++)
 		{
 			if (this.types_by_index[i].sid === sid_)
@@ -6943,7 +6944,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getGroupBySid = function (sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.allGroups.length; i < len; i++)
 		{
 			if (this.allGroups[i].sid === sid_)
@@ -6968,22 +6969,22 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	function makeSaveDb(e)
 	{
-		var db = e.target.result;
+		let db = e.target.result;
 		db.createObjectStore("saves", { keyPath: "slot" });
 	};
 	function IndexedDB_WriteSlot(slot_, data_, oncomplete_, onerror_)
 	{
 		try {
-			var request = indexedDB.open("_C2SaveStates");
+			let request = indexedDB.open("_C2SaveStates");
 			request.onupgradeneeded = makeSaveDb;
 			request.onerror = onerror_;
 			request.onsuccess = function (e)
 			{
-				var db = e.target.result;
+				let db = e.target.result;
 				db.onerror = onerror_;
-				var transaction = db.transaction(["saves"], "readwrite");
-				var objectStore = transaction.objectStore("saves");
-				var putReq = objectStore.put({"slot": slot_, "data": data_ });
+				let transaction = db.transaction(["saves"], "readwrite");
+				let objectStore = transaction.objectStore("saves");
+				let putReq = objectStore.put({"slot": slot_, "data": data_ });
 				putReq.onsuccess = oncomplete_;
 			};
 		}
@@ -6995,16 +6996,16 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	function IndexedDB_ReadSlot(slot_, oncomplete_, onerror_)
 	{
 		try {
-			var request = indexedDB.open("_C2SaveStates");
+			let request = indexedDB.open("_C2SaveStates");
 			request.onupgradeneeded = makeSaveDb;
 			request.onerror = onerror_;
 			request.onsuccess = function (e)
 			{
-				var db = e.target.result;
+				let db = e.target.result;
 				db.onerror = onerror_;
-				var transaction = db.transaction(["saves"]);
-				var objectStore = transaction.objectStore("saves");
-				var readReq = objectStore.get(slot_);
+				let transaction = db.transaction(["saves"]);
+				let objectStore = transaction.objectStore("saves");
+				let readReq = objectStore.get(slot_);
 				readReq.onsuccess = function (e)
 				{
 					if (readReq.result)
@@ -7040,11 +7041,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.handleSaveLoad = function ()
 	{
-		var self = this;
-		var savingToSlot = this.saveToSlot;
-		var savingJson = this.lastSaveJson;
-		var loadingFromSlot = this.loadFromSlot;
-		var continuous = false;
+		let self = this;
+		let savingToSlot = this.saveToSlot;
+		let savingJson = this.lastSaveJson;
+		let loadingFromSlot = this.loadFromSlot;
+		let continuous = false;
 		if (this.signalledContinuousPreview)
 		{
 			continuous = true;
@@ -7161,7 +7162,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (this.loadFromJson !== null)
 		{
 			this.ClearDeathRow();
-			var ok = this.loadFromJSONString(this.loadFromJson);
+			let ok = this.loadFromJSONString(this.loadFromJson);
 			if (ok)
 			{
 				this.lastSaveJson = this.loadFromJson;
@@ -7177,7 +7178,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	function CopyExtraObject(extra)
 	{
-		var p, ret = {};
+		let p, ret = {};
 		for (p in extra)
 		{
 			if (extra.hasOwnProperty(p))
@@ -7195,8 +7196,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.saveToJSONString = function()
 	{
-		var i, len, j, lenj, type, layout, typeobj, g, c, a, v, p;
-		var o = {
+		let i, len, j, lenj, type, layout, typeobj, g, c, a, v, p;
+		let o = {
 			"c2save":				true,
 			"version":				1,
 			"rt": {
@@ -7239,13 +7240,13 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			layout = this.layouts_by_index[i];
 			o["layouts"][layout.sid.toString()] = layout.saveToJSON();
 		}
-		var ogroups = o["events"]["groups"];
+		let ogroups = o["events"]["groups"];
 		for (i = 0, len = this.allGroups.length; i < len; i++)
 		{
 			g = this.allGroups[i];
 			ogroups[g.sid.toString()] = this.groups_by_name[g.group_name].group_active;
 		}
-		var ocnds = o["events"]["cnds"];
+		let ocnds = o["events"]["cnds"];
 		for (p in this.cndsBySid)
 		{
 			if (this.cndsBySid.hasOwnProperty(p))
@@ -7255,7 +7256,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 					ocnds[p] = { "ex": CopyExtraObject(c.extra) };
 			}
 		}
-		var oacts = o["events"]["acts"];
+		let oacts = o["events"]["acts"];
 		for (p in this.actsBySid)
 		{
 			if (this.actsBySid.hasOwnProperty(p))
@@ -7265,7 +7266,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 					oacts[p] = { "ex": CopyExtraObject(a.extra) };
 			}
 		}
-		var ovars = o["events"]["vars"];
+		let ovars = o["events"]["vars"];
 		for (p in this.varsBySid)
 		{
 			if (this.varsBySid.hasOwnProperty(p))
@@ -7280,7 +7281,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.refreshUidMap = function ()
 	{
-		var i, len, type, j, lenj, inst;
+		let i, len, type, j, lenj, inst;
 		this.objectsByUid = {};
 		for (i = 0, len = this.types_by_index.length; i < len; i++)
 		{
@@ -7296,7 +7297,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.loadFromJSONString = function (str)
 	{
-		var o;
+		let o;
 		try {
 			o = JSON.parse(str);
 		}
@@ -7308,7 +7309,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (o["version"] > 1)
 			return false;		// from future version of c2; assume not compatible
 		this.isLoadingState = true;
-		var rt = o["rt"];
+		let rt = o["rt"];
 		this.kahanTime.reset();
 		this.kahanTime.sum = rt["time"];
 		this.wallTime.reset();
@@ -7317,17 +7318,17 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.tickcount = rt["tickcount"];
 		this.execcount = rt["execcount"];
 		this.start_time = Date.now() - rt["start_time_offset"];
-		var layout_sid = rt["running_layout"];
+		let layout_sid = rt["running_layout"];
 		if (layout_sid !== this.running_layout.sid)
 		{
-			var changeToLayout = this.getLayoutBySid(layout_sid);
+			let changeToLayout = this.getLayoutBySid(layout_sid);
 			if (changeToLayout)
 				this.doChangeLayout(changeToLayout);
 			else
 				return;		// layout that was saved on has gone missing (deleted?)
 		}
-		var i, len, j, lenj, k, lenk, p, type, existing_insts, load_insts, inst, binst, layout, layer, g, iid, t;
-		var otypes = o["types"];
+		let i, len, j, lenj, k, lenk, p, type, existing_insts, load_insts, inst, binst, layout, layer, g, iid, t;
+		let otypes = o["types"];
 		for (p in otypes)
 		{
 			if (otypes.hasOwnProperty(p))
@@ -7364,7 +7365,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		}
 		this.ClearDeathRow();
 		this.refreshUidMap();
-		var olayouts = o["layouts"];
+		let olayouts = o["layouts"];
 		for (p in olayouts)
 		{
 			if (olayouts.hasOwnProperty(p))
@@ -7375,7 +7376,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				layout.loadFromJSON(olayouts[p]);
 			}
 		}
-		var ogroups = o["events"]["groups"];
+		let ogroups = o["events"]["groups"];
 		for (p in ogroups)
 		{
 			if (ogroups.hasOwnProperty(p))
@@ -7385,7 +7386,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 					this.groups_by_name[g.group_name].setGroupActive(ogroups[p]);
 			}
 		}
-		var ocnds = o["events"]["cnds"];
+		let ocnds = o["events"]["cnds"];
 		for (p in this.cndsBySid)
 		{
 			if (this.cndsBySid.hasOwnProperty(p))
@@ -7400,7 +7401,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				}
 			}
 		}
-		var oacts = o["events"]["acts"];
+		let oacts = o["events"]["acts"];
 		for (p in this.actsBySid)
 		{
 			if (this.actsBySid.hasOwnProperty(p))
@@ -7415,7 +7416,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 				}
 			}
 		}
-		var ovars = o["events"]["vars"];
+		let ovars = o["events"]["vars"];
 		for (p in ovars)
 		{
 			if (ovars.hasOwnProperty(p) && this.varsBySid.hasOwnProperty(p))
@@ -7471,10 +7472,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.saveInstanceToJSON = function(inst, state_only)
 	{
-		var i, len, world, behinst, et;
-		var type = inst.type;
-		var plugin = type.plugin;
-		var o = {};
+		let i, len, world, behinst, et;
+		let type = inst.type;
+		let plugin = type.plugin;
+		let o = {};
 		if (state_only)
 			o["c2"] = true;		// mark as known json data from Construct 2
 		else
@@ -7544,7 +7545,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getInstanceVarIndexBySid = function (type, sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = type.instvar_sids.length; i < len; i++)
 		{
 			if (type.instvar_sids[i] === sid_)
@@ -7554,7 +7555,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.getBehaviorIndexBySid = function (inst, sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = inst.behavior_insts.length; i < len; i++)
 		{
 			if (inst.behavior_insts[i].type.sid === sid_)
@@ -7564,10 +7565,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.loadInstanceFromJSON = function(inst, o, state_only)
 	{
-		var p, i, len, iv, oivs, world, fxindex, obehs, behindex, value;
-		var oldlayer;
-		var type = inst.type;
-		var plugin = type.plugin;
+		let p, i, len, iv, oivs, world, fxindex, obehs, behindex, value;
+		let oldlayer;
+		let type = inst.type;
+		let plugin = type.plugin;
 		if (state_only)
 		{
 			if (!o["c2"])
@@ -7666,7 +7667,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.fetchLocalFileViaCordova = function (filename, successCallback, errorCallback)
 	{
-		var path = cordova["file"]["applicationDirectory"] + "www/" + filename;
+		let path = cordova["file"]["applicationDirectory"] + "www/" + filename;
 		window["resolveLocalFileSystemURL"](path, function (entry)
 		{
 			entry.file(successCallback, errorCallback);
@@ -7676,7 +7677,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		this.fetchLocalFileViaCordova(filename, function (file)
 		{
-			var reader = new FileReader();
+			let reader = new FileReader();
 			reader.onload = function (e)
 			{
 				successCallback(e.target.result);
@@ -7685,9 +7686,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			reader.readAsText(file);
 		}, errorCallback);
 	};
-	var queuedArrayBufferReads = [];
-	var activeArrayBufferReads = 0;
-	var MAX_ARRAYBUFFER_READS = 8;
+	let queuedArrayBufferReads = [];
+	let activeArrayBufferReads = 0;
+	let MAX_ARRAYBUFFER_READS = 8;
 	Runtime.prototype.maybeStartNextArrayBufferRead = function()
 	{
 		if (!queuedArrayBufferReads.length)
@@ -7695,12 +7696,12 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		if (activeArrayBufferReads >= MAX_ARRAYBUFFER_READS)
 			return;		// already got maximum number in-flight
 		activeArrayBufferReads++;
-		var job = queuedArrayBufferReads.shift();
+		let job = queuedArrayBufferReads.shift();
 		this.doFetchLocalFileViaCordovaAsArrayBuffer(job.filename, job.successCallback, job.errorCallback);
 	};
 	Runtime.prototype.fetchLocalFileViaCordovaAsArrayBuffer = function (filename, successCallback_, errorCallback_)
 	{
-		var self = this;
+		let self = this;
 		queuedArrayBufferReads.push({
 			filename: filename,
 			successCallback: function (result)
@@ -7722,7 +7723,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	{
 		this.fetchLocalFileViaCordova(filename, function (file)
 		{
-			var reader = new FileReader();
+			let reader = new FileReader();
 			reader.onload = function (e)
 			{
 				successCallback(e.target.result);
@@ -7732,10 +7733,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	Runtime.prototype.fetchLocalFileViaCordovaAsURL = function (filename, successCallback, errorCallback)
 	{
-		var blobType = "";
-		var lowername = filename.toLowerCase();
-		var ext3 = lowername.substr(lowername.length - 4);
-		var ext4 = lowername.substr(lowername.length - 5);
+		let blobType = "";
+		let lowername = filename.toLowerCase();
+		let ext3 = lowername.substr(lowername.length - 4);
+		let ext4 = lowername.substr(lowername.length - 5);
 		if (ext3 === ".mp4")
 			blobType = "video/mp4";
 		else if (ext4 === ".webm")
@@ -7746,8 +7747,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			blobType = "audio/mpeg";
 		this.fetchLocalFileViaCordovaAsArrayBuffer(filename, function (arrayBuffer)
 		{
-			var blob = new Blob([arrayBuffer], { type: blobType });
-			var url = URL.createObjectURL(blob);
+			let blob = new Blob([arrayBuffer], { type: blobType });
+			let url = URL.createObjectURL(blob);
 			successCallback(url);
 		}, errorCallback);
 	};
@@ -7799,10 +7800,10 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	window["createCocoonJSRuntime"] = function ()
 	{
 		window["c2cocoonjs"] = true;
-		var canvas = document.createElement("screencanvas") || document.createElement("canvas");
+		let canvas = document.createElement("screencanvas") || document.createElement("canvas");
 		canvas.screencanvas = true;
 		document.body.appendChild(canvas);
-		var rt = new Runtime(canvas);
+		let rt = new Runtime(canvas);
 		window["c2runtime"] = rt;
 		window.addEventListener("orientationchange", function () {
 			window["c2runtime"]["setSize"](window.innerWidth, window.innerHeight);
@@ -7812,8 +7813,8 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 	};
 	window["createEjectaRuntime"] = function ()
 	{
-		var canvas = document.getElementById("canvas");
-		var rt = new Runtime(canvas);
+		let canvas = document.getElementById("canvas");
+		let rt = new Runtime(canvas);
 		window["c2runtime"] = rt;
 		window["c2runtime"]["setSize"](window.innerWidth, window.innerHeight);
 		return rt;
@@ -7821,7 +7822,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 }());
 window["cr_getC2Runtime"] = function()
 {
-	var canvas = document.getElementById("c2canvas");
+	let canvas = document.getElementById("c2canvas");
 	if (canvas)
 		return canvas["c2runtime"];
 	else if (window["c2runtime"])
@@ -7831,7 +7832,7 @@ window["cr_getC2Runtime"] = function()
 }
 window["cr_getSnapshot"] = function (format_, quality_)
 {
-	var runtime = window["cr_getC2Runtime"]();
+	let runtime = window["cr_getC2Runtime"]();
 	if (runtime)
 		runtime.doCanvasSnapshot(format_, quality_);
 }
@@ -7839,13 +7840,13 @@ window["cr_sizeCanvas"] = function(w, h)
 {
 	if (w === 0 || h === 0)
 		return;
-	var runtime = window["cr_getC2Runtime"]();
+	let runtime = window["cr_getC2Runtime"]();
 	if (runtime)
 		runtime["setSize"](w, h);
 }
 window["cr_setSuspended"] = function(s)
 {
-	var runtime = window["cr_getC2Runtime"]();
+	let runtime = window["cr_getC2Runtime"]();
 	if (runtime)
 		runtime["setSuspended"](s);
 }
@@ -7869,23 +7870,23 @@ window["cr_setSuspended"] = function(s)
 		this.unbounded_scrolling = m[3];
 		this.sheetname = m[4];
 		this.sid = m[5];
-		var lm = m[6];
-		var i, len;
+		let lm = m[6];
+		let i, len;
 		this.layers = [];
 		this.initial_types = [];
 		for (i = 0, len = lm.length; i < len; i++)
 		{
-			var layer = new cr.layer(this, lm[i]);
+			let layer = new cr.layer(this, lm[i]);
 			layer.number = i;
 			cr.seal(layer);
 			this.layers.push(layer);
 		}
-		var im = m[7];
+		let im = m[7];
 		this.initial_nonworld = [];
 		for (i = 0, len = im.length; i < len; i++)
 		{
-			var inst = im[i];
-			var type = this.runtime.types_by_index[inst[1]];
+			let inst = im[i];
+			let type = this.runtime.types_by_index[inst[1]];
 ;
 			if (!type.default_instance)
 				type.default_instance = inst;
@@ -7916,22 +7917,22 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.saveObjectToPersist = function (inst)
 	{
-		var sidStr = inst.type.sid.toString();
+		let sidStr = inst.type.sid.toString();
 		if (!this.persist_data.hasOwnProperty(sidStr))
 			this.persist_data[sidStr] = [];
-		var type_persist = this.persist_data[sidStr];
+		let type_persist = this.persist_data[sidStr];
 		type_persist.push(this.runtime.saveInstanceToJSON(inst));
 	};
 	Layout.prototype.hasOpaqueBottomLayer = function ()
 	{
-		var layer = this.layers[0];
+		let layer = this.layers[0];
 		return !layer.transparent && layer.opacity === 1.0 && !layer.forceOwnTexture && layer.visible;
 	};
 	Layout.prototype.updateActiveEffects = function ()
 	{
 		cr.clearArray(this.active_effect_types);
 		this.shaders_preserve_opaqueness = true;
-		var i, len, et;
+		let i, len, et;
 		for (i = 0, len = this.effect_types.length; i < len; i++)
 		{
 			et = this.effect_types[i];
@@ -7945,7 +7946,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.getEffectByName = function (name_)
 	{
-		var i, len, et;
+		let i, len, et;
 		for (i = 0, len = this.effect_types.length; i < len; i++)
 		{
 			et = this.effect_types[i];
@@ -7954,12 +7955,12 @@ window["cr_setSuspended"] = function(s)
 		}
 		return null;
 	};
-	var created_instances = [];
+	let created_instances = [];
 	function sort_by_zindex(a, b)
 	{
 		return a.zindex - b.zindex;
 	};
-	var first_layout = true;
+	let first_layout = true;
 	Layout.prototype.startRunning = function ()
 	{
 		if (this.sheetname)
@@ -7973,7 +7974,7 @@ window["cr_setSuspended"] = function(s)
 		this.height = this.originalHeight;
 		this.scrollX = (this.runtime.original_width / 2);
 		this.scrollY = (this.runtime.original_height / 2);
-		var i, k, len, lenk, type, type_instances, initial_inst, inst, iid, t, s, p, q, type_data, layer;
+		let i, k, len, lenk, type, type_instances, initial_inst, inst, iid, t, s, p, q, type_data, layer;
 		for (i = 0, len = this.runtime.types_by_index.length; i < len; i++)
 		{
 			type = this.runtime.types_by_index[i];
@@ -7985,7 +7986,7 @@ window["cr_setSuspended"] = function(s)
 				inst = type_instances[k];
 				if (inst.layer)
 				{
-					var num = inst.layer.number;
+					let num = inst.layer.number;
 					if (num >= this.layers.length)
 						num = this.layers.length - 1;
 					inst.layer = this.layers[num];
@@ -8002,7 +8003,7 @@ window["cr_setSuspended"] = function(s)
 				this.layers[i].instances.sort(sort_by_zindex);
 			}
 		}
-		var layer;
+		layer;
 		cr.clearArray(created_instances);
 		this.boundScrolling();
 		for (i = 0, len = this.layers.length; i < len; i++)
@@ -8011,7 +8012,7 @@ window["cr_setSuspended"] = function(s)
 			layer.createInitialInstances();		// fills created_instances
 			layer.updateViewport(null);
 		}
-		var uids_changed = false;
+		let uids_changed = false;
 		if (!this.first_visit)
 		{
 			for (p in this.persist_data)
@@ -8128,7 +8129,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.createGlobalNonWorlds = function ()
 	{
-		var i, k, len, initial_inst, inst, type;
+		let i, k, len, initial_inst, inst, type;
 		for (i = 0, k = 0, len = this.initial_nonworld.length; i < len; i++)
 		{
 			initial_inst = this.initial_nonworld[i];
@@ -8163,8 +8164,8 @@ window["cr_setSuspended"] = function(s)
 		}
 		this.runtime.isEndingLayout = true;
 		cr.clearArray(this.runtime.system.waits);
-		var i, leni, j, lenj;
-		var layer_instances, inst, type;
+		let i, leni, j, lenj;
+		let layer_instances, inst, type;
 		if (!this.first_visit)
 		{
 			for (i = 0, leni = this.layers.length; i < leni; i++)
@@ -8209,11 +8210,11 @@ window["cr_setSuspended"] = function(s)
 		first_layout = false;
 		this.runtime.isEndingLayout = false;
 	};
-	var temp_rect = new cr.rect(0, 0, 0, 0);
+	let temp_rect = new cr.rect(0, 0, 0, 0);
 	Layout.prototype.recreateInitialObjects = function (type, x1, y1, x2, y2)
 	{
 		temp_rect.set(x1, y1, x2, y2);
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.layers.length; i < len; i++)
 		{
 			this.layers[i].recreateInitialObjects(type, temp_rect);
@@ -8221,10 +8222,10 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.draw = function (ctx)
 	{
-		var layout_canvas;
-		var layout_ctx = ctx;
-		var ctx_changed = false;
-		var render_offscreen = !this.runtime.fullscreenScalingQuality;
+		let layout_canvas;
+		let layout_ctx = ctx;
+		let ctx_changed = false;
+		let render_offscreen = !this.runtime.fullscreenScalingQuality;
 		if (render_offscreen)
 		{
 			if (!this.runtime.layout_canvas)
@@ -8257,7 +8258,7 @@ window["cr_setSuspended"] = function(s)
 		layout_ctx.globalCompositeOperation = "source-over";
 		if (this.runtime.clearBackground && !this.hasOpaqueBottomLayer())
 			layout_ctx.clearRect(0, 0, this.runtime.draw_width, this.runtime.draw_height);
-		var i, len, l;
+		let i, len, l;
 		for (i = 0, len = this.layers.length; i < len; i++)
 		{
 			l = this.layers[i];
@@ -8288,7 +8289,7 @@ window["cr_setSuspended"] = function(s)
 		{
 			glw.setSize(this.runtime.draw_width, this.runtime.draw_height);
 		}
-		var i, l;
+		let i, l;
 		for (i = this.layers.length - 1; i >= 0; --i)
 		{
 			l = this.layers[i];
@@ -8306,7 +8307,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.drawGL = function (glw)
 	{
-		var render_to_texture = (this.active_effect_types.length > 0 ||
+		let render_to_texture = (this.active_effect_types.length > 0 ||
 								 this.runtime.uses_background_blending ||
 								 !this.runtime.fullscreenScalingQuality ||
 								 this.runtime.enableFrontToBack);
@@ -8338,7 +8339,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		if (this.runtime.clearBackground && !this.hasOpaqueBottomLayer())
 			glw.clear(0, 0, 0, 0);
-		var i, len, l;
+		let i, len, l;
 		for (i = 0, len = this.layers.length; i < len; i++)
 		{
 			l = this.layers[i];
@@ -8354,7 +8355,7 @@ window["cr_setSuspended"] = function(s)
 			{
 				if (this.active_effect_types.length === 1)
 				{
-					var etindex = this.active_effect_types[0].index;
+					let etindex = this.active_effect_types[0].index;
 					glw.switchProgram(this.active_effect_types[0].shaderindex);
 					glw.setProgramParameters(null,								// backTex
 											 1.0 / this.runtime.draw_width,		// pixelWidth
@@ -8383,8 +8384,8 @@ window["cr_setSuspended"] = function(s)
 				glw.setAlphaBlend();
 				glw.resetModelView();
 				glw.updateModelView();
-				var halfw = this.runtime.width / 2;
-				var halfh = this.runtime.height / 2;
+				let halfw = this.runtime.width / 2;
+				let halfh = this.runtime.height / 2;
 				glw.quad(-halfw, halfh, halfw, halfh, halfw, -halfh, -halfw, -halfh);
 				glw.setTexture(null);
 				glw.setDepthTestEnabled(true);					// turn depth test back on
@@ -8411,8 +8412,8 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.getMinLayerScale = function ()
 	{
-		var m = this.layers[0].getScale();
-		var i, len, l;
+		let m = this.layers[0].getScale();
+		let i, len, l;
 		for (i = 1, len = this.layers.length; i < len; i++)
 		{
 			l = this.layers[i];
@@ -8427,7 +8428,7 @@ window["cr_setSuspended"] = function(s)
 	{
 		if (!this.unbounded_scrolling)
 		{
-			var widthBoundary = (this.runtime.draw_width * (1 / this.getMinLayerScale()) / 2);
+			let widthBoundary = (this.runtime.draw_width * (1 / this.getMinLayerScale()) / 2);
 			if (x > this.width - widthBoundary)
 				x = this.width - widthBoundary;
 			if (x < widthBoundary)
@@ -8443,7 +8444,7 @@ window["cr_setSuspended"] = function(s)
 	{
 		if (!this.unbounded_scrolling)
 		{
-			var heightBoundary = (this.runtime.draw_height * (1 / this.getMinLayerScale()) / 2);
+			let heightBoundary = (this.runtime.draw_height * (1 / this.getMinLayerScale()) / 2);
 			if (y > this.height - heightBoundary)
 				y = this.height - heightBoundary;
 			if (y < heightBoundary)
@@ -8462,12 +8463,12 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.renderEffectChain = function (glw, layer, inst, rendertarget)
 	{
-		var active_effect_types = inst ?
+		let active_effect_types = inst ?
 							inst.active_effect_types :
 							layer ?
 								layer.active_effect_types :
 								this.active_effect_types;
-		var layerScale = 1, layerAngle = 0, viewOriginLeft = 0, viewOriginTop = 0, viewOriginRight = this.runtime.draw_width, viewOriginBottom = this.runtime.draw_height;
+		let layerScale = 1, layerAngle = 0, viewOriginLeft = 0, viewOriginTop = 0, viewOriginRight = this.runtime.draw_width, viewOriginBottom = this.runtime.draw_height;
 		if (inst)
 		{
 			layerScale = inst.layer.getScale();
@@ -8486,22 +8487,22 @@ window["cr_setSuspended"] = function(s)
 			viewOriginRight = layer.viewRight;
 			viewOriginBottom = layer.viewBottom;
 		}
-		var fx_tex = this.runtime.fx_tex;
-		var i, len, last, temp, fx_index = 0, other_fx_index = 1;
-		var y, h;
-		var windowWidth = this.runtime.draw_width;
-		var windowHeight = this.runtime.draw_height;
-		var halfw = windowWidth / 2;
-		var halfh = windowHeight / 2;
-		var rcTex = layer ? layer.rcTex : this.rcTex;
-		var rcTex2 = layer ? layer.rcTex2 : this.rcTex2;
-		var screenleft = 0, clearleft = 0;
-		var screentop = 0, cleartop = 0;
-		var screenright = windowWidth, clearright = windowWidth;
-		var screenbottom = windowHeight, clearbottom = windowHeight;
-		var boxExtendHorizontal = 0;
-		var boxExtendVertical = 0;
-		var inst_layer_angle = inst ? inst.layer.getAngle() : 0;
+		let fx_tex = this.runtime.fx_tex;
+		let i, len, last, temp, fx_index = 0, other_fx_index = 1;
+		let y, h;
+		let windowWidth = this.runtime.draw_width;
+		let windowHeight = this.runtime.draw_height;
+		let halfw = windowWidth / 2;
+		let halfh = windowHeight / 2;
+		let rcTex = layer ? layer.rcTex : this.rcTex;
+		let rcTex2 = layer ? layer.rcTex2 : this.rcTex2;
+		let screenleft = 0, clearleft = 0;
+		let screentop = 0, cleartop = 0;
+		let screenright = windowWidth, clearright = windowWidth;
+		let screenbottom = windowHeight, clearbottom = windowHeight;
+		let boxExtendHorizontal = 0;
+		let boxExtendVertical = 0;
+		let inst_layer_angle = inst ? inst.layer.getAngle() : 0;
 		if (inst)
 		{
 			for (i = 0, len = active_effect_types.length; i < len; i++)
@@ -8509,17 +8510,17 @@ window["cr_setSuspended"] = function(s)
 				boxExtendHorizontal += glw.getProgramBoxExtendHorizontal(active_effect_types[i].shaderindex);
 				boxExtendVertical += glw.getProgramBoxExtendVertical(active_effect_types[i].shaderindex);
 			}
-			var bbox = inst.bbox;
+			let bbox = inst.bbox;
 			screenleft = layer.layerToCanvas(bbox.left, bbox.top, true, true);
 			screentop = layer.layerToCanvas(bbox.left, bbox.top, false, true);
 			screenright = layer.layerToCanvas(bbox.right, bbox.bottom, true, true);
 			screenbottom = layer.layerToCanvas(bbox.right, bbox.bottom, false, true);
 			if (inst_layer_angle !== 0)
 			{
-				var screentrx = layer.layerToCanvas(bbox.right, bbox.top, true, true);
-				var screentry = layer.layerToCanvas(bbox.right, bbox.top, false, true);
-				var screenblx = layer.layerToCanvas(bbox.left, bbox.bottom, true, true);
-				var screenbly = layer.layerToCanvas(bbox.left, bbox.bottom, false, true);
+				let screentrx = layer.layerToCanvas(bbox.right, bbox.top, true, true);
+				let screentry = layer.layerToCanvas(bbox.right, bbox.top, false, true);
+				let screenblx = layer.layerToCanvas(bbox.left, bbox.bottom, true, true);
+				let screenbly = layer.layerToCanvas(bbox.left, bbox.bottom, false, true);
 				temp = Math.min(screenleft, screenright, screentrx, screenblx);
 				screenright = Math.max(screenleft, screenright, screentrx, screenblx);
 				screenleft = temp;
@@ -8563,7 +8564,7 @@ window["cr_setSuspended"] = function(s)
 			rcTex.right = rcTex2.right = 1;
 			rcTex.bottom = rcTex2.bottom = 1;
 		}
-		var pre_draw = (inst && (glw.programUsesDest(active_effect_types[0].shaderindex) || boxExtendHorizontal !== 0 || boxExtendVertical !== 0 || inst.opacity !== 1 || inst.type.plugin.must_predraw)) || (layer && !inst && layer.opacity !== 1);
+		let pre_draw = (inst && (glw.programUsesDest(active_effect_types[0].shaderindex) || boxExtendHorizontal !== 0 || boxExtendVertical !== 0 || inst.opacity !== 1 || inst.type.plugin.must_predraw)) || (layer && !inst && layer.opacity !== 1);
 		glw.setAlphaBlend();
 		if (pre_draw)
 		{
@@ -8606,10 +8607,10 @@ window["cr_setSuspended"] = function(s)
 			other_fx_index = 0;
 		}
 		glw.setOpacity(1);
-		var last = active_effect_types.length - 1;
-		var post_draw = glw.programUsesCrossSampling(active_effect_types[last].shaderindex) ||
+		last = active_effect_types.length - 1;
+		let post_draw = glw.programUsesCrossSampling(active_effect_types[last].shaderindex) ||
 						(!layer && !inst && !this.runtime.fullscreenScalingQuality);
-		var etindex = 0;
+		let etindex = 0;
 		for (i = 0, len = active_effect_types.length; i < len; i++)
 		{
 			if (!fx_tex[fx_index])
@@ -8633,11 +8634,11 @@ window["cr_setSuspended"] = function(s)
 				glw.clearRect(clearleft, y, clearright - clearleft, h);
 				if (inst)
 				{
-					var pixelWidth;
-					var pixelHeight;
+					let pixelWidth;
+					let pixelHeight;
 					if (inst.curFrame && inst.curFrame.texture_img)
 					{
-						var img = inst.curFrame.texture_img;
+						let img = inst.curFrame.texture_img;
 						pixelWidth = 1.0 / img.width;
 						pixelHeight = 1.0 / img.height;
 					}
@@ -8767,7 +8768,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.getLayerBySid = function (sid_)
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.layers.length; i < len; i++)
 		{
 			if (this.layers[i].sid === sid_)
@@ -8777,8 +8778,8 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.saveToJSON = function ()
 	{
-		var i, len, layer, et;
-		var o = {
+		let i, len, layer, et;
+		let o = {
 			"sx": this.scrollX,
 			"sy": this.scrollY,
 			"s": this.scale,
@@ -8804,7 +8805,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layout.prototype.loadFromJSON = function (o)
 	{
-		var i, j, len, fx, p, layer;
+		let i, j, len, fx, p, layer;
 		this.scrollX = o["sx"];
 		this.scrollY = o["sy"];
 		this.scale = o["s"];
@@ -8814,7 +8815,7 @@ window["cr_setSuspended"] = function(s)
 		this.persist_data = o["persist"];
 		if (typeof o["fv"] !== "undefined")
 			this.first_visit = o["fv"];
-		var ofx = o["fx"];
+		let ofx = o["fx"];
 		for (i = 0, len = ofx.length; i < len; i++)
 		{
 			fx = this.getEffectByName(ofx[i]["name"]);
@@ -8824,7 +8825,7 @@ window["cr_setSuspended"] = function(s)
 			this.effect_params[fx.index] = ofx[i]["params"];
 		}
 		this.updateActiveEffects();
-		var olayers = o["layers"];
+		let olayers = o["layers"];
 		for (p in olayers)
 		{
 			if (olayers.hasOwnProperty(p))
@@ -8881,15 +8882,15 @@ window["cr_setSuspended"] = function(s)
 			this.render_grid = new cr.RenderGrid(this.runtime.original_width, this.runtime.original_height);
 		}
 		this.render_offscreen = false;
-		var im = m[14];
-		var i, len;
+		let im = m[14];
+		let i, len;
 		this.startup_initial_instances = [];		// for restoring initial_instances after load
 		this.initial_instances = [];
 		this.created_globals = [];		// global object UIDs already created - for save/load to avoid recreating
 		for (i = 0, len = im.length; i < len; i++)
 		{
-			var inst = im[i];
-			var type = this.runtime.types_by_index[inst[1]];
+			let inst = im[i];
+			let type = this.runtime.types_by_index[inst[1]];
 ;
 			if (!type.default_instance)
 			{
@@ -8925,7 +8926,7 @@ window["cr_setSuspended"] = function(s)
 	{
 		cr.clearArray(this.active_effect_types);
 		this.shaders_preserve_opaqueness = true;
-		var i, len, et;
+		let i, len, et;
 		for (i = 0, len = this.effect_types.length; i < len; i++)
 		{
 			et = this.effect_types[i];
@@ -8939,7 +8940,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.getEffectByName = function (name_)
 	{
-		var i, len, et;
+		let i, len, et;
 		for (i = 0, len = this.effect_types.length; i < len; i++)
 		{
 			et = this.effect_types[i];
@@ -8950,7 +8951,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.createInitialInstances = function ()
 	{
-		var i, k, len, inst, initial_inst, type, keep, hasPersistBehavior;
+		let i, k, len, inst, initial_inst, type, keep, hasPersistBehavior;
 		for (i = 0, k = 0, len = this.initial_instances.length; i < len; i++)
 		{
 			initial_inst = this.initial_instances[i];
@@ -8987,10 +8988,10 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.recreateInitialObjects = function (only_type, rc)
 	{
-		var i, len, initial_inst, type, wm, x, y, inst, j, lenj, s;
-		var types_by_index = this.runtime.types_by_index;
-		var only_type_is_family = only_type.is_family;
-		var only_type_members = only_type.members;
+		let i, len, initial_inst, type, wm, x, y, inst, j, lenj, s;
+		let types_by_index = this.runtime.types_by_index;
+		let only_type_is_family = only_type.is_family;
+		let only_type_members = only_type.members;
 		for (i = 0, len = this.initial_instances.length; i < len; ++i)
 		{
 			initial_inst = this.initial_instances[i];
@@ -9026,7 +9027,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.removeFromInstanceList = function (inst, remove_from_grid)
 	{
-		var index = cr.fastIndexOf(this.instances, inst);
+		let index = cr.fastIndexOf(this.instances, inst);
 		if (index < 0)
 			return;		// not found
 		if (remove_from_grid && this.useRenderCells && inst.rendercells && inst.rendercells.right >= inst.rendercells.left)
@@ -9068,8 +9069,8 @@ window["cr_setSuspended"] = function(s)
 	Layer.prototype.moveInstanceAdjacent = function (inst, other, isafter)
 	{
 ;
-		var myZ = inst.get_zindex();
-		var insertZ = other.get_zindex();
+		let myZ = inst.get_zindex();
+		let insertZ = other.get_zindex();
 		cr.arrayRemove(this.instances, myZ);
 		if (myZ < insertZ)
 			insertZ--;
@@ -9096,7 +9097,7 @@ window["cr_setSuspended"] = function(s)
 			return;
 		if (this.zindices_stale_from === -1)
 			this.zindices_stale_from = 0;
-		var i, len, inst;
+		let i, len, inst;
 		if (this.useRenderCells)
 		{
 			for (i = this.zindices_stale_from, len = this.instances.length; i < len; ++i)
@@ -9130,7 +9131,7 @@ window["cr_setSuspended"] = function(s)
 			return 0;
 		return cr.clamp_angle(this.layout.angle + this.angle);
 	};
-	var arr_cache = [];
+	let arr_cache = [];
 	function alloc_arr()
 	{
 		if (arr_cache.length)
@@ -9145,7 +9146,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	function mergeSortedZArrays(a, b, out)
 	{
-		var i = 0, j = 0, k = 0, lena = a.length, lenb = b.length, ai, bj;
+		let i = 0, j = 0, k = 0, lena = a.length, lenb = b.length, ai, bj;
 		out.length = lena + lenb;
 		for ( ; i < lena && j < lenb; ++k)
 		{
@@ -9167,10 +9168,10 @@ window["cr_setSuspended"] = function(s)
 		for ( ; j < lenb; ++j, ++k)
 			out[k] = b[j];
 	};
-	var next_arr = [];
+	let next_arr = [];
 	function mergeAllSortedZArrays_pass(arr, first_pass)
 	{
-		var i, len, arr1, arr2, out;
+		let i, len, arr1, arr2, out;
 		for (i = 0, len = arr.length; i < len - 1; i += 2)
 		{
 			arr1 = arr[i];
@@ -9202,7 +9203,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	function mergeAllSortedZArrays(arr)
 	{
-		var first_pass = true;
+		let first_pass = true;
 		while (arr.length > 1)
 		{
 			mergeAllSortedZArrays_pass(arr, first_pass);
@@ -9210,7 +9211,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		return arr[0];
 	};
-	var render_arr = [];
+	let render_arr = [];
 	Layer.prototype.getRenderCellInstancesToDraw = function ()
 	{
 ;
@@ -9220,21 +9221,21 @@ window["cr_setSuspended"] = function(s)
 			return alloc_arr();
 		if (render_arr.length === 1)
 		{
-			var a = alloc_arr();
+			let a = alloc_arr();
 			cr.shallowAssignArray(a, render_arr[0]);
 			cr.clearArray(render_arr);
 			return a;
 		}
-		var draw_list = mergeAllSortedZArrays(render_arr);
+		let draw_list = mergeAllSortedZArrays(render_arr);
 		cr.clearArray(render_arr);
 		return draw_list;
 	};
 	Layer.prototype.draw = function (ctx)
 	{
 		this.render_offscreen = (this.forceOwnTexture || this.opacity !== 1.0 || this.blend_mode !== 0);
-		var layer_canvas = this.runtime.canvas;
-		var layer_ctx = ctx;
-		var ctx_changed = false;
+		let layer_canvas = this.runtime.canvas;
+		let layer_ctx = ctx;
+		let ctx_changed = false;
 		if (this.render_offscreen)
 		{
 			if (!this.runtime.layer_canvas)
@@ -9276,8 +9277,8 @@ window["cr_setSuspended"] = function(s)
 		}
 		layer_ctx.save();
 		this.disableAngle = true;
-		var px = this.canvasToLayer(0, 0, true, true);
-		var py = this.canvasToLayer(0, 0, false, true);
+		let px = this.canvasToLayer(0, 0, true, true);
+		let py = this.canvasToLayer(0, 0, false, true);
 		this.disableAngle = false;
 		if (this.runtime.pixel_rounding)
 		{
@@ -9285,10 +9286,10 @@ window["cr_setSuspended"] = function(s)
 			py = Math.round(py);
 		}
 		this.rotateViewport(px, py, layer_ctx);
-		var myscale = this.getScale();
+		let myscale = this.getScale();
 		layer_ctx.scale(myscale, myscale);
 		layer_ctx.translate(-px, -py);
-		var instances_to_draw;
+		let instances_to_draw;
 		if (this.useRenderCells)
 		{
 			this.cur_render_cells.left = this.render_grid.XToCell(this.viewLeft);
@@ -9307,7 +9308,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		else
 			instances_to_draw = this.instances;
-		var i, len, inst, last_inst = null;
+		let i, len, inst, last_inst = null;
 		for (i = 0, len = instances_to_draw.length; i < len; ++i)
 		{
 			inst = instances_to_draw[i];
@@ -9331,7 +9332,7 @@ window["cr_setSuspended"] = function(s)
 		if (!inst.visible || inst.width === 0 || inst.height === 0)
 			return;
 		inst.update_bbox();
-		var bbox = inst.bbox;
+		let bbox = inst.bbox;
 		if (bbox.right < this.viewLeft || bbox.bottom < this.viewTop || bbox.left > this.viewRight || bbox.top > this.viewBottom)
 			return;
 		layer_ctx.globalCompositeOperation = inst.compositeOp;
@@ -9340,8 +9341,8 @@ window["cr_setSuspended"] = function(s)
 	Layer.prototype.updateViewport = function (ctx)
 	{
 		this.disableAngle = true;
-		var px = this.canvasToLayer(0, 0, true, true);
-		var py = this.canvasToLayer(0, 0, false, true);
+		let px = this.canvasToLayer(0, 0, true, true);
+		let py = this.canvasToLayer(0, 0, false, true);
 		this.disableAngle = false;
 		if (this.runtime.pixel_rounding)
 		{
@@ -9352,12 +9353,12 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.rotateViewport = function (px, py, ctx)
 	{
-		var myscale = this.getScale();
+		let myscale = this.getScale();
 		this.viewLeft = px;
 		this.viewTop = py;
 		this.viewRight = px + (this.runtime.draw_width * (1 / myscale));
 		this.viewBottom = py + (this.runtime.draw_height * (1 / myscale));
-		var temp;
+		let temp;
 		if (this.viewLeft > this.viewRight)
 		{
 			temp = this.viewLeft;
@@ -9370,7 +9371,7 @@ window["cr_setSuspended"] = function(s)
 			this.viewTop = this.viewBottom;
 			this.viewBottom = temp;
 		}
-		var myAngle = this.getAngle();
+		let myAngle = this.getAngle();
 		if (myAngle !== 0)
 		{
 			if (ctx)
@@ -9392,10 +9393,10 @@ window["cr_setSuspended"] = function(s)
 	}
 	Layer.prototype.drawGL_earlyZPass = function (glw)
 	{
-		var windowWidth = this.runtime.draw_width;
-		var windowHeight = this.runtime.draw_height;
-		var shaderindex = 0;
-		var etindex = 0;
+		let windowWidth = this.runtime.draw_width;
+		let windowHeight = this.runtime.draw_height;
+		let shaderindex = 0;
+		let etindex = 0;
 		this.render_offscreen = this.forceOwnTexture;
 		if (this.render_offscreen)
 		{
@@ -9411,8 +9412,8 @@ window["cr_setSuspended"] = function(s)
 			glw.setRenderingToTexture(this.runtime.layer_tex);
 		}
 		this.disableAngle = true;
-		var px = this.canvasToLayer(0, 0, true, true);
-		var py = this.canvasToLayer(0, 0, false, true);
+		let px = this.canvasToLayer(0, 0, true, true);
+		let py = this.canvasToLayer(0, 0, false, true);
 		this.disableAngle = false;
 		if (this.runtime.pixel_rounding)
 		{
@@ -9420,13 +9421,13 @@ window["cr_setSuspended"] = function(s)
 			py = Math.round(py);
 		}
 		this.rotateViewport(px, py, null);
-		var myscale = this.getScale();
+		let myscale = this.getScale();
 		glw.resetModelView();
 		glw.scale(myscale, myscale);
 		glw.rotateZ(-this.getAngle());
 		glw.translate((this.viewLeft + this.viewRight) / -2, (this.viewTop + this.viewBottom) / -2);
 		glw.updateModelView();
-		var instances_to_draw;
+		let instances_to_draw;
 		if (this.useRenderCells)
 		{
 			this.cur_render_cells.left = this.render_grid.XToCell(this.viewLeft);
@@ -9445,7 +9446,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		else
 			instances_to_draw = this.instances;
-		var i, inst, last_inst = null;
+		let i, inst, last_inst = null;
 		for (i = instances_to_draw.length - 1; i >= 0; --i)
 		{
 			inst = instances_to_draw[i];
@@ -9467,10 +9468,10 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.drawGL = function (glw)
 	{
-		var windowWidth = this.runtime.draw_width;
-		var windowHeight = this.runtime.draw_height;
-		var shaderindex = 0;
-		var etindex = 0;
+		let windowWidth = this.runtime.draw_width;
+		let windowHeight = this.runtime.draw_height;
+		let shaderindex = 0;
+		let etindex = 0;
 		this.render_offscreen = (this.forceOwnTexture || this.opacity !== 1.0 || this.active_effect_types.length > 0 || this.blend_mode !== 0);
 		if (this.render_offscreen)
 		{
@@ -9502,8 +9503,8 @@ window["cr_setSuspended"] = function(s)
 			}
 		}
 		this.disableAngle = true;
-		var px = this.canvasToLayer(0, 0, true, true);
-		var py = this.canvasToLayer(0, 0, false, true);
+		let px = this.canvasToLayer(0, 0, true, true);
+		let py = this.canvasToLayer(0, 0, false, true);
 		this.disableAngle = false;
 		if (this.runtime.pixel_rounding)
 		{
@@ -9511,13 +9512,13 @@ window["cr_setSuspended"] = function(s)
 			py = Math.round(py);
 		}
 		this.rotateViewport(px, py, null);
-		var myscale = this.getScale();
+		let myscale = this.getScale();
 		glw.resetModelView();
 		glw.scale(myscale, myscale);
 		glw.rotateZ(-this.getAngle());
 		glw.translate((this.viewLeft + this.viewRight) / -2, (this.viewTop + this.viewBottom) / -2);
 		glw.updateModelView();
-		var instances_to_draw;
+		let instances_to_draw;
 		if (this.useRenderCells)
 		{
 			this.cur_render_cells.left = this.render_grid.XToCell(this.viewLeft);
@@ -9536,7 +9537,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		else
 			instances_to_draw = this.instances;
-		var i, len, inst, last_inst = null;
+		let i, len, inst, last_inst = null;
 		for (i = 0, len = instances_to_draw.length; i < len; ++i)
 		{
 			inst = instances_to_draw[i];
@@ -9579,8 +9580,8 @@ window["cr_setSuspended"] = function(s)
 				glw.setBlend(this.srcBlend, this.destBlend);
 				glw.resetModelView();
 				glw.updateModelView();
-				var halfw = this.runtime.draw_width / 2;
-				var halfh = this.runtime.draw_height / 2;
+				let halfw = this.runtime.draw_width / 2;
+				let halfh = this.runtime.draw_height / 2;
 				glw.quad(-halfw, halfh, halfw, halfh, halfw, -halfh, -halfw, -halfh);
 				glw.setTexture(null);
 			}
@@ -9596,7 +9597,7 @@ window["cr_setSuspended"] = function(s)
 		if (!inst.visible || inst.width === 0 || inst.height === 0)
 			return;
 		inst.update_bbox();
-		var bbox = inst.bbox;
+		let bbox = inst.bbox;
 		if (bbox.right < this.viewLeft || bbox.bottom < this.viewTop || bbox.left > this.viewRight || bbox.top > this.viewBottom)
 			return;
 		glw.setEarlyZIndex(inst.earlyz_index);
@@ -9617,7 +9618,7 @@ window["cr_setSuspended"] = function(s)
 		if (!inst.visible || inst.width === 0 || inst.height === 0)
 			return;
 		inst.update_bbox();
-		var bbox = inst.bbox;
+		let bbox = inst.bbox;
 		if (bbox.right < this.viewLeft || bbox.bottom < this.viewTop || bbox.left > this.viewRight || bbox.top > this.viewBottom)
 			return;
 		inst.earlyz_index = this.runtime.earlyz_index++;
@@ -9628,9 +9629,9 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.drawInstanceWithShadersGL = function (inst, glw)
 	{
-		var shaderindex = inst.active_effect_types[0].shaderindex;
-		var etindex = inst.active_effect_types[0].index;
-		var myscale = this.getScale();
+		let shaderindex = inst.active_effect_types[0].shaderindex;
+		let etindex = inst.active_effect_types[0].index;
+		let myscale = this.getScale();
 		if (inst.active_effect_types.length === 1 && !glw.programUsesCrossSampling(shaderindex) &&
 			!glw.programExtendsBox(shaderindex) && ((!inst.angle && !inst.layer.getAngle()) || !glw.programUsesDest(shaderindex)) &&
 			inst.opacity === 1 && !inst.type.plugin.must_predraw)
@@ -9639,24 +9640,24 @@ window["cr_setSuspended"] = function(s)
 			glw.setBlend(inst.srcBlend, inst.destBlend);
 			if (glw.programIsAnimated(shaderindex))
 				this.runtime.redraw = true;
-			var destStartX = 0, destStartY = 0, destEndX = 0, destEndY = 0;
+			let destStartX = 0, destStartY = 0, destEndX = 0, destEndY = 0;
 			if (glw.programUsesDest(shaderindex))
 			{
-				var bbox = inst.bbox;
-				var screenleft = this.layerToCanvas(bbox.left, bbox.top, true, true);
-				var screentop = this.layerToCanvas(bbox.left, bbox.top, false, true);
-				var screenright = this.layerToCanvas(bbox.right, bbox.bottom, true, true);
-				var screenbottom = this.layerToCanvas(bbox.right, bbox.bottom, false, true);
+				let bbox = inst.bbox;
+				let screenleft = this.layerToCanvas(bbox.left, bbox.top, true, true);
+				let screentop = this.layerToCanvas(bbox.left, bbox.top, false, true);
+				let screenright = this.layerToCanvas(bbox.right, bbox.bottom, true, true);
+				let screenbottom = this.layerToCanvas(bbox.right, bbox.bottom, false, true);
 				destStartX = screenleft / windowWidth;
 				destStartY = 1 - screentop / windowHeight;
 				destEndX = screenright / windowWidth;
 				destEndY = 1 - screenbottom / windowHeight;
 			}
-			var pixelWidth;
-			var pixelHeight;
+			let pixelWidth;
+			let pixelHeight;
 			if (inst.curFrame && inst.curFrame.texture_img)
 			{
-				var img = inst.curFrame.texture_img;
+				let img = inst.curFrame.texture_img;
 				pixelWidth = 1.0 / img.width;
 				pixelHeight = 1.0 / img.height;
 			}
@@ -9690,19 +9691,19 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.canvasToLayer = function (ptx, pty, getx, using_draw_area)
 	{
-		var multiplier = this.runtime.devicePixelRatio;
+		let multiplier = this.runtime.devicePixelRatio;
 		if (this.runtime.isRetina)
 		{
 			ptx *= multiplier;
 			pty *= multiplier;
 		}
-		var ox = this.runtime.parallax_x_origin;
-		var oy = this.runtime.parallax_y_origin;
-		var par_x = ((this.layout.scrollX - ox) * this.parallaxX) + ox;
-		var par_y = ((this.layout.scrollY - oy) * this.parallaxY) + oy;
-		var x = par_x;
-		var y = par_y;
-		var invScale = 1 / this.getScale(!using_draw_area);
+		let ox = this.runtime.parallax_x_origin;
+		let oy = this.runtime.parallax_y_origin;
+		let par_x = ((this.layout.scrollX - ox) * this.parallaxX) + ox;
+		let par_y = ((this.layout.scrollY - oy) * this.parallaxY) + oy;
+		let x = par_x;
+		let y = par_y;
+		let invScale = 1 / this.getScale(!using_draw_area);
 		if (using_draw_area)
 		{
 			x -= (this.runtime.draw_width * invScale) / 2;
@@ -9715,14 +9716,14 @@ window["cr_setSuspended"] = function(s)
 		}
 		x += ptx * invScale;
 		y += pty * invScale;
-		var a = this.getAngle();
+		let a = this.getAngle();
 		if (a !== 0)
 		{
 			x -= par_x;
 			y -= par_y;
-			var cosa = Math.cos(a);
-			var sina = Math.sin(a);
-			var x_temp = (x * cosa) - (y * sina);
+			let cosa = Math.cos(a);
+			let sina = Math.sin(a);
+			let x_temp = (x * cosa) - (y * sina);
 			y = (y * cosa) + (x * sina);
 			x = x_temp;
 			x += par_x;
@@ -9732,26 +9733,26 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.layerToCanvas = function (ptx, pty, getx, using_draw_area)
 	{
-		var ox = this.runtime.parallax_x_origin;
-		var oy = this.runtime.parallax_y_origin;
-		var par_x = ((this.layout.scrollX - ox) * this.parallaxX) + ox;
-		var par_y = ((this.layout.scrollY - oy) * this.parallaxY) + oy;
-		var x = par_x;
-		var y = par_y;
-		var a = this.getAngle();
+		let ox = this.runtime.parallax_x_origin;
+		let oy = this.runtime.parallax_y_origin;
+		let par_x = ((this.layout.scrollX - ox) * this.parallaxX) + ox;
+		let par_y = ((this.layout.scrollY - oy) * this.parallaxY) + oy;
+		let x = par_x;
+		let y = par_y;
+		let a = this.getAngle();
 		if (a !== 0)
 		{
 			ptx -= par_x;
 			pty -= par_y;
-			var cosa = Math.cos(-a);
-			var sina = Math.sin(-a);
-			var x_temp = (ptx * cosa) - (pty * sina);
+			let cosa = Math.cos(-a);
+			let sina = Math.sin(-a);
+			let x_temp = (ptx * cosa) - (pty * sina);
 			pty = (pty * cosa) + (ptx * sina);
 			ptx = x_temp;
 			ptx += par_x;
 			pty += par_y;
 		}
-		var invScale = 1 / this.getScale(!using_draw_area);
+		let invScale = 1 / this.getScale(!using_draw_area);
 		if (using_draw_area)
 		{
 			x -= (this.runtime.draw_width * invScale) / 2;
@@ -9764,7 +9765,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		x = (ptx - x) / invScale;
 		y = (pty - y) / invScale;
-		var multiplier = this.runtime.devicePixelRatio;
+		let multiplier = this.runtime.devicePixelRatio;
 		if (this.runtime.isRetina && !using_draw_area)
 		{
 			x /= multiplier;
@@ -9776,18 +9777,18 @@ window["cr_setSuspended"] = function(s)
 	{
 		if (this.getAngle() === 0)
 			return getx ? x_ : y_;
-		var nx = this.layerToCanvas(x_, y_, true);
-		var ny = this.layerToCanvas(x_, y_, false);
+		let nx = this.layerToCanvas(x_, y_, true);
+		let ny = this.layerToCanvas(x_, y_, false);
 		this.disableAngle = true;
-		var px = this.canvasToLayer(nx, ny, true);
-		var py = this.canvasToLayer(nx, ny, true);
+		let px = this.canvasToLayer(nx, ny, true);
+		let py = this.canvasToLayer(nx, ny, true);
 		this.disableAngle = false;
 		return getx ? px : py;
 	};
 	Layer.prototype.saveToJSON = function ()
 	{
-		var i, len, et;
-		var o = {
+		let i, len, et;
+		let o = {
 			"s": this.scale,
 			"a": this.angle,
 			"vl": this.viewLeft,
@@ -9814,7 +9815,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	Layer.prototype.loadFromJSON = function (o)
 	{
-		var i, j, len, p, inst, fx;
+		let i, j, len, p, inst, fx;
 		this.scale = o["s"];
 		this.angle = o["a"];
 		this.viewLeft = o["vl"];
@@ -9830,7 +9831,7 @@ window["cr_setSuspended"] = function(s)
 		this.zoomRate = o["zr"];
 		this.created_globals = o["cg"] || [];		// added r197
 		cr.shallowAssignArray(this.initial_instances, this.startup_initial_instances);
-		var temp_set = new cr.ObjectSet();
+		let temp_set = new cr.ObjectSet();
 		for (i = 0, len = this.created_globals.length; i < len; ++i)
 			temp_set.add(this.created_globals[i]);
 		for (i = 0, j = 0, len = this.initial_instances.length; i < len; ++i)
@@ -9842,7 +9843,7 @@ window["cr_setSuspended"] = function(s)
 			}
 		}
 		cr.truncateArray(this.initial_instances, j);
-		var ofx = o["fx"];
+		let ofx = o["fx"];
 		for (i = 0, len = ofx.length; i < len; i++)
 		{
 			fx = this.getEffectByName(ofx[i]["name"]);
@@ -9860,10 +9861,10 @@ window["cr_setSuspended"] = function(s)
 ;
 (function()
 {
-	var allUniqueSolModifiers = [];
+	let allUniqueSolModifiers = [];
 	function testSolsMatch(arr1, arr2)
 	{
-		var i, len = arr1.length;
+		let i, len = arr1.length;
 		switch (len) {
 		case 0:
 			return true;
@@ -9886,7 +9887,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	function findMatchingSolModifier(arr)
 	{
-		var i, len, u, temp, subarr;
+		let i, len, u, temp, subarr;
 		if (arr.length === 2)
 		{
 			if (arr[0].index > arr[1].index)
@@ -9922,9 +9923,9 @@ window["cr_setSuspended"] = function(s)
 		this.deep_includes = [];				// all includes from this sheet recursively, in trigger order
 		this.already_included_sheets = [];		// used while building deep_includes
 		this.name = m[0];
-		var em = m[1];		// events model
+		let em = m[1];		// events model
 		this.events = [];       // triggers won't make it to this array
-		var i, len;
+		let i, len;
 		for (i = 0, len = em.length; i < len; i++)
 			this.init_event(em[i], null, this.events);
 	};
@@ -9937,12 +9938,12 @@ window["cr_setSuspended"] = function(s)
 		switch (m[0]) {
 		case 0:	// event block
 		{
-			var block = new cr.eventblock(this, parent, m);
+			let block = new cr.eventblock(this, parent, m);
 			cr.seal(block);
 			if (block.orblock)
 			{
 				nontriggers.push(block);
-				var i, len;
+				let i, len;
 				for (i = 0, len = block.conditions.length; i < len; i++)
 				{
 					if (block.conditions[i].trigger)
@@ -9958,16 +9959,16 @@ window["cr_setSuspended"] = function(s)
 			}
 			break;
 		}
-		case 1: // variable
+		case 1: // letiable
 		{
-			var v = new cr.eventvariable(this, parent, m);
+			let v = new cr.eventvariable(this, parent, m);
 			cr.seal(v);
 			nontriggers.push(v);
 			break;
 		}
         case 2:	// include
         {
-            var inc = new cr.eventinclude(this, parent, m);
+            let inc = new cr.eventinclude(this, parent, m);
 			cr.seal(inc);
             nontriggers.push(inc);
 			break;
@@ -9978,7 +9979,7 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventSheet.prototype.postInit = function ()
 	{
-		var i, len;
+		let i, len;
 		for (i = 0, len = this.events.length; i < len; i++)
 		{
 			this.events[i].postInit(i < len - 1 && this.events[i + 1].is_else_block);
@@ -9993,10 +9994,10 @@ window["cr_setSuspended"] = function(s)
 	};
 	EventSheet.prototype.addDeepIncludes = function (root_sheet)
 	{
-		var i, len, inc, sheet;
-		var deep_includes = root_sheet.deep_includes;
-		var already_included_sheets = root_sheet.already_included_sheets;
-		var arr = this.includes.valuesRef();
+		let i, len, inc, sheet;
+		let deep_includes = root_sheet.deep_includes;
+		let already_included_sheets = root_sheet.already_included_sheets;
+		let arr = this.includes.valuesRef();
 		for (i = 0, len = arr.length; i < len; ++i)
 		{
 			inc = arr[i];
