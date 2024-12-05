@@ -1,0 +1,6 @@
+projectKey=ping_pong-_05-12-2024
+serverUrl=http://localhost:9000
+serverVersion=24.12.0.100206
+dashboardUrl=http://localhost:9000/dashboard?id=ping_pong-_05-12-2024
+ceTaskId=229d50a9-4938-4372-b2b0-e48c5dc64bb7
+ceTaskUrl=http://localhost:9000/api/ce/task?id=229d50a9-4938-4372-b2b0-e48c5dc64bb7
