@@ -1,0 +1,6 @@
+projectKey=Monster-_05-12-2024
+serverUrl=http://localhost:9000
+serverVersion=24.12.0.100206
+dashboardUrl=http://localhost:9000/dashboard?id=Monster-_05-12-2024
+ceTaskId=a64334ab-da93-4258-a30b-79fb96e5cf1e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=a64334ab-da93-4258-a30b-79fb96e5cf1e
