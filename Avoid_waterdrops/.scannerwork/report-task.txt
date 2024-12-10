@@ -1,0 +1,6 @@
+projectKey=avoid_waterdrops-_10-12-2024
+serverUrl=http://localhost:9000
+serverVersion=24.12.0.100206
+dashboardUrl=http://localhost:9000/dashboard?id=avoid_waterdrops-_10-12-2024
+ceTaskId=1f4c8859-bb2c-40b3-af21-e063c62f782d
+ceTaskUrl=http://localhost:9000/api/ce/task?id=1f4c8859-bb2c-40b3-af21-e063c62f782d
