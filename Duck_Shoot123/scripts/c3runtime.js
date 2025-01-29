@@ -1551,7 +1551,7 @@ self.C3_ExpressionFuncs = [
 			return () => (and((("{" + "\"highScore\"") + ": "), v0.GetValue()) + "}");
 		},
 		() => "high_score",
-		() => "http://51.20.122.168/api/userScore",
+		() => "https://51.20.122.168/api/userScore",
 		() => "POST",
 		() => 960,
 		() => 670,
